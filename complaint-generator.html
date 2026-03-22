@@ -818,25 +818,16 @@ function copyTxt(){
 function sendAct(){
   if(!curText)return;
   if(dest==='uk'){
-    // Copy text to clipboard as backup
+    // Copy text to clipboard, then open mailto with subject only.
+    // mailto body param is broken on iOS Safari and most Android browsers.
     const doCopy = navigator.clipboard.writeText(curText).catch(()=>{
       const x=document.createElement('textarea');x.value=curText;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);
     });
 
     doCopy.then(()=>{
       const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
-      const fullBody = encodeURIComponent(curText);
-      const mailtoFull = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${fullBody}`;
-
-      // Use location.href for mailto — window.open doesn't pass body on iOS/most Android
-      if (mailtoFull.length > 28000) {
-        const shortBody = encodeURIComponent('(Текст жалобы скопирован — вставьте через Ctrl+V / долгое нажатие → Вставить)');
-        window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${shortBody}`;
-        toast('✅ Текст скопирован — вставьте в письмо');
-      } else {
-        window.location.href = mailtoFull;
-        toast('📧 Открываем почту с текстом жалобы...');
-      }
+      window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`;
+      toast('✅ Текст скопирован — вставьте в письмо (долгое нажатие → Вставить)');
     });
   } else {
     navigator.clipboard.writeText(curText).then(()=>{toast('✅ Скопировано, открываем портал...');setTimeout(()=>window.open(DEST_URL[dest],'_blank'),500)}).catch(()=>window.open(DEST_URL[dest],'_blank'));
