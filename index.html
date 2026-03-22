@@ -345,8 +345,8 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 </div>
 
 <div class="bottom-actions" id="ba">
-  <button class="btn btn-copy" id="bcopy" disabled onclick="copyTxt()">📋 Скопировать</button>
-  <button class="btn btn-send" id="bsend" disabled onclick="sendAct()">✉️ Отправить</button>
+  <button class="btn btn-copy" id="bcopy" disabled onclick="copyAndShow()" style="flex:2">📋 Скопировать текст</button>
+  <button class="btn btn-send" id="bsend" disabled onclick="sendAct()" style="display:none">✉️ Отправить</button>
 </div>
 
 <div class="send-modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
@@ -851,6 +851,7 @@ function upd() {
     area.innerHTML = '<div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div>';
     rb.style.display='none'; bc.disabled=true; bs.disabled=true; curText='';
     if(ts) ts.style.display='none';
+    resetButtons();
     return;
   }
 
@@ -860,24 +861,31 @@ function upd() {
   // Auto-resize textarea to fit content
   const ta = document.getElementById('complaint-ta');
   if(ta){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight+4, window.innerHeight*0.5)+'px'; }
-  rb.style.display='inline'; bc.disabled=false; bs.disabled=false;
+  rb.style.display='inline'; bc.disabled=false;
+  resetButtons();
 }
 
 function regen(){seed++;upd();toast('Текст обновлён')}
 function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // ====== ACTIONS ======
-function copyTxt(){
-  if(!curText)return;
-  clipCopy(curText).then(()=>toast('✅ Скопировано!'));
-}
+
 function clipCopy(text){
   return navigator.clipboard.writeText(text).catch(()=>{
     const x=document.createElement('textarea');x.value=text;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);
   });
 }
 
-function sendAct(){
+function resetButtons(){
+  const bc = document.getElementById('bcopy');
+  const bs = document.getElementById('bsend');
+  bc.innerHTML='📋 Скопировать текст';
+  bc.style.flex='2';
+  bs.style.display='none';
+  bs.disabled=true;
+}
+
+function copyAndShow(){
   if(!curText)return;
   // Check required fields
   const name = document.getElementById('fullname').value.trim();
@@ -886,41 +894,28 @@ function sendAct(){
     showFieldsModal(!name, !apt);
     return;
   }
+  clipCopy(curText).then(()=>{
+    // Show "Send" button after copy
+    const bcopy = document.getElementById('bcopy');
+    const bsend = document.getElementById('bsend');
+    bcopy.innerHTML='✅ Скопировано!';
+    bcopy.style.flex='1';
+    bsend.style.display='flex';
+    bsend.style.flex='2';
+    bsend.disabled=false;
+    toast('✅ Текст скопирован — теперь нажмите «Отправить»');
+  });
+}
 
+function sendAct(){
+  if(!curText)return;
   if(dest==='uk'){
     const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
-    const body = encodeURIComponent(curText);
-    const mailtoFull = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${body}`;
-
-    // Tier 1: short text — mailto with body works everywhere
-    if(mailtoFull.length <= 1500){
-      showSendModal('email-direct');
-      setTimeout(()=>{ window.location.href = mailtoFull; }, 600);
-    }
-    // Tier 2: long text + Web Share API — body pre-fills when user picks email
-    else if(navigator.share){
-      navigator.share({
-        title: 'Жалоба на содержание МКД — ул. Совхозная д.5',
-        text: curText
-      }).then(()=>{
-        toast('Жалоба отправлена');
-      }).catch(()=>{});
-      // Copy recipient to clipboard for convenience
-      clipCopy('kontinent.reception@mail.ru');
-      showSendModal('email-share');
-    }
-    // Tier 3: fallback — clipboard + mailto without body + instructions
-    else {
-      clipCopy(curText).then(()=>{
-        showSendModal('email-paste');
-        setTimeout(()=>{ window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`; }, 600);
-      });
-    }
+    window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`;
+    showSendModal('email');
   } else {
-    clipCopy(curText).then(()=>{
-      showSendModal('portal');
-      setTimeout(()=>window.open(DEST_URL[dest],'_blank'), 600);
-    });
+    showSendModal('portal');
+    setTimeout(()=>window.open(DEST_URL[dest],'_blank'), 600);
   }
 }
 
@@ -930,37 +925,19 @@ function showSendModal(type){
   const shareBtn = document.getElementById('modal-share-btn');
   shareBtn.style.display = navigator.share ? 'flex' : 'none';
 
-  if(type==='email-direct'){
-    // Tier 1: mailto with body — everything pre-filled
-    title.textContent='Открываем почту';
+  if(type==='email'){
+    title.textContent='Почти готово!';
     steps.innerHTML=`
-      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Всё готово</b>Адрес, тема и текст жалобы уже заполнены</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Проверьте и отправьте</b>Убедитесь, что текст на месте, и нажмите «Отправить»</div></div>
-    `;
-  } else if(type==='email-share'){
-    // Tier 2: Web Share API — text goes to body via share sheet
-    title.textContent='Отправка жалобы';
-    steps.innerHTML=`
-      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Выберите почтовое приложение</b>В меню «Поделиться» выберите Mail, Gmail или Outlook</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Укажите адрес</b>Адрес УК скопирован: <b>kontinent.reception@mail.ru</b> — вставьте в поле «Кому»</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Отправьте</b>Текст жалобы уже в письме</div></div>
-    `;
-  } else if(type==='email-paste'){
-    // Tier 3: clipboard fallback
-    title.textContent='Отправка на email';
-    steps.innerHTML=`
-      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Откроется почта</b>Тема и адрес уже заполнены</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле письма, затем «Вставить»</div></div>
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Откроется почта</b>Адрес и тема уже заполнены</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле письма → «Вставить»</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Отправьте!</b></div></div>
     `;
   } else {
-    // Portal
     title.textContent='Отправка на портал';
     steps.innerHTML=`
-      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Откроется портал</b>Найдите форму подачи обращения</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле текста, затем «Вставить»</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-text"><b>Сохраните номер</b>После отправки запишите номер заявки в чат дома</div></div>
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Откроется портал</b>Найдите форму подачи обращения</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле текста → «Вставить»</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Сохраните номер заявки</b>Запишите в чат дома</div></div>
     `;
   }
 
