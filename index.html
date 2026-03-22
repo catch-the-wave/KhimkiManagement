@@ -2,120 +2,156 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Жалоба на УК «Континент Комфорта»</title>
 <style>
-:root{--primary:#2563eb;--primary-dark:#1d4ed8;--success:#16a34a;--danger:#dc2626;--warning:#f59e0b;--bg:#f5f5f7;--card:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--r:12px}
+:root {
+  --primary: #1a73e8;
+  --danger: #d32f2f;
+  --success: #2e7d32;
+  --bg: #f5f5f5;
+  --card: #fff;
+  --text: #212121;
+  --muted: #616161;
+  --border: #e0e0e0;
+  --r: 12px;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);padding-bottom:90px;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden;width:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:600px;margin:0 auto;padding:0 12px 140px}
 
-/* Header */
-.header{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;padding:16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px}
-.header h1{font-size:16px;font-weight:700;flex:1}
-.addr{font-size:12px;opacity:.8;margin-top:2px}
-.burger{background:none;border:none;cursor:pointer;padding:4px;display:flex;flex-direction:column;gap:4px;z-index:201}
-.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.3s}
-.burger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
-.burger.open span:nth-child(2){opacity:0}
-.burger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+.header{background:linear-gradient(135deg,var(--danger),#b71c1c);color:#fff;padding:18px 16px;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:17px;font-weight:700}
+.header p{font-size:12px;opacity:.85;margin-top:2px}
 
-/* Drawer */
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;opacity:0;pointer-events:none;transition:.3s}
-.drawer-overlay.open{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:-300px;width:280px;height:100%;background:var(--card);z-index:200;transition:.3s;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,.15)}
-.drawer.open{right:0}
-.drawer-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
-.drawer-header h2{font-size:16px}
-.drawer-header p{font-size:12px;color:var(--muted);margin-top:2px}
-.drawer-body{padding:8px}
-.drawer-link{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit;font-size:14px;color:var(--text)}
-.drawer-link:hover,.drawer-link:active{background:var(--bg)}
-.drawer-link .dl-icon{font-size:20px;flex-shrink:0}
-.drawer-link .dl-label{font-weight:600}
-.drawer-link .dl-desc{font-size:11px;color:var(--muted);margin-top:1px}
-.drawer-divider{height:1px;background:var(--border);margin:4px 8px}
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;transition:.2s}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
 
-/* Cards */
-.card{background:var(--card);border-radius:var(--r);padding:16px;margin:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.card-title{font-size:14px;font-weight:700;margin-bottom:10px}
+.section{display:none;padding-top:12px}
+.section.active{display:block}
 
-/* Chips */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:8px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:13px;cursor:pointer;transition:.2s;user-select:none;-webkit-user-select:none}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.card-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:7px 11px;background:var(--bg);border:2px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none}
 .chip:active{transform:scale(.96)}
-.chip.selected{background:var(--primary);color:#fff;border-color:var(--primary)}
-.chip-actions{display:flex;gap:8px;margin-top:8px}
-.chip-actions button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;padding:4px 0;font-weight:600}
+.chip.selected{background:var(--danger);border-color:var(--danger);color:#fff;font-weight:600}
+.chip .ck{display:none}
+.chip.selected .ck{display:inline}
+.sel-ctrls{display:flex;gap:12px;margin-bottom:8px}
+.sel-ctrls button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600}
 
-/* Tone switch */
-.tone-switch{display:none;align-items:center;justify-content:center;gap:8px;margin:12px 0 4px;font-size:13px}
-.tone-switch label{cursor:pointer;padding:6px 14px;border-radius:16px;border:1.5px solid var(--border);transition:.2s}
-.tone-switch label.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.form-row{display:flex;gap:8px;margin-bottom:8px}
+.field{flex:1;position:relative}
+.field input,.field select{width:100%;padding:10px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff}
+.field input:focus,.field select:focus{outline:none;border-color:var(--primary)}
+.field label{position:absolute;top:-7px;left:8px;background:#fff;padding:0 4px;font-size:11px;color:var(--muted);font-weight:600}
+.addr{font-size:13px;color:var(--muted);padding:4px 0}
 
-/* Complaint area */
-.complaint-area{min-height:60px;margin:8px 0}
+.complaint-live{background:#fff;border:2px solid var(--border);border-radius:var(--r);padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word;max-height:50vh;overflow-y:auto;transition:.2s}
+.complaint-live.ok{border-color:var(--success)}
 textarea.complaint-edit{width:100%;min-height:200px;max-height:50vh;background:#fff;border:2px solid var(--success);border-radius:var(--r);padding:14px;font-size:13px;line-height:1.7;font-family:inherit;resize:vertical;box-sizing:border-box;color:var(--text);outline:none;transition:.2s}
 textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
 .edit-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
 .empty-hint{text-align:center;padding:30px 16px;color:var(--muted);font-size:14px}
 .empty-hint .arr{font-size:24px;display:block;margin-bottom:8px}
 
-/* Regen button */
-.regen-btn{display:none;font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:4px}
+.dest-bar{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.dest-btn{flex-shrink:0;padding:7px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:#fff;color:var(--muted);transition:.15s;white-space:nowrap}
+.dest-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
 
-/* Destination */
-.dest-row{display:flex;flex-wrap:wrap;gap:6px}
-.dest-btn{padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);font-size:12px;cursor:pointer;transition:.2s;font-weight:500}
-.dest-btn.active{border-color:var(--primary);background:rgba(37,99,235,.08);color:var(--primary)}
-.dest-btn.active-danger{border-color:var(--danger);background:rgba(220,38,38,.08);color:var(--danger)}
-
-/* Photo upload */
-.photo-zone{border:2px dashed var(--border);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;transition:.2s;position:relative}
-.photo-zone:active{border-color:var(--primary);background:rgba(37,99,235,.04)}
-.photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.photo-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.photo-preview img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
-
-/* Form fields */
-.form-row{display:flex;gap:10px;margin-bottom:8px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:12px;font-weight:600;color:var(--muted)}
-.field input{padding:10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:.2s}
-.field input:focus{border-color:var(--primary)}
-
-/* Bottom bar */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;z-index:50}
-.btn{flex:1;padding:14px;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
-.btn:disabled{opacity:.4;cursor:default}
-.btn-copy{background:var(--bg);color:var(--text)}
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:12px 8px;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-copy{background:var(--primary);color:#fff}
 .btn-send{background:var(--danger);color:#fff}
-.btn-send:active:not(:disabled){transform:scale(.97)}
-.btn-portal{background:var(--primary);color:#fff}
+.btn-portal{background:var(--success);color:#fff}
 
-/* Toast */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:.3s;z-index:300;white-space:nowrap;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.photo-add-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:2px dashed var(--border);border-radius:8px;font-size:14px;font-weight:600;color:var(--primary);cursor:pointer;transition:.15s;background:var(--bg)}
+.photo-add-btn:active{border-color:var(--primary);background:#e3f2fd}
+.photo-upload{border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:.2s}
+.photo-upload:active{border-color:var(--primary);background:#e3f2fd}
+.thumbs-big{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.thumb{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .rm{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.regen{font-size:12px;color:var(--primary);cursor:pointer;background:none;border:none;font-weight:600;padding:6px 0;font-family:inherit}
+.tone-switch{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:3px;margin-bottom:10px}
+.tone-btn{flex:1;padding:7px 8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
+.tone-btn.active{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
-/* Sections */
-.section{display:none}
-.section.active{display:block}
+.portal-link{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text);border:1px solid var(--border);margin-bottom:6px}
+.portal-link .pi{font-size:22px}
+.portal-link .pn{font-size:13px;font-weight:600}
+.portal-link .pd{font-size:11px;color:var(--muted)}
 
-/* Ready texts */
-.ri{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px}
-.rt{font-weight:700;font-size:14px;margin-bottom:6px}
-.rx{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:8px}
-.rc{background:var(--primary);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
+.ri{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
+.ri .rt{font-size:13px;font-weight:700;color:var(--danger);margin-bottom:4px}
+.ri .rx{font-size:12px;line-height:1.5;margin-bottom:6px}
+.ri .rc{font-size:11px;color:var(--primary);background:#fff;border:1px solid var(--primary);padding:5px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:#323232;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:200;transition:transform .3s;white-space:nowrap;max-width:90vw;white-space:normal;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.trust-block{background:linear-gradient(135deg,#e8f5e9,#fff3e0);border:1px solid #c8e6c9;border-radius:var(--r);padding:14px;margin-bottom:10px;font-size:13px;line-height:1.6}
+.trust-block b{color:var(--success)}
+.trust-block .tb-stat{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.trust-block .tb-stat span{background:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid var(--border)}
+
+.dest-hint{font-size:11px;color:var(--muted);margin-top:4px;padding:0 2px;line-height:1.5}
+.dest-hint b{color:var(--primary)}
+
+.send-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
+.send-modal-overlay.show{opacity:1;pointer-events:auto}
+.send-modal{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:#fff;border-radius:16px 16px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));z-index:301;transform:translateY(100%);transition:transform .3s;max-height:85vh;overflow-y:auto}
+.send-modal.show{transform:translateY(0)}
+.send-modal h3{font-size:16px;margin-bottom:14px;text-align:center}
+.send-modal .step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.send-modal .step:last-of-type{border-bottom:none}
+.send-modal .step-num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.send-modal .step-num.done{background:var(--success)}
+.send-modal .step-text{font-size:13px;line-height:1.5}
+.send-modal .step-text b{display:block;margin-bottom:2px}
+.send-modal .modal-actions{display:flex;gap:8px;margin-top:16px}
+.send-modal .modal-actions .btn{flex:1}
+.next-dest{margin-top:12px;padding:12px;background:var(--bg);border-radius:8px;text-align:center}
+.next-dest p{font-size:12px;color:var(--muted);margin-bottom:8px}
+.next-dest button{font-size:13px;font-weight:600;color:#fff;background:var(--primary);border:none;border-radius:8px;padding:10px 16px;cursor:pointer;width:100%}
+
+/* Burger menu */
+.burger{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;background:none;border:none;padding:0;z-index:102}
+.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:1px;transition:.2s}
+.burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+
+.drawer{position:fixed;top:0;right:-280px;width:280px;height:100%;background:#fff;z-index:151;transition:right .25s;box-shadow:-4px 0 20px rgba(0,0,0,.15);display:flex;flex-direction:column}
+.drawer.open{right:0}
+.drawer-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
+.drawer-header h2{font-size:15px;font-weight:700;color:var(--text)}
+.drawer-header p{font-size:12px;color:var(--muted);margin-top:2px}
+.drawer-body{flex:1;overflow-y:auto;padding:12px 16px}
+.drawer-link{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit;font-size:14px;color:var(--text)}
+.drawer-link:hover,.drawer-link:active{background:var(--bg)}
+.drawer-link .dl-icon{font-size:20px;flex-shrink:0}
+.drawer-link .dl-label{font-weight:600}
+.drawer-link .dl-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.drawer-divider{height:1px;background:var(--border);margin:8px 0}
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
+<div class="header" style="position:sticky;top:0;z-index:100">
+  <h1>Жалоба на УК «Континент Комфорта»</h1>
+  <p>г. Химки, ул. Совхозная, д. 5</p>
   <button class="burger" id="burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
-  <div>
-    <h1>Жалоба на УК</h1>
-    <div class="addr">г. Химки, ул. Совхозная, д. 5</div>
-  </div>
 </div>
 
 <!-- Drawer overlay -->
@@ -137,471 +173,511 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
       <span class="dl-icon">📄</span>
       <div><div class="dl-label">Готовые тексты жалоб</div><div class="dl-desc">7 шаблонов по каждой теме</div></div>
     </button>
+    <button class="drawer-link" onclick="switchTab('photo');toggleDrawer()">
+      <span class="dl-icon">📷</span>
+      <div><div class="dl-label">Фото проблем</div><div class="dl-desc">Загрузить фото для жалобы</div></div>
+    </button>
     <button class="drawer-link" onclick="switchTab('where');toggleDrawer()">
       <span class="dl-icon">📍</span>
       <div><div class="dl-label">Куда подавать</div><div class="dl-desc">Порталы, email, телефоны</div></div>
     </button>
     <div class="drawer-divider"></div>
-    <button class="drawer-link" onclick="switchTab('qr');toggleDrawer()">
+    <button class="drawer-link" onclick="toggleDrawer();switchTab('qr')">
       <span class="dl-icon">🖨️</span>
       <div><div class="dl-label">QR-код для лифта</div><div class="dl-desc">Макет объявления для печати</div></div>
     </button>
-  </div>
-</div>
-
-<!-- MAIN TAB -->
-<div id="tab-main" class="section active">
-  <!-- Problems -->
-  <div class="card">
-    <div class="card-title">Выберите проблемы</div>
-    <div class="chips" id="chips"></div>
-    <div class="chip-actions">
-      <button onclick="selAll()">Выбрать все</button>
-      <button onclick="clrAll()">Сбросить</button>
-    </div>
-  </div>
-
-  <!-- Tone + Text -->
-  <div class="card">
-    <div class="tone-switch" id="tone-switch">
-      <label id="tone-formal" class="active" onclick="setTone('formal')">📋 Формальный</label>
-      <label id="tone-informal" onclick="setTone('informal')">💬 Неформальный</label>
-    </div>
-    <div class="complaint-area" id="complaint-area">
-      <div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div>
-    </div>
-    <button class="regen-btn" id="regen-btn" onclick="regen()">🔄 Другой вариант текста</button>
-  </div>
-
-  <!-- Destination -->
-  <div class="card">
-    <div class="card-title">Куда отправить?</div>
-    <div class="dest-row">
-      <button class="dest-btn active-danger" data-d="uk" onclick="setDest(this)">📧 УК (email)</button>
-      <button class="dest-btn" data-d="admin" onclick="setDest(this)">🏛️ Администрация</button>
-      <button class="dest-btn" data-d="ministry" onclick="setDest(this)">📋 Мин. ЖКХ МО</button>
-      <button class="dest-btn" data-d="governor" onclick="setDest(this)">👔 Губернатор</button>
-      <button class="dest-btn" data-d="gis" onclick="setDest(this)">🌐 ГИС ЖКХ</button>
-    </div>
-  </div>
-
-  <!-- Photo -->
-  <div class="card">
-    <div class="card-title">📷 Приложите фото</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Фото проблем — сильный аргумент в жалобе</p>
-    <div class="photo-zone" id="photo-zone">
-      <div>📸 Нажмите, чтобы добавить фото</div>
-      <input type="file" accept="image/*" multiple capture="environment" onchange="addPhotos(this.files)">
-    </div>
-    <div class="photo-preview" id="photo-preview"></div>
-  </div>
-
-  <!-- Personal data -->
-  <div class="card">
-    <div class="card-title">Ваши данные</div>
-    <div class="form-row">
-      <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fio" placeholder="Иванов Иван Иванович" oninput="upd()"></div>
-      <div class="field" style="flex:1"><label>Квартира</label><input type="text" id="apt" placeholder="№" oninput="upd()"></div>
+    <div class="drawer-divider"></div>
+    <div style="padding:12px;font-size:11px;color:var(--muted);line-height:1.5">
+      <strong>Совет дома</strong><br>
+      Нужно 20–30 жалоб/день в течение 2–3 недель. Жалобу может подать любой жилец, не только собственник.
     </div>
   </div>
 </div>
 
-<!-- READY TEXTS TAB -->
-<div id="tab-ready" class="section">
-  <div class="card">
-    <div class="card-title">Готовые тексты жалоб</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Скопируйте нужный текст — вставьте ФИО, номер квартиры и дату.</p>
-    <div id="rlist"></div>
-  </div>
-</div>
+<!-- tabs removed — navigation via burger menu, main screen always visible -->
 
-<!-- WHERE TO SEND TAB -->
-<div id="tab-where" class="section">
-  <div class="card">
-    <div class="card-title">Куда подавать жалобу</div>
-    <div style="font-size:13px;line-height:1.8">
-      <p style="margin-bottom:10px"><b>📧 УК «Континент Комфорта»</b><br>Email: <a href="mailto:kontinent.reception@mail.ru">kontinent.reception@mail.ru</a></p>
-      <p style="margin-bottom:10px"><b>🏛️ Администрация г. Химки</b><br><a href="https://admhimki.ru/internet-priemnaya/" target="_blank">admhimki.ru/internet-priemnaya</a></p>
-      <p style="margin-bottom:10px"><b>📋 Министерство ЖКХ МО</b><br><a href="https://mgkh.mosreg.ru/obrasheniya" target="_blank">mgkh.mosreg.ru/obrasheniya</a></p>
-      <p style="margin-bottom:10px"><b>👔 Губернатор МО</b><br><a href="https://mosreg.ru/governor/reception" target="_blank">mosreg.ru/governor/reception</a></p>
-      <p style="margin-bottom:10px"><b>🌐 ГИС ЖКХ</b><br><a href="https://dom.gosuslugi.ru" target="_blank">dom.gosuslugi.ru</a></p>
+<div class="container">
+  <!-- MAIN -->
+  <div id="tab-main" class="section active">
+    <div class="trust-block">
+      <b>Массовые жалобы работают.</b> УК обязана ответить на каждую в течение 10 рабочих дней (ст. 161 ЖК РФ). 20-30 жалоб в день в течение 2-3 недель создают основание для проверки и смены УК. Жалобу может подать <b>любой жилец</b>, не только собственник.
     </div>
-    <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:8px;font-size:12px;line-height:1.6">
-      <b>💡 Совет:</b> Подайте сразу в несколько мест — это усилит давление на УК.<br>
-      <b>Фиксируйте:</b> дату, номер заявки — в чат дома.<br>
-      <b>Любой жилец</b> может подать жалобу, не только собственник.
+    <div class="card">
+      <div class="card-title">Чем вы недовольны?</div>
+      <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
+      <div class="chips" id="chips"></div>
     </div>
-  </div>
-</div>
-
-<!-- QR TAB -->
-<div id="tab-qr" class="section">
-  <div class="card">
-    <div class="card-title">QR-код для объявления в лифте</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Введите URL, на котором размещён генератор жалоб. QR-код обновится автоматически.</p>
-    <div class="form-row">
-      <div class="field" style="flex:1"><label>URL сайта</label><input type="text" id="qr-url" placeholder="https://catch-the-wave.github.io/KhimkiManagement/" oninput="updateQR()"></div>
-    </div>
-    <div style="text-align:center;margin:16px 0">
-      <canvas id="qr-canvas" width="200" height="200" style="border:3px solid var(--primary);border-radius:12px;padding:4px"></canvas>
-      <div id="qr-placeholder" style="font-size:13px;color:var(--muted);margin-top:8px">Введите URL выше</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Макет объявления</div>
-    <div style="background:#fff;border:2px solid var(--border);border-radius:8px;padding:16px;text-align:center;line-height:1.6">
-      <div style="background:var(--danger);color:#fff;display:inline-block;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:8px">ВНИМАНИЕ, ЖИЛЬЦЫ!</div>
-      <div style="font-size:18px;font-weight:900;margin-bottom:6px">Помогите сменить УК!</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Наш дом перестали обслуживать. Нужна ваша жалоба.</div>
-      <div style="font-size:13px;text-align:left;margin-bottom:12px">УК «Континент Комфорта» прекратила обслуживание дома. Совет дома принял решение о смене УК. Для расторжения договора нужны <b>массовые жалобы</b> от жильцов в течение 2–3 недель.</div>
-      <div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px">📱 НАВЕДИТЕ КАМЕРУ НА QR-КОД</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Откроется генератор жалоб — за 2 минуты</div>
-      <div style="text-align:left;background:var(--bg);border-radius:8px;padding:10px;font-size:12px;margin-bottom:12px">
-        <b>1.</b> Отсканируйте QR-код<br>
-        <b>2.</b> Выберите проблемы галочками<br>
-        <b>3.</b> Нажмите «Отправить»<br>
-        <b>4.</b> Номер заявки — в чат дома
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="card-title" style="margin:0">Текст жалобы</div>
+        <button class="regen" onclick="regen()" id="rbtn" style="display:none">🔄 Другой вариант</button>
       </div>
-      <div style="font-size:12px;font-weight:700;color:var(--danger)">Жалобу может подать ЛЮБОЙ жилец!</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">Нужно 20–30 жалоб в день.</div>
+      <div class="tone-switch" id="tone-switch" style="display:none">
+        <button class="tone-btn active" data-tone="formal" onclick="setTone(this)">Формальный</button>
+        <button class="tone-btn" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+      </div>
+      <div id="carea"><div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div></div>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center">Распечатайте эту страницу или сделайте скриншот для размещения в лифте.</p>
-    <button class="btn btn-copy" style="margin-top:8px" onclick="window.print()">🖨️ Печать</button>
+    <div class="card">
+      <div class="card-title">Куда направить</div>
+      <div class="dest-bar">
+        <button class="dest-btn active" data-d="uk" onclick="setD(this)">✉️ УК (email)</button>
+        <button class="dest-btn" data-d="admin" onclick="setD(this)">🏛️ Администрация</button>
+        <button class="dest-btn" data-d="ministry" onclick="setD(this)">🧹 Мин. чистоты</button>
+        <button class="dest-btn" data-d="governor" onclick="setD(this)">📋 Правительство МО</button>
+        <button class="dest-btn" data-d="gis" onclick="setD(this)">🏠 ГИС ЖКХ</button>
+      </div>
+      <div class="dest-hint" id="dest-hint">Отправьте одну жалобу в <b>2-3 места</b> для максимального эффекта. Начните с УК, затем — Администрация.</div>
+      <div class="dest-hint" id="dest-desc" style="margin-top:4px;font-style:italic"></div>
+    </div>
+    <div class="card" id="photo-card">
+      <div class="card-title">📷 Приложите фото</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Жалоба с фото — весомее. Сфотографируйте проблему (грязь, темноту, крыс, мусор) и прикрепите здесь. Фото будут упомянуты в тексте.</p>
+      <label class="photo-add-btn" onclick="">
+        <span>📷 Добавить фото</span>
+        <input type="file" accept="image/*" multiple onchange="addPh(this.files)" style="display:none">
+      </label>
+      <div class="thumbs-big" id="thumbs"></div>
+      <div id="photo-count" style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ваши данные</div>
+      <div class="form-row">
+        <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="upd()"></div>
+        <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="upd()"></div>
+      </div>
+      <div class="addr">📍 г. Химки, ул. Совхозная, д. 5</div>
+    </div>
   </div>
-  <div class="card">
-    <div class="card-title">💡 Где захостить бесплатно</div>
-    <div style="font-size:12px;line-height:1.6">
-      <p style="margin-bottom:6px"><b>GitHub Pages</b> — загрузите файл в репозиторий, включите Pages. (Уже сделано!)</p>
-      <p style="margin-bottom:6px"><b>Netlify</b> — перетащите файл на netlify.com/drop.</p>
-      <p><b>Telegram-бот @AnyFileBot</b> — отправьте файл, получите прямую ссылку.</p>
+
+  <!-- PHOTO -->
+  <div id="tab-photo" class="section">
+    <div class="card">
+      <div class="card-title">Фото проблем</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Фотографии усиливают жалобу. Сфотографируйте проблему и загрузите сюда — они будут упомянуты в тексте жалобы.</p>
+      <div class="photo-upload" onclick="document.getElementById('phi').click()">
+        <div style="font-size:40px;margin-bottom:8px">📷</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text)">Нажмите, чтобы добавить фото</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">До 5 фотографий</div>
+        <input type="file" id="phi" accept="image/*" multiple onchange="addPh(this.files)" style="display:none">
+      </div>
+      <div class="thumbs-big" id="thumbs2"></div>
+      <div id="photo-count2" style="font-size:13px;color:var(--muted);margin-top:8px;text-align:center"></div>
+    </div>
+  </div>
+
+  <!-- READY -->
+  <div id="tab-ready" class="section">
+    <div class="card">
+      <div class="card-title">Готовые тексты жалоб</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Скопируйте → отправьте на <strong>kontinent.reception@mail.ru</strong> или вставьте на портале. Замените [ФИО] и [кв.] на свои.</p>
+      <div id="rlist"></div>
+    </div>
+  </div>
+
+  <!-- WHERE -->
+  <div id="tab-where" class="section">
+    <div class="card">
+      <div class="card-title">Куда подавать жалобы</div>
+      <a class="portal-link" href="mailto:kontinent.reception@mail.ru"><span class="pi">✉️</span><div><div class="pn">УК «Континент Комфорта»</div><div class="pd">kontinent.reception@mail.ru — самый простой</div></div></a>
+      <a class="portal-link" href="https://eds.mosreg.ru/claims" target="_blank"><span class="pi">🏛️</span><div><div class="pn">«Решаем проблемы вместе»</div><div class="pd">Портал Правительства МО</div></div></a>
+      <a class="portal-link" href="https://mstg.mosreg.ru" target="_blank"><span class="pi">🧹</span><div><div class="pn">Министерство чистоты МО</div><div class="pd">Жилищный надзор</div></div></a>
+      <a class="portal-link" href="https://dom.gosuslugi.ru" target="_blank"><span class="pi">🏠</span><div><div class="pn">ГИС ЖКХ</div><div class="pd">dom.gosuslugi.ru</div></div></a>
+      <a class="portal-link" href="tel:84955737788"><span class="pi">📞</span><div><div class="pn">Глава г. Химки</div><div class="pd">8 (495) 573-77-88</div></div></a>
+    </div>
+    <div class="card">
+      <div class="card-title">Советы</div>
+      <div style="font-size:12px;line-height:1.6">
+        <p style="margin-bottom:6px"><b>Массовость:</b> 20–30 жалоб/день, 2–3 недели.</p>
+        <p style="margin-bottom:6px"><b>Несколько мест:</b> одну жалобу — в УК, администрацию и на портал.</p>
+        <p style="margin-bottom:6px"><b>Фото:</b> приложите к жалобе.</p>
+        <p style="margin-bottom:6px"><b>Фиксируйте:</b> дату, номер заявки — в чат дома.</p>
+        <p><b>Любой жилец</b> может подать жалобу, не только собственник.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR -->
+  <div id="tab-qr" class="section">
+    <div class="card">
+      <div class="card-title">QR-код для объявления в лифте</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Введите URL, на котором размещён генератор жалоб. QR-код обновится автоматически.</p>
+      <div class="form-row">
+        <div class="field" style="flex:1"><label>URL сайта</label><input type="text" id="qr-url" placeholder="https://your-site.com/complaint.html" oninput="updateQR()"></div>
+      </div>
+      <div style="text-align:center;margin:16px 0">
+        <canvas id="qr-canvas" width="200" height="200" style="border:3px solid var(--primary);border-radius:12px;padding:4px"></canvas>
+        <div id="qr-placeholder" style="font-size:13px;color:var(--muted);margin-top:8px">Введите URL выше</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Макет объявления</div>
+      <div style="background:#fff;border:2px solid var(--border);border-radius:8px;padding:16px;text-align:center;line-height:1.6">
+        <div style="background:var(--danger);color:#fff;display:inline-block;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:8px">ВНИМАНИЕ, ЖИЛЬЦЫ!</div>
+        <div style="font-size:18px;font-weight:900;margin-bottom:6px">Помогите сменить УК!</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Наш дом перестали обслуживать. Нужна ваша жалоба.</div>
+        <div style="font-size:13px;text-align:left;margin-bottom:12px">УК «Континент Комфорта» прекратила обслуживание дома. Совет дома принял решение о смене УК. Для расторжения договора нужны <b>массовые жалобы</b> от жильцов в течение 2–3 недель.</div>
+        <div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px">📱 НАВЕДИТЕ КАМЕРУ НА QR-КОД</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Откроется генератор жалоб — за 2 минуты</div>
+        <div style="text-align:left;background:var(--bg);border-radius:8px;padding:10px;font-size:12px;margin-bottom:12px">
+          <b>1.</b> Отсканируйте QR-код<br>
+          <b>2.</b> Выберите проблемы галочками<br>
+          <b>3.</b> Нажмите «Отправить»<br>
+          <b>4.</b> Номер заявки — в чат дома
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--danger)">Жалобу может подать ЛЮБОЙ жилец!</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Нужно 20–30 жалоб в день.</div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center">Распечатайте эту страницу или сделайте скриншот для размещения в лифте.</p>
+      <button class="btn btn-copy" style="margin-top:8px" onclick="window.print()">🖨️ Печать</button>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Где захостить бесплатно</div>
+      <div style="font-size:12px;line-height:1.6">
+        <p style="margin-bottom:6px"><b>GitHub Pages</b> — загрузите файл в репозиторий, включите Pages.</p>
+        <p style="margin-bottom:6px"><b>Netlify</b> — перетащите файл на netlify.com/drop.</p>
+        <p><b>Telegram-бот @AnyFileBot</b> — отправьте файл, получите прямую ссылку.</p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Bottom bar -->
-<div class="bottom-bar" id="ba">
-  <button class="btn btn-copy" id="bcopy" disabled onclick="copyAct()">📋 Скопировать</button>
-  <button class="btn btn-send" id="bsend" disabled onclick="sendAct()">📧 Отправить</button>
+<div class="bottom-actions" id="ba">
+  <button class="btn btn-copy" id="bcopy" disabled onclick="copyTxt()">📋 Скопировать</button>
+  <button class="btn btn-send" id="bsend" disabled onclick="sendAct()">✉️ Отправить</button>
 </div>
 
-<!-- Toast -->
+<div class="send-modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="send-modal" id="send-modal">
+  <h3 id="modal-title">Отправка жалобы</h3>
+  <div id="modal-steps"></div>
+  <div id="modal-next-dest"></div>
+  <div class="modal-actions">
+    <button class="btn btn-copy" onclick="closeModal()">Закрыть</button>
+    <button class="btn btn-send" id="modal-share-btn" onclick="shareWithNeighbor()" style="display:none">Поделиться с соседом</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ====== PROBLEM DATA ======
+// ====== PROBLEM BLOCKS — multiple unique variants per problem ======
+// Each problem has 4 different paragraph-length descriptions written in different styles.
+// The generator picks one variant per problem randomly, so each complaint reads uniquely.
+
 const P = {
   cleaning: {
-    label: '🧹 Нет уборки',
+    label: 'Нет уборки',
     v: [
-      'В подъезде дома по адресу г. Химки, ул. Совхозная, д. 5 полностью отсутствует уборка мест общего пользования. Лестничные клетки, холлы и лифты не убираются на протяжении длительного времени.',
-      'Влажная уборка в подъезде по указанному адресу не проводится месяцами. Полы покрыты грязью, в углах скопился мусор, пыль не протирается.',
-      'УК «Континент Комфорта» прекратила проводить уборку подъезда. На лестничных площадках грязь, мусор, следы от обуви — уборщицы нет уже несколько месяцев.',
-      'Состояние подъезда антисанитарное — уборка не проводится. Полы залиты грязью, перила в пыли, углы завалены мусором. Ни разу за последние месяцы не видели уборщицу.'
+      'В подъезде не проводится уборка уже несколько месяцев. На полу скопилась грязь, пыль лежит на перилах и подоконниках. Ощущение, что уборщица не появлялась в нашем доме с осени прошлого года. При этом в квитанциях мы продолжаем платить за содержание.',
+      'Влажная уборка подъезда полностью прекращена. Лестничные площадки в ужасном состоянии: грязь на полу, пыльные стены, мусор в углах. Жильцы вынуждены сами мыть площадки возле своих квартир, но это не решение проблемы — мы платим за эту услугу управляющей компании.',
+      'Хочу обратить внимание на антисанитарное состояние подъезда. Уборка не проводится: полы грязные, на лестницах пыль и мусор. Складывается впечатление, что управляющая компания вообще забыла о существовании нашего дома.',
+      'Подъезд нашего дома находится в крайне запущенном состоянии из-за полного отсутствия уборки. Я неоднократно обращал(а) внимание на грязные полы, пыль и мусор на лестничных клетках. Никакой реакции со стороны УК не последовало.'
     ],
     vi: [
-      'В подъезде не убирают вообще — грязь, пыль, мусор в углах. Уборщицу не видели уже месяцами. Ходить по лестнице неприятно.',
-      'Подъезд превратился в свинарник. Никто не моет полы, не протирает перила. Грязь копится неделями, а мы платим за содержание.',
-      'Уборки в подъезде нет от слова совсем. Полы чёрные от грязи, в углах мусор. Куда уходят наши деньги за содержание?',
-      'Месяцами никто не убирает подъезд. Грязища на полу, пыль на перилах, мусор по углам — стыдно гостей приглашать.'
+      'Подъезд не убирают вообще. Грязь, пыль, мусор по углам — такое ощущение, что уборщица пропала ещё в прошлом году. А деньги за содержание мы платим каждый месяц как положено.',
+      'Зайдите в наш подъезд — всё поймёте сами. Полы грязные, перила липкие, пыль слоями. Мы уже сами моем площадки перед квартирами, но почему мы должны это делать, если платим за уборку?',
+      'Уборка в подъезде — ноль. Полный ноль. Грязь на полу, пыль на подоконниках, мусор в углах. И это при том, что каждый месяц в квитанции стоит строка «содержание». За что мы платим?',
+      'В подъезде грязно настолько, что стыдно перед гостями. Уборка не проводится месяцами. Соседи уже сами организовали субботник, но это же не наша обязанность — мы за это платим УК.'
     ]
   },
   chute_clog: {
-    label: '🗑️ Засор мусоропровода',
+    label: 'Засор мусоропровода',
     v: [
-      'Мусоропровод в доме засорён, мусороприёмные ковши неисправны. Из ствола мусоропровода исходит сильный неприятный запах, распространяющийся по этажам.',
-      'Мусоропровод не обслуживается: ковши сломаны, ствол забит мусором. Зловоние проникает на лестничные клетки и в квартиры.',
-      'Мусоропровод не чистится и не дезинфицируется. Ковши на этажах заклинивают или сломаны. Запах гниющих отходов ощущается на всех этажах.',
-      'Ствол мусоропровода забит, ковши не функционируют. Из-за отсутствия обслуживания по подъезду распространяется тошнотворный запах.'
+      'Мусоропровод в нашем подъезде постоянно забит. Мусор не проходит, накапливается, жильцы не могут им пользоваться. Приходится носить пакеты с мусором на улицу к контейнерам, что крайне неудобно, особенно для пожилых жильцов и семей с маленькими детьми.',
+      'Мусоропровод засорён и не функционирует. Жильцы верхних этажей страдают больше всего — мусор просто не проходит вниз. Заявки на прочистку остаются без ответа. Проблема тянется уже не первый месяц.',
+      'Ствол мусоропровода засорён настолько, что выбросить мусор через него невозможно. Люди вынуждены спускаться с пакетами на улицу. Ни одна заявка на прочистку мусоропровода не была выполнена управляющей компанией.',
+      'Обращаю внимание на неработающий мусоропровод. Он забит, мусор из него не вывозится. Это продолжается уже длительное время. Мы неоднократно сообщали об этом в УК, но прочистка так и не была проведена.'
     ],
     vi: [
-      'Мусоропровод забит наглухо, ковши сломаны. Воняет так, что в подъезд заходить невозможно. А мы платим за обслуживание.',
-      'Из мусоропровода несёт гнилью на весь подъезд. Ковши не работают — мусор некуда деть. УК на заявки не реагирует.',
-      'Мусоропровод превратился в источник вони. Не чистят, не дезинфицируют, сломанные ковши не чинят. Жить невозможно.',
-      'Ковши мусоропровода сломаны, ствол забит. Запах стоит такой, что глаза слезятся. Сколько ни пиши заявки — толку ноль.'
+      'Мусоропровод забит наглухо. Мусор не проходит, застревает. Приходится таскать пакеты на улицу пешком. Бабушки с верхних этажей страдают больше всех. Заявки оставляли — толку ноль.',
+      'Мусоропровод не работает уже давно. Забит, не прочищается. Мы звонили, писали — без результата. Люди с пакетами мусора ходят на улицу, хотя мусоропровод для того и существует.',
+      'Выбросить мусор в мусоропровод невозможно — он забит. Просто не работает. Оставляли заявки — ни разу никто не пришёл прочистить. А мы продолжаем за это платить.',
+      'Мусоропровод — мёртвый. Засор такой, что ничего не проходит. Носим мусор на улицу. У кого есть маленькие дети или пожилые родственники — понимают, как это неудобно.'
     ]
   },
   chute_smell: {
-    label: '🦨 Зловоние из мусоропровода',
+    label: 'Зловоние из мусоропровода',
     v: [
-      'Из мусоропровода исходит невыносимое зловоние, которое распространяется по всему подъезду и проникает в квартиры. Дезинфекция ствола мусоропровода не проводится.',
-      'В подъезде стоит постоянный запах гниющих отходов из мусоропровода. УК не проводит промывку и санитарную обработку.',
-      'Зловоние из мусоропровода делает пребывание в подъезде невыносимым. Запах ощущается круглосуточно — санитарная обработка не проводится.',
-      'Мусоропровод является источником стойкого неприятного запаха. Отсутствие регулярной дезинфекции привело к антисанитарии в подъезде.'
+      'Из ствола мусоропровода исходит невыносимый запах гниющих отходов. Вонь проникает в квартиры через загрузочные клапаны и распространяется по всему подъезду. Дышать на некоторых этажах буквально невозможно, особенно в тёплые дни.',
+      'На лестничных площадках стоит отвратительный запах из мусоропровода. Причина — мусоропровод не прочищается и не дезинфицируется. Жители вынуждены закрывать двери наглухо, но запах всё равно проникает в квартиры.',
+      'Зловоние из мусоропровода делает проживание невыносимым. Запах гниения стоит на всех этажах круглосуточно. Никакая санитарная обработка ствола мусоропровода не проводилась уже очень давно.',
+      'Хочу пожаловаться на сильнейший запах из мусоропровода. Вонь ощущается уже при входе в подъезд и усиливается на верхних этажах. У меня есть маленький ребёнок, и я крайне обеспокоен(а) влиянием этой антисанитарии на здоровье семьи.'
     ],
     vi: [
-      'Из мусоропровода воняет так, что хочется зажать нос и бежать мимо. Не моют, не чистят — вонь стоит 24/7.',
-      'Вонь из мусоропровода проникает в квартиры. Дети жалуются на запах. УК и пальцем не пошевелит — дезинфекции не было месяцами.',
-      'Подъезд пропитан запахом гнили из мусоропровода. Гости в шоке, жильцы привыкли, но это не нормально.',
-      'Зловоние из мусоропровода — это просто невыносимо. Ни разу не видели, чтобы кто-то его мыл или обрабатывал.'
+      'Из мусоропровода воняет так, что дышать невозможно. Запах гнили стоит на всех этажах. Двери закрываем — всё равно проникает в квартиры. Особенно тяжело летом.',
+      'Вонь из мусоропровода — это просто кошмар. Заходишь в подъезд — сразу бьёт в нос. На верхних этажах вообще невыносимо. Никакой обработки, никакой прочистки.',
+      'Мусоропровод воняет на весь подъезд. Запах такой, что гости отказываются к нам приходить. У нас маленький ребёнок — мы реально переживаем за его здоровье. А УК — тишина.',
+      'Невозможно жить с этим запахом из мусоропровода. Гниёт что-то внутри, вонь расползается по этажам. Ни разу не прочищали, ни разу не дезинфицировали. Просто забили на это.'
     ]
   },
-  lighting: {
-    label: '💡 Нет освещения',
+  chute_broken: {
+    label: 'Поломка ковша',
     v: [
-      'В подъезде отсутствует освещение на лестничных клетках, в холлах и на этажах. Перегоревшие лампы не заменяются. Передвижение по подъезду в тёмное время суток создаёт угрозу здоровью жителей.',
-      'Освещение мест общего пользования не функционирует. Жители вынуждены пользоваться фонариками на телефонах. Электрик отсутствует, заявки игнорируются.',
-      'Лестничные клетки и холлы погружены в темноту — лампы не горят. УК не обеспечивает замену осветительных приборов, что создаёт травмоопасную ситуацию.',
-      'Отсутствие освещения в подъезде длится уже несколько месяцев. На лестницах темно даже днём, что особенно опасно для пожилых жителей и детей.'
+      'Загрузочный ковш мусоропровода на моём этаже сломан. Крышка не закрывается, из-за чего запах из ствола беспрепятственно распространяется по площадке. Заявку на ремонт я подавал(а), но никто так и не пришёл.',
+      'Ковш мусоропровода неисправен — заклинивает, не проворачивается. Выбросить мусор через него невозможно. Помимо неудобства, сломанный ковш является источником антисанитарии и неприятного запаха.',
+      'На нескольких этажах нашего подъезда сломаны загрузочные ковши мусоропровода. Они не ремонтируются, хотя жильцы неоднократно обращались. Мусоропровод фактически не функционирует.',
+      'Крышка ковша мусоропровода оторвана, механизм поворота заклинил. Ремонт не производился несмотря на многочисленные обращения. Открытый ствол — это и запах, и насекомые.'
     ],
     vi: [
-      'В подъезде темнота — лампочки перегорели, никто не меняет. Поднимаемся с фонариком на телефоне. Того и гляди ногу сломаешь.',
-      'Света в подъезде нет уже давно. Ходим в темноте, как в подземелье. Электрика нет, заявки бесполезны.',
-      'Лампочки не горят ни на одном этаже. Дети боятся заходить в подъезд вечером. А мы за что платим?',
-      'Темнота в подъезде — норма уже несколько месяцев. Поменять лампочку — видимо, непосильная задача для нашей УК.'
+      'Ковш мусоропровода сломан — крышка не закрывается, механизм заклинило. И вот через эту дыру на площадку идёт вся вонь из ствола. Заявку оставлял(а) — никто не пришёл.',
+      'На нашем этаже ковш мусоропровода сломан уже давно. Мусор не выбросишь, крышка болтается. Писали в УК — без реакции. Из открытого ствола лезут тараканы и воняет.',
+      'Ковши мусоропровода поломаны на нескольких этажах. Никто не чинит. Мусоропровод толком не работает, а из сломанных крышек на площадку идёт запах и насекомые.',
+      'Крышка мусоропровода оторвана. Просто висит. Из ствола несёт гнилью прямо на площадку. Сколько раз просили починить — ноль реакции.'
     ]
   },
-  pests: {
-    label: '🐀 Крысы и тараканы',
+  stairs_dirty: {
+    label: 'Грязная лестница',
     v: [
-      'В доме наблюдается массовое присутствие грызунов и тараканов. Крысы обнаружены в подвале, на придомовой территории и у мусорных контейнеров. Тараканы проникают в квартиры. Дератизация и дезинсекция не проводятся.',
-      'УК не обеспечивает проведение дератизации и дезинсекции. В подвале обитают крысы, в подъездах — тараканы. Антисанитарная обстановка представляет угрозу здоровью жителей.',
-      'Жители регулярно наблюдают крыс во дворе и подвале, тараканов — на лестничных клетках и в квартирах. Заявки на проведение обработки помещений игнорируются.',
-      'Санитарная обработка дома не проводится. Крысы свободно перемещаются по двору, тараканы — по подъездам. Ситуация представляет эпидемиологическую угрозу.'
+      'Лестница в подъезде не убирается. Ступени покрыты слоем грязи, на площадках мусор и пыль. Перила липкие. По лестнице неприятно ходить, а ведь ей пользуются и дети, и пожилые люди каждый день.',
+      'Общедомовая лестница находится в ужасном состоянии. Видно, что её не мыли месяцами. Грязь въелась в плитку, по углам паутина и мусор. Стыдно перед гостями.',
+      'Лестничные марши и площадки между этажами не убираются. Пол грязный, на ступенях песок и пятна. Создаётся впечатление полной заброшенности дома.',
+      'Прошу принять меры по наведению порядка на лестнице. Уборка лестничных клеток не проводится, полы в ужасном состоянии. Жильцы неоднократно обращали на это внимание, безрезультатно.'
     ],
     vi: [
-      'Крысы бегают по двору среди бела дня, тараканы лезут в квартиры. Обработку не делают, заявки игнорируют. Живём как на помойке.',
-      'У нас крысы в подвале и тараканы в подъезде. Дети боятся выходить во двор. А УК говорит «ждите» — и тишина.',
-      'Тараканов столько, что они уже никого не стесняются. Крысы облюбовали мусорку. Дератизацию и дезинсекцию не проводили ни разу.',
-      'Крысы у мусорки, тараканы в подъезде — это наша реальность. УК на обработку денег не находит, зато квитанции присылает исправно.'
+      'Лестница — грязная. Ступеньки в грязи, перила липкие, по углам мусор. Ощущение, что не мыли с момента сдачи дома. А дети тут каждый день ходят.',
+      'Лестницу не моют вообще. Грязь такая, что к подошвам прилипает. Стыдно, когда гости приходят. Мы сами уже пару раз мыли, но это же не наша работа.',
+      'На лестнице грязь, песок, пятна. По углам паутина. Выглядит как заброшенный дом, а не жилой. Уборщицу мы не видели ни разу за последние месяцы.',
+      'Лестничные площадки в таком состоянии, что реально неприятно ходить. Грязно, пыльно. Дети трогают перила — а они липкие от грязи. Где уборка, за которую мы платим?'
+    ]
+  },
+  stairs_light: {
+    label: 'Нет света на лестнице',
+    v: [
+      'На лестнице в подъезде не работает освещение. Подниматься и спускаться приходится в полной темноте, что особенно опасно для пожилых жильцов и детей. Лампочки перегорели давно, замена не производится.',
+      'Освещение на лестничных клетках отсутствует. Перегоревшие лампы никто не меняет, электрика в штате УК нет. Тёмная лестница — прямая угроза безопасности жителей.',
+      'В подъезде темно — на лестнице нет света уже продолжительное время. Я лично менял(а) лампочку на своём этаже за свой счёт, но это обязанность УК, а не жильцов.',
+      'Лестничные пролёты не освещены. Люди спотыкаются, падают. Мой сосед уже получил травму на тёмной лестнице. УК не реагирует на заявки.'
+    ],
+    vi: [
+      'На лестнице темнота. Лампочки перегорели, никто не меняет. Спускаемся по ступенькам наощупь. Сосед уже упал и ушибся. Это реально опасно, особенно для пожилых.',
+      'Света на лестнице нет. Вообще. Электрика нет, лампочки никто не меняет. Я уже сам купил и вкрутил на своём этаже, но это же не моя обязанность.',
+      'Лестница — как в подвале, темнота полная. Дети боятся ходить одни. Пожилые соседи рискуют упасть. А УК хоть бы лампочку вкрутила.',
+      'Без фонарика по лестнице не пройти — света нет уже давно. Лампочки сгорели, менять некому. Писали заявки — тишина. Опасно, особенно вечером.'
+    ]
+  },
+  hall_light: {
+    label: 'Нет света в холлах',
+    v: [
+      'В межквартирном холле и возле лифтов нет освещения. Выходя из квартиры, оказываешься в полной темноте. Кнопку лифта приходится искать на ощупь.',
+      'Лифтовой холл и коридоры между квартирами не освещены. Лампы не работают, датчики движения — тоже. Темнота на этажах — постоянная проблема.',
+      'Хочу обратить внимание на отсутствие света в холлах. Перегоревшие лампочки не заменяются. Жильцы вынуждены пользоваться фонариками телефонов, чтобы попасть к себе домой.',
+      'В лифтовом и межквартирном холлах полная темнота. Для пожилых жильцов это особенно критично — в темноте легко оступиться и упасть. Электрик в доме отсутствует.'
+    ],
+    vi: [
+      'Выходишь из квартиры — темнота. Кнопку лифта ищешь на ощупь. В холле ни одной работающей лампочки. Датчики движения тоже мёртвые. Привет от нашей УК.',
+      'В холле и возле лифтов свет не горит. Темно как в погребе. Мы уже привыкли ходить с фонариком телефона, но разве так должно быть?',
+      'Ни на одном этаже в холле не работает свет. Лампочки перегорели — никто не меняет. Электрика у нас, видимо, нет в принципе.',
+      'Холлы на этажах — полная темнота. Бабушки и дедушки реально рискуют упасть. У нас в доме нет электрика, никто ничего не меняет и не чинит.'
     ]
   },
   yard: {
-    label: '🏚️ Двор и мусорка',
+    label: 'Грязный двор',
     v: [
-      'Придомовая территория не убирается. Мусорная площадка завалена отходами, контейнеры переполнены. Дворник отсутствует. Территория находится в антисанитарном состоянии.',
-      'Двор и мусорная площадка не обслуживаются. Мусор разбросан вокруг контейнеров, на газонах и тротуарах скопились отходы. Уборка территории не производится.',
-      'Мусорная площадка представляет собой свалку — контейнеры переполнены, мусор рассыпан вокруг. Двор не подметается, дворника нет.',
-      'Территория двора запущена: газоны замусорены, мусорная площадка переполнена, тротуары грязные. УК не обеспечивает содержание придомовой территории.'
+      'Придомовая территория не убирается. Во дворе грязь, мусор, окурки. Газоны заросли, бордюры разрушены. Двор выглядит заброшенным. Дворник отсутствует.',
+      'Территория возле дома в неудовлетворительном состоянии. Мусор лежит прямо на газонах и вдоль дорожек. Складывается впечатление, что за двором вообще никто не следит.',
+      'Двор нашего дома в ужасном состоянии. Нет ни уборки, ни ухода за территорией. Дети играют среди мусора. Другие дома в округе выглядят значительно лучше.',
+      'Обращаюсь по поводу состояния двора. Территория замусорена, тротуары грязные. Дворника нет. Жильцы периодически сами выходят убирать, но мы не обязаны это делать.'
     ],
     vi: [
-      'Двор как после апокалипсиса — мусор везде, контейнеры переполнены. Дворника нет. Детей не выпустишь гулять.',
-      'Мусорка завалена так, что подойти страшно. Во дворе грязь, окурки, пакеты. Дворника не видели с тех пор, как УК перестала работать.',
-      'Двор превратился в свалку. Мусор вываливается из контейнеров, ветер разносит его по всей территории. Стыдно перед соседними домами.',
-      'Около мусорки — гора отходов. Во дворе полный бардак. Ни уборки, ни дворника — ничего. Только квитанции приходят.'
+      'Двор — помойка. Мусор на газонах, окурки на дорожках, всё заросло. Дворника нет и в помине. Соседние дома выглядят нормально, а наш — как заброшенный.',
+      'Территорию возле дома не убирают. Мусор валяется, газоны запущены. Дети гуляют среди этого безобразия. Дворника мы не видели ни разу.',
+      'Во дворе грязно. Мусор, бычки, грязные дорожки. Мы с соседями сами выходили убирать пару раз, но это абсурд — мы же платим за это каждый месяц.',
+      'Двор в таком состоянии, что стыдно. Ни уборки, ни ухода. Дворника нет. Зато в квитанции всё аккуратно — деньги за содержание начисляются исправно.'
     ]
   },
-  no_staff: {
-    label: '🔧 Нет персонала',
+  trash_area: {
+    label: 'Мусорная площадка',
     v: [
-      'УК «Континент Комфорта» фактически прекратила обслуживание дома. Отсутствуют сантехник, электрик, дворник, уборщица. Заявки жителей на ремонт и устранение аварий остаются без ответа.',
-      'Персонал управляющей компании полностью отсутствует: нет ни одного штатного работника — ни дворника, ни уборщицы, ни сантехника, ни электрика. Аварийные заявки не обрабатываются.',
-      'Дом фактически брошен управляющей компанией. Технический персонал отсутствует. Жители лишены возможности получить элементарные услуги — вызвать сантехника или электрика.',
-      'УК не обеспечивает дом обслуживающим персоналом. Заявки на вызов специалистов игнорируются неделями. Дом остался без какого-либо обслуживания.'
+      'Мусорная площадка возле дома — это позор. Мусор валяется вокруг контейнеров, пакеты разорваны, содержимое разбросано. Площадка не очищается, контейнеры переполнены.',
+      'Контейнерная площадка содержится отвратительно. Мусор не вывозится вовремя, контейнеры переполнены, отходы разбросаны вокруг. Запах чувствуется из окон квартир.',
+      'Состояние мусорной площадки критическое. Мусор горами лежит рядом с контейнерами, площадка не убирается. Это рассадник инфекций и привлекает грызунов.',
+      'Площадка для сбора мусора не обслуживается. Контейнеры переполнены, мусор вываливается и разносится ветром. Ни вывоза, ни уборки вокруг контейнеров.'
     ],
     vi: [
-      'В доме нет вообще никого — ни сантехника, ни электрика, ни дворника, ни уборщицы. Звонишь в УК — трубку не берут или говорят «ждите».',
-      'УК бросила дом. Персонала ноль. Потёк кран — вызвать некого. Нет света — электрика нет. Зато деньги берут за полный пакет.',
-      'Мы платим за обслуживание, а обслуживания нет. Ни одного специалиста в доме. Заявки уходят в пустоту.',
-      'Дом без персонала — это наша реальность. Сантехника нет, электрика нет, дворника нет. УК существует только в квитанциях.'
+      'Мусорка — катастрофа. Контейнеры переполнены, мусор валяется вокруг на несколько метров. Пакеты рваные, всё разбросано. Крысы бегают. Никто не убирает.',
+      'Мусорная площадка — зрелище не для слабонервных. Контейнеры забиты, мусор вокруг, вонь в тёплую погоду долетает до квартир. Вывозят с опозданием, убирают — никогда.',
+      'Возле мусорных контейнеров — свалка. Мусор не вывозят вовремя, площадку не чистят. Запах, крысы, разбросанные пакеты. Смотреть на это каждый день невыносимо.',
+      'Контейнерная площадка не обслуживается. Мусор горой вокруг баков, ветром разносит по двору. Это же антисанитария в чистом виде. И никому нет дела.'
+    ]
+  },
+  roaches: {
+    label: 'Тараканы',
+    v: [
+      'В подъезде и квартирах появились тараканы. Их количество растёт с каждой неделей. Дезинсекция не проводится. Жильцы травят насекомых за свой счёт, но без комплексной обработки всего дома это бесполезно.',
+      'В доме завелись тараканы. Они ползают по лестницам, проникают в квартиры. Мы неоднократно просили УК провести дезинсекцию, но ничего сделано не было.',
+      'Серьёзная проблема с тараканами. Насекомые появляются в квартирах, на кухнях, в ванных. Обработку УК не проводит, хотя это входит в её обязанности.',
+      'Тараканы стали бедствием для жителей. Они лезут из мусоропровода, из подвала. Индивидуальная обработка квартир не помогает — нужна дезинсекция всего дома.'
+    ],
+    vi: [
+      'Тараканы повсюду. На лестнице, в подъезде, лезут в квартиры. Мы сами травим — бесполезно, потому что нужно обрабатывать весь дом. А УК этим не занимается.',
+      'Из мусоропровода и подвала лезут тараканы. Их всё больше. Мы покупаем отраву за свои деньги, но без нормальной дезинсекции всего дома — это борьба с ветряными мельницами.',
+      'В квартире тараканы. На кухне, в ванной. Это не потому что у нас грязно — это потому что весь дом не обрабатывается. УК обязана проводить дезинсекцию, но ей всё равно.',
+      'Тараканы — везде. Соседи жалуются, мы жалуемся, все жалуются. Травим сами — не помогает. Нужна обработка всего дома, но УК на это забила.'
+    ]
+  },
+  rats: {
+    label: 'Крысы',
+    v: [
+      'Во дворе и подвале нашего дома обнаружены крысы. Грызунов можно увидеть вечером возле мусорных контейнеров. Дератизация не проводится. Это угроза здоровью жителей.',
+      'В подвале дома и на территории расплодились крысы. Жильцы первых этажей слышат шум грызунов. УК не принимает никаких мер по дератизации.',
+      'Крысы стали постоянными обитателями двора. Их видят жильцы, их видят дети. Грызуны переносят опасные заболевания. Обработка не проводилась очень давно.',
+      'Хочу сообщить о нашествии крыс на территории и в подвале. Грызунов видно даже днём. Дератизация не проводится.'
+    ],
+    vi: [
+      'Во дворе крысы. Вечером их видно возле мусорки, бегают открыто. В подвале тоже. Дети гуляют во дворе — а там крысы. Дератизацию никто не проводит.',
+      'Крысы — наши постоянные соседи. В подвале шуршат, во дворе бегают. Жильцы первых этажей в ужасе. А УК — ноль реакции.',
+      'У нас крысы. Во дворе, у мусорки, в подвале. Их видно уже днём — это значит, что их очень много. Обработку от грызунов никто не проводил.',
+      'Крысы обнаглели — бегают по двору средь бела дня. Возле мусорки их целые стаи вечером. У нас дети! Это реальная угроза здоровью. А УК не делает ничего.'
     ]
   },
   no_response: {
-    label: '📵 Не отвечают на заявки',
+    label: 'Заявки игнорируются',
     v: [
-      'Управляющая компания систематически игнорирует обращения и заявки жителей. Телефоны не отвечают, письменные заявки остаются без рассмотрения, обратная связь отсутствует.',
-      'Заявки жителей на устранение неисправностей не выполняются. Диспетчерская служба не функционирует. Ответы на письменные обращения не предоставляются.',
-      'Жители лишены возможности связаться с УК: телефоны недоступны, офис закрыт, на электронные обращения ответов нет. Заявки не обрабатываются месяцами.',
-      'Обращения жителей в УК остаются без какой-либо реакции. За последние месяцы ни одна заявка не была выполнена. Связаться с представителями компании невозможно.'
+      'Заявки жителей систематически игнорируются. Я лично оставлял(а) несколько обращений — ни на одно не получил(а) ответа. Диспетчерская либо не берёт трубку, либо обещает и не делает.',
+      'Управляющая компания не реагирует на обращения жильцов. Заявки не выполняются, на звонки не отвечают. Компания просто собирает деньги, не оказывая услуг.',
+      'Ни одна моя заявка не была выполнена за последние месяцы. Писал(а) на почту, звонил(а) — тишина. Полное игнорирование при исправном сборе оплаты.',
+      'Невозможно добиться от УК выполнения работы. Любые обращения — без внимания. Соседи подтвердят. УК прекратила взаимодействие с жильцами.'
     ],
     vi: [
-      'Звонишь в УК — тишина. Пишешь заявку — игнор. Ответов нет, реакции нет. Как будто УК не существует.',
-      'Мы пишем заявки, а они просто пропадают в никуда. Ни ответа, ни привета. Телефон диспетчерской — автоответчик.',
-      'Невозможно достучаться до УК. Ни по телефону, ни письменно. Заявки копятся, а толку — ноль.',
-      'УК как чёрная дыра — заявки принимает, но ничего не делает. Ни разу не перезвонили, ни разу не ответили.'
+      'Пишем заявки — игнорируют. Звоним — не берут трубку. Если берут — обещают и не делают. Ни одна заявка не выполнена за последние месяцы. Вообще ни одна.',
+      'УК нас просто игнорирует. Мы пишем, звоним, просим — в ответ тишина. Зато квитанции приходят исправно. Получается, мы платим за воздух.',
+      'Заявки — в пустоту. Ни ответа, ни привета. Диспетчерская то не берёт трубку, то «мы передали, ждите». Ждём уже месяцами. Ничего не происходит.',
+      'Мы пытались решить проблемы через заявки — бесполезно. Ноль реакции. Почта, телефон — всё мимо. Такое ощущение, что УК просто не существует, кроме как в квитанциях.'
     ]
   },
-  payment: {
-    label: '💰 Оплата без услуг',
+  no_staff: {
+    label: 'Нет персонала',
     v: [
-      'Несмотря на полное отсутствие обслуживания, УК продолжает начислять и взимать плату за содержание и ремонт общего имущества в полном объёме. Услуги не оказываются, однако финансовые обязательства жителей не корректируются.',
-      'Жители ежемесячно оплачивают содержание дома, при этом УК фактически не оказывает ни одной из предусмотренных договором услуг. Требуется перерасчёт.',
-      'Квитанции выставляются в полном объёме, но ни одна из заявленных услуг не предоставляется. Фактически жители платят за несуществующее обслуживание.',
-      'УК взимает плату за услуги, которые не оказывает. Уборка, ремонт, обслуживание — всё отсутствует. Требуется проверка обоснованности начислений.'
+      'В нашем доме полностью отсутствует обслуживающий персонал. Нет ни сантехника, ни электрика, ни дворника, ни уборщицы. Жизнеобеспечение дома держится на инициативе отдельных жильцов.',
+      'Управляющая компания не обеспечила дом ни одним специалистом. Нет сантехника — течь устраняем сами. Нет электрика — лампочки меняем сами. Нет дворника — двор не убирается.',
+      'Обслуживающий персонал отсутствует как таковой. Ни одного работника УК жильцы не видели уже долгое время. Вызвать специалиста через УК невозможно.',
+      'Наш дом брошен управляющей компанией. Штат персонала — ноль. Нет ни дворника, ни уборщицы, ни электрика, ни сантехника. Всё за свой счёт.'
     ],
     vi: [
-      'Платим каждый месяц за содержание, а содержания нет. Куда уходят наши деньги? Ни уборки, ни ремонта, ни персонала — ничего.',
-      'Квитанции приходят исправно, суммы не маленькие. А за что платим? За грязь в подъезде, крыс во дворе и темноту на лестнице?',
-      'Деньги берут, услуг не дают. Классическая схема. Пора разобраться, куда утекают наши платежи за обслуживание.',
-      'Самое обидное — мы продолжаем платить. За несуществующую уборку, за отсутствующего дворника, за сломанный мусоропровод. Это нечестно.'
-    ]
-  },
-  intercom: {
-    label: '🚪 Домофон не работает',
-    v: [
-      'Домофонная система в подъезде неисправна. Входная дверь не закрывается, что создаёт угрозу безопасности жителей. Ремонт домофона не производится.',
-      'Домофон вышел из строя, входная дверь подъезда не запирается. В подъезд проникают посторонние лица. Заявки на ремонт игнорируются.',
-      'Система контроля доступа в подъезд не функционирует. Домофон сломан, дверь открыта круглосуточно. Безопасность жителей под угрозой.',
-      'Домофон неисправен на протяжении длительного времени. Подъезд остаётся открытым, что привлекает посторонних и создаёт опасность для жильцов.'
-    ],
-    vi: [
-      'Домофон не работает, дверь нараспашку. В подъезд заходит кто угодно. Безопасность — ноль.',
-      'Сломанный домофон — ещё одна «заслуга» нашей УК. Дверь открыта, в подъезде ночуют бездомные. Страшно возвращаться вечером.',
-      'Домофон сломался давно, а чинить некому. Дверь подъезда стоит открытая. Любой может зайти — и заходят.',
-      'Ни домофона, ни запирающейся двери. Подъезд стал проходным двором. УК — без реакции.'
-    ]
-  },
-  roof: {
-    label: '🏗️ Протечка кровли',
-    v: [
-      'Кровля дома находится в аварийном состоянии. На верхних этажах наблюдаются протечки, повреждающие отделку квартир и общедомовое имущество. Ремонт кровли не проводится.',
-      'Протечки кровли приводят к затоплению квартир на верхних этажах. Потолки и стены покрыты пятнами, образуется плесень. УК не принимает мер по ремонту.',
-      'Крыша дома требует срочного ремонта. Во время осадков вода проникает через кровлю в квартиры и на лестничные клетки верхних этажей.',
-      'Аварийное состояние кровли приводит к регулярным протечкам. Жители верхних этажей вынуждены подставлять ёмкости для сбора воды. Ремонт не планируется.'
-    ],
-    vi: [
-      'Крыша течёт при каждом дожде. На верхних этажах потолки в пятнах и плесени. А УК даже не чешется.',
-      'С крыши льёт в квартиры — обои отваливаются, потолки мокрые. Жители верхних этажей тазики подставляют. Ремонта кровли нет и не предвидится.',
-      'Протечка кровли — проблема не новая. Но УК годами ничего не делает. Квартиры на верхних этажах страдают от сырости и плесени.',
-      'Каждый дождь — это потоп на верхних этажах. Крыша дырявая, а ремонтировать её, похоже, никто не собирается.'
-    ]
-  },
-  plumbing: {
-    label: '🚰 Проблемы с водоснабжением',
-    v: [
-      'В доме наблюдаются систематические проблемы с водоснабжением: низкое давление воды, частые отключения без предупреждения, ржавая вода из кранов. Сантехник для устранения неисправностей отсутствует.',
-      'Водоснабжение дома осуществляется с перебоями. Жители жалуются на слабый напор, ржавую воду и внезапные отключения. Заявки на вызов сантехника не выполняются.',
-      'Качество водоснабжения неудовлетворительное: из кранов течёт ржавая вода, давление нестабильное. Трубы в подвале требуют ремонта, который не проводится.',
-      'Инженерные сети водоснабжения в неудовлетворительном состоянии. Частые аварии, протечки в подвале, ржавая вода в кранах — всё это результат отсутствия обслуживания.'
-    ],
-    vi: [
-      'Вода из крана течёт ржавая, напор еле-еле. Сантехника нет, трубы никто не чинит. Бельё стирать в такой воде невозможно.',
-      'То воды нет, то она ржавая. Давление такое, что на верхних этажах струйка еле капает. А заявку подать некому.',
-      'Проблемы с водой — каждую неделю. Отключают без предупреждения, а когда включают — из крана течёт ржавчина. Трубы гнилые.',
-      'Водоснабжение в доме — это лотерея. Сегодня вода есть, завтра нет. Когда есть — ржавая. Сантехника нет, трубы не чинят.'
-    ]
-  },
-  heating: {
-    label: '🌡️ Проблемы с отоплением',
-    v: [
-      'Система отопления дома работает неудовлетворительно. Батареи в квартирах прогреваются недостаточно, температура в жилых помещениях не соответствует нормативам. Регулировка системы отопления не проводится.',
-      'В отопительный сезон температура в квартирах ниже нормативной. Радиаторы отопления холодные или едва тёплые. Заявки на проверку системы отопления игнорируются.',
-      'Отопление дома не обеспечивает нормативную температуру в квартирах. Жители вынуждены использовать электрообогреватели за свой счёт.',
-      'Система отопления не обслуживается: батареи холодные, стояки не промыты, регулировка не проведена. Жители мёрзнут в собственных квартирах.'
-    ],
-    vi: [
-      'Батареи чуть тёплые, в квартире холодно. Приходится включать обогреватели и платить за электричество. А за отопление мы тоже платим!',
-      'Зимой в квартире как на улице. Батареи не греют, стояки не промыты. УК на жалобы не реагирует — мёрзни как хочешь.',
-      'Отопление есть только в квитанции. В реальности — еле тёплые батареи и холодные квартиры. Дети болеют из-за холода.',
-      'Каждую зиму одно и то же — холодные батареи. Промывку не делают, регулировку не проводят. Деньги за отопление берут исправно.'
+      'Персонала нет. Совсем. Ни сантехника, ни электрика, ни дворника, ни уборщицы. Если что-то ломается — чиним сами за свои деньги. А платим УК каждый месяц.',
+      'Кто обслуживает наш дом? Никто. Буквально — ни одного человека. Течёт труба — сами. Нет света — сами. Грязно — сами. За что мы платим управляющей компании?',
+      'Ни одного сотрудника УК мы не видели уже очень давно. Ни дворника, ни уборщицы, ни электрика. Дом существует сам по себе, а деньги за «содержание» уходят в никуда.',
+      'В доме нет ни одного специалиста от УК. Всё, что нужно сделать, — делаем сами. Лампочки, мелкий ремонт, уборка. Мы — и жильцы, и обслуга. Только платим мы почему-то не себе, а УК.'
     ]
   },
   elevators: {
-    label: '🛗 Лифт не работает',
+    label: 'Не работают лифты',
     v: [
-      'Лифт в подъезде неисправен и не эксплуатируется. Жители верхних этажей, включая пожилых людей и маломобильных граждан, вынуждены подниматься пешком. Ремонт лифта не проводится.',
-      'Лифтовое оборудование вышло из строя. Лифт не работает на протяжении длительного времени. Для жителей верхних этажей это создаёт серьёзные неудобства.',
-      'Лифт сломан и не ремонтируется. Маломобильные граждане и семьи с маленькими детьми фактически лишены возможности нормально покидать квартиры.',
-      'Неисправность лифта длится уже продолжительное время. Заявки на ремонт не выполняются. Жители вынуждены пешком преодолевать по 9–17 этажей.'
+      'Лифты в нашем доме систематически выходят из строя и не ремонтируются. Жильцы верхних этажей вынуждены подниматься пешком. Для пожилых людей и маломобильных граждан это создаёт непреодолимые трудности.',
+      'Лифтовое оборудование находится в аварийном состоянии. Лифты регулярно ломаются, застревают, не приезжают на вызов. Техническое обслуживание лифтов управляющей компанией не обеспечивается.',
+      'В доме не работают лифты. Поломки происходят постоянно, ремонт не производится или затягивается на недели. Жители с детскими колясками, пожилые и люди с ограниченными возможностями оказываются в безвыходной ситуации.',
+      'Обращаю внимание на неудовлетворительное состояние лифтов. Они регулярно выходят из строя, заявки на ремонт игнорируются. Лифт — это не роскошь, а необходимость для многоэтажного дома.'
     ],
     vi: [
-      'Лифт не работает, а дом высотный. Поднимаемся пешком — с сумками, с колясками, с больными ногами. УК на заявки плевать.',
-      'Сломанный лифт — это не мелочь. Бабушки с верхних этажей неделями не выходят из дома. А УК даже не чешется.',
-      'Лифт встал давно и, видимо, навсегда. Ремонтировать некому. Как людям на 15-й этаж подниматься?',
-      'Лифт сломан, заявки написаны — результат нулевой. Пожилые люди не могут спуститься за продуктами. Это уже вопрос здоровья.'
+      'Лифты не работают. То один сломается, то другой. Поднимаемся пешком на 15 этаж с пакетами. Бабушки и мамы с колясками — вообще беда. Чинят неделями, если вообще чинят.',
+      'Лифты ломаются постоянно. Застревают, не приезжают, двери не закрываются. Страшно в них ездить, а пешком на верхние этажи — нереально. УК не чинит или чинит так, что через день снова ломается.',
+      'С лифтами — катастрофа. Работают через раз. Сегодня один стоит, завтра другой. Мамы с колясками, пожилые люди — все страдают. А УК не чешется.',
+      'Лифты — отдельная боль. Регулярно ломаются, ремонт тянется вечность. Живём на 12 этаже — попробуйте подняться пешком с продуктами. А УК всё равно.'
     ]
   }
 };
 
-// ====== DESTINATIONS ======
-const DEST_URL = {
-  uk: 'mailto:kontinent.reception@mail.ru',
-  admin: 'https://admhimki.ru/internet-priemnaya/',
-  ministry: 'https://mgkh.mosreg.ru/obrasheniya',
-  governor: 'https://mosreg.ru/governor/reception',
-  gis: 'https://dom.gosuslugi.ru'
-};
+const PROB_IDS = Object.keys(P);
+const sel = new Set();
+let dest = 'uk';
+let tone = 'formal'; // 'formal' or 'informal'
+let photos = [];
+let curText = '';
+let seed = 0;
 
-// ====== TEMPLATES ======
+// ====== TEMPLATES (formal / informal) ======
 const T = {
   formal: {
     open: [
-      'Я, нижеподписавшийся(-аяся), проживающий(-ая) по адресу: г. Химки, ул. Совхозная, д. 5',
-      'Настоящим обращаюсь с жалобой на ненадлежащее исполнение обязанностей управляющей компанией «Континент Комфорта» по обслуживанию дома по адресу: г. Химки, ул. Совхозная, д. 5',
-      'Довожу до Вашего сведения о грубых нарушениях в содержании многоквартирного дома по адресу: г. Химки, ул. Совхозная, д. 5, допущенных УК «Континент Комфорта»',
-      'Обращаюсь с жалобой на бездействие УК «Континент Комфорта» в отношении содержания общего имущества многоквартирного дома по адресу: г. Химки, ул. Совхозная, д. 5'
+      'Я, {n}, проживаю по адресу: Московская область, г. Химки, ул. Совхозная, д. 5, кв. {a}.',
+      'Обращаюсь к вам как жилец дома по адресу: МО, г. Химки, ул. Совхозная, д. 5, кв. {a}. {n}.',
+      '{n}, жилец МКД по адресу: Московская обл., г. Химки, ул. Совхозная, д. 5, кв. {a}.',
+      'Мои данные: {n}. Адрес проживания: МО, г. Химки, ул. Совхозная, д. 5, кв. {a}.'
     ],
     uk_intro: [
-      'Обращаюсь к Вам в связи с систематическим неисполнением обязанностей по содержанию дома.',
-      'Вынужден(-а) обратиться в связи с полным прекращением обслуживания нашего дома.',
-      'Направляю жалобу на ненадлежащее содержание общего имущества многоквартирного дома.'
+      'Обращаюсь с жалобой на бездействие УК «Континент Комфорта», которая управляет нашим домом. Компания не исполняет свои обязанности по содержанию общего имущества, при этом оплата взимается в полном объёме.',
+      'Вынужден(а) обратиться с жалобой на УК «Континент Комфорта». После смены руководства в декабре компания фактически бросила наш дом, прекратив его обслуживание.',
+      'Довожу до вашего сведения, что УК «Континент Комфорта» полностью перестала выполнять обязательства перед жильцами. Ниже описываю конкретные проблемы.',
+      'Жалоба связана с систематическим неисполнением УК «Континент Комфорта» условий договора управления. Ситуация ухудшается с каждым днём.'
     ],
     gov_intro: [
-      'Прошу провести проверку деятельности УК «Континент Комфорта» (ИНН уточняется) по следующим основаниям:',
-      'В связи с грубым нарушением УК «Континент Комфорта» условий договора управления, прошу принять меры:',
-      'Прошу рассмотреть жалобу на бездействие УК «Континент Комфорта» и принять меры реагирования:'
+      'Прошу провести проверку деятельности УК «Континент Комфорта». Компания не выполняет обязательства по содержанию дома, хотя оплату получает регулярно.',
+      'Обращаюсь за помощью, так как УК «Континент Комфорта» перестала обслуживать наш дом. Обращения жильцов остаются без ответа.',
+      'Вынужден(а) обратиться, так как самостоятельно решить проблему с бездействующей УК «Континент Комфорта» жильцы не в состоянии.',
+      'Прошу содействия в решении проблемы с УК «Континент Комфорта», которая прекратила содержание нашего дома.'
     ],
     uk_close: [
-      'Требую устранить указанные нарушения в течение 10 рабочих дней и произвести перерасчёт платы за непредоставленные услуги.',
-      'Прошу незамедлительно устранить вышеуказанные нарушения и обеспечить надлежащее содержание общего имущества дома.',
-      'Требую привести содержание дома в соответствие с условиями договора управления и действующими нормативами.'
+      'Требую в кратчайшие сроки устранить нарушения и обеспечить содержание дома в соответствии с договором. В противном случае обращусь в жилищную инспекцию и контролирующие органы.',
+      'Прошу принять меры. Согласно ст. 161 ЖК РФ управляющая организация обязана обеспечивать надлежащее содержание общего имущества. О мерах прошу уведомить письменно.',
+      'Требую провести работы в 10-дневный срок. Если ситуация не изменится, обращусь в ГЖИ МО, прокуратуру и суд.',
+      'Ожидаю конкретных действий, а не формальных отписок. В случае бездействия оставляю за собой право обращения в надзорные органы и суд.'
     ],
     gov_close: [
-      'Прошу провести проверку и принять меры к УК «Континент Комфорта» в соответствии с действующим законодательством.',
-      'Прошу привлечь УК к ответственности и обязать устранить нарушения. О результатах проверки прошу уведомить в установленном порядке.',
-      'Прошу принять меры реагирования и проинформировать о результатах рассмотрения настоящей жалобы.'
+      'Прошу провести проверку УК «Континент Комфорта» и принять меры по восстановлению нормального содержания дома. О результатах прошу уведомить.',
+      'Прошу принять меры за грубое нарушение условий договора. Жители рассчитывают на вашу помощь.',
+      'Прошу обязать УК выполнить обязательства и привлечь к ответственности. Ситуация требует срочного вмешательства.',
+      'Прошу инициировать проверку и содействовать в решении проблем. Жильцы исчерпали возможности самостоятельного решения.'
     ]
   },
   informal: {
     open: [
-      'Пишу вам как жилец дома на ул. Совхозной д. 5 в Химках',
-      'Обращаюсь к вам от имени жителей дома — Химки, ул. Совхозная, д. 5',
-      'Я живу в доме по адресу Химки, ул. Совхозная, 5, и у нас серьёзные проблемы',
-      'Мы, жители дома на Совхозной 5 (Химки), вынуждены жаловаться'
+      'Здравствуйте! Меня зовут {n}, я живу по адресу: г. Химки, ул. Совхозная, д. 5, кв. {a}.',
+      'Добрый день! {n}, жилец дома по адресу: Химки, ул. Совхозная, д. 5, кв. {a}.',
+      'Здравствуйте, я — {n}, проживаю в Химках, ул. Совхозная, д. 5, кв. {a}.',
+      'Добрый день! Пишу вам как жилец дома: Химки, Совхозная 5, кв. {a}. Меня зовут {n}.'
     ],
     uk_intro: [
-      'Мы устали терпеть. Дом фактически заброшен, вот конкретные проблемы:',
-      'Ситуация в доме стала невыносимой. Вот что происходит:',
-      'Вы перестали обслуживать наш дом, но деньги берёте исправно. Вот факты:'
+      'Пишу вам, потому что наш дом фактически брошен. УК «Континент Комфорта» перестала нас обслуживать, хотя мы продолжаем платить. Вот что происходит.',
+      'Хочу сообщить о ситуации в нашем доме. С тех пор как в УК «Континент Комфорта» сменилось руководство, дом просто забросили. Конкретно.',
+      'Наша УК «Континент Комфорта» перестала работать. Дом не обслуживается, заявки не выполняются, людей нет. А деньги берут. Расскажу подробнее.',
+      'Пишу, потому что терпение кончилось. УК «Континент Комфорта» не делает вообще ничего. Дом в ужасном состоянии. По порядку.'
     ],
     gov_intro: [
-      'Наша управляющая компания «Континент Комфорта» бросила дом. Просим помощи. Вот что происходит:',
-      'УК «Континент Комфорта» не работает. Просим проверку. Ситуация такая:',
-      'Помогите — наша УК перестала обслуживать дом. Конкретно:'
+      'Обращаюсь к вам за помощью. Наша УК «Континент Комфорта» бросила дом — не обслуживает, не отвечает на заявки, людей нет. А мы платим. Помогите разобраться.',
+      'Пишу вам, потому что больше некуда. УК «Континент Комфорта» перестала обслуживать наш дом. Мы пытались решить это сами — бесполезно. Нужна ваша помощь.',
+      'Прошу помочь. Наша управляющая компания «Континент Комфорта» фактически прекратила работу, но деньги собирает исправно. Ситуация такая.',
+      'Нужна ваша помощь с нашей УК «Континент Комфорта». Они просто перестали работать — не убирают, не чинят, не отвечают. Вот что у нас творится.'
     ],
     uk_close: [
-      'Просим навести порядок. Если ничего не изменится — будем жаловаться в жилинспекцию и прокуратуру.',
-      'Ждём реакции в течение недели. В противном случае обратимся в контролирующие органы.',
-      'Требуем устранить всё перечисленное. Копия этого письма направлена в надзорные органы.'
+      'Просим наконец-то заняться нашим домом. Мы платим за обслуживание — имеем право его получать. Если ничего не изменится, будем обращаться в жилищную инспекцию и выше.',
+      'Мы устали ждать. Просим начать работать или честно сказать, что вы не собираетесь этого делать — тогда мы найдём другую УК. Жду ответа.',
+      'Ждём реальных действий, а не отписок. Если ничего не изменится в ближайшие дни — будем жаловаться в ГЖИ, прокуратуру и далее по списку.',
+      'Прошу отнестись к этому серьёзно. Жильцы настроены решительно. Если обслуживание не будет восстановлено, дальше будет жилищная инспекция и суд.'
     ],
     gov_close: [
-      'Просим разобраться и заставить УК работать. Нам больше не к кому обращаться.',
-      'Помогите нам — жильцы на пределе. Готовы к смене УК, нужна ваша поддержка.',
-      'Ждём конкретных действий. Жильцы массово подают жалобы — ситуация критическая.'
+      'Просим помочь разобраться с этой ситуацией. Сами мы уже исчерпали все способы. Рассчитываем на вашу поддержку.',
+      'Очень надеемся на вашу помощь. Ситуация действительно тяжёлая, а УК нас игнорирует. Будем благодарны за любые меры.',
+      'Пожалуйста, помогите. Мы просто хотим, чтобы наш дом обслуживали нормально, как все остальные. Спасибо за внимание к нашей проблеме.',
+      'Будем очень признательны, если вы вмешаетесь. Мы — обычные жители, которые хотят жить в нормальных условиях. Заранее спасибо.'
     ]
   }
 };
-
-const CONNECTORS = [
-  'Помимо этого, ',
-  'Кроме того, ',
-  'Также необходимо отметить: ',
-  'Дополнительно сообщаю: ',
-  'Ещё одна серьёзная проблема: ',
-  'Вдобавок ко всему, ',
-  'Не менее важно: ',
-  'Следует также упомянуть: '
+const DEST_HDR = {
+  uk:'В УК «Континент Комфорта»\nkontinent.reception@mail.ru',
+  admin:'В администрацию городского округа Химки',
+  ministry:'В Министерство по содержанию территорий\nи государственному жилищному надзору МО',
+  governor:'В Правительство Московской области',
+  gis:'В ГИС ЖКХ'
+};
+const DEST_URL = {
+  admin:'https://eds.mosreg.ru/claims',ministry:'https://mstg.mosreg.ru',governor:'https://eds.mosreg.ru/claims',gis:'https://dom.gosuslugi.ru'
+};
+const CONNECTORS_FORMAL = [
+  'Кроме того, ', 'Также хочу отметить, что ', 'Помимо этого, ',
+  'Не менее серьёзная проблема — ', 'Отдельно хочу обратить внимание: ',
+  'Ещё одна проблема: ', 'Дополнительно сообщаю: ', 'Вдобавок ко всему, '
 ];
-
-// ====== STATE ======
-let sel = new Set();
-let tone = 'formal';
-let dest = 'uk';
-let seed = Date.now();
-let curText = '';
-
-// ====== SEEDED RANDOM ======
-function srand(s) {
-  return function() {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
+const CONNECTORS_INFORMAL = [
+  'Ещё проблема: ', 'И это ещё не всё. ', 'Дальше — хуже. ',
+  'А ещё вот что. ', 'Плюс ко всему, ', 'И ещё момент. ',
+  'Отдельная головная боль — ', 'Ну и вишенка на торте: '
+];
 
 // ====== INIT ======
 function init() {
   const c = document.getElementById('chips');
-  c.innerHTML = Object.entries(P).map(([id, p]) =>
-    `<div class="chip" data-id="${id}" onclick="tog(this)">${p.label}</div>`
+  c.innerHTML = PROB_IDS.map(id =>
+    `<div class="chip" data-id="${id}" onclick="tog(this)">${P[id].label}<span class="ck"> ✓</span></div>`
   ).join('');
   renderReady();
 }
@@ -616,8 +692,6 @@ function toggleDrawer() {
   o.classList.toggle('open', !isOpen);
   b.classList.toggle('open', !isOpen);
 }
-
-// ====== QR ======
 function updateQR() {
   const url = document.getElementById('qr-url').value.trim();
   const canvas = document.getElementById('qr-canvas');
@@ -649,7 +723,7 @@ function updateQR() {
   img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
 }
 
-// ====== TABS ======
+// ====== TABS (from drawer) ======
 function switchTab(t) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
@@ -659,97 +733,116 @@ function switchTab(t) {
 
 // ====== CHIPS ======
 function tog(el) {
-  const id = el.dataset.id;
-  if (sel.has(id)) { sel.delete(id); el.classList.remove('selected'); }
-  else { sel.add(id); el.classList.add('selected'); }
-  seed++;
+  const id=el.dataset.id;
+  if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
+  else{sel.add(id);el.classList.add('selected')}
+  seed++; // new variant on each change
   upd();
 }
-function selAll() { document.querySelectorAll('.chip').forEach(c => { c.classList.add('selected'); sel.add(c.dataset.id); }); seed++; upd(); }
-function clrAll() { document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected')); sel.clear(); upd(); }
+function selAll(){document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});seed++;upd()}
+function clrAll(){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));sel.clear();upd()}
 
 // ====== TONE ======
-function setTone(t) {
-  tone = t;
-  document.getElementById('tone-formal').classList.toggle('active', t==='formal');
-  document.getElementById('tone-informal').classList.toggle('active', t==='informal');
+function setTone(btn){
+  document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  tone=btn.dataset.tone;
   seed++;
   upd();
 }
 
 // ====== DEST ======
-function setDest(el) {
-  dest = el.dataset.d;
-  document.querySelectorAll('.dest-btn').forEach(b => { b.classList.remove('active','active-danger'); });
-  el.classList.add(dest==='uk'?'active-danger':'active');
-  updSendBtn();
+const DEST_DESC = {
+  uk:'Прямое обращение в УК. Обязаны ответить в 10 дней.',
+  admin:'Администрация г. Химки может инициировать проверку УК.',
+  ministry:'Жилищный надзор может оштрафовать УК и обязать устранить нарушения.',
+  governor:'Правительство МО — максимальное давление на УК.',
+  gis:'Официальный портал ЖКХ. Жалоба получает регистрационный номер.'
+};
+const DEST_ORDER = ['uk','admin','ministry','governor','gis'];
+function setD(b){
+  document.querySelectorAll('.dest-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');dest=b.dataset.d;updSendBtn();upd();
+  const dd=document.getElementById('dest-desc');
+  if(dd) dd.textContent=DEST_DESC[dest]||'';
 }
-function updSendBtn() {
-  const bs = document.getElementById('bsend');
-  if (dest==='uk') { bs.textContent='📧 Отправить'; bs.className='btn btn-send'; }
-  else { bs.textContent='🌐 На портал'; bs.className='btn btn-portal'; }
-}
+function updSendBtn(){const b=document.getElementById('bsend');if(dest==='uk'){b.className='btn btn-send';b.innerHTML='✉️ Отправить'}else{b.className='btn btn-portal';b.innerHTML='🌐 На портал'}}
 
 // ====== PHOTOS ======
-function addPhotos(files) {
-  const pp = document.getElementById('photo-preview');
-  Array.from(files).forEach(f => {
-    const r = new FileReader();
-    r.onload = e => { pp.innerHTML += `<img src="${e.target.result}">`; };
-    r.readAsDataURL(f);
-  });
+function addPh(files){Array.from(files).forEach(f=>{if(photos.length>=5)return;const r=new FileReader();r.onload=e=>{photos.push({n:f.name,d:e.target.result});rTh();upd()};r.readAsDataURL(f)})}
+function rmPh(i){photos.splice(i,1);rTh();upd()}
+function rTh(){
+  const html=photos.map((p,i)=>`<div class="thumb"><img src="${p.d}"><button class="rm" onclick="rmPh(${i})">×</button></div>`).join('');
+  const txt=photos.length>0?`Загружено фото: ${photos.length} из 5`:'';
+  // Update both thumb containers (main + photo tab)
+  ['thumbs','thumbs2'].forEach(id=>{const el=document.getElementById(id);if(el) el.innerHTML=html});
+  ['photo-count','photo-count2'].forEach(id=>{const el=document.getElementById(id);if(el) el.textContent=txt});
+}
+
+// ====== SEEDED RANDOM ======
+function seededRand(s) {
+  // Simple hash-based pseudo-random
+  let h = s * 2654435761 >>> 0;
+  return function() { h = (h * 1103515245 + 12345) >>> 0; return (h >>> 16) / 65536; };
 }
 
 // ====== GENERATE ======
 function gen() {
-  const r = srand(seed);
-  const pick = (arr) => arr[Math.floor(r() * arr.length)];
-  const ids = Array.from(sel);
-  const tt = T[tone];
+  if (sel.size === 0) return '';
+  const name = document.getElementById('fullname').value.trim() || '[ФИО]';
+  const apt = document.getElementById('apt').value.trim() || '[кв.]';
   const isUK = dest === 'uk';
+  const isFormal = tone === 'formal';
+  const tmpl = T[tone];
+  const rng = seededRand(seed);
+  const pick = arr => arr[Math.floor(rng() * arr.length)];
 
-  let parts = [];
-  // Opening
-  const fio = document.getElementById('fio').value.trim();
-  const apt = document.getElementById('apt').value.trim();
-  let opening = pick(tt.open);
-  if (apt) opening += ', кв. ' + apt;
-  if (fio) opening += ' (' + fio + ')';
-  opening += '.';
-  parts.push(opening);
+  let t = DEST_HDR[dest] + '\n\n';
+  t += (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
+  t += pick(tmpl.open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+  t += (isUK ? pick(tmpl.uk_intro) : pick(tmpl.gov_intro)) + '\n\n';
 
-  // Intro
-  parts.push(isUK ? pick(tt.uk_intro) : pick(tt.gov_intro));
+  // Build problem paragraphs with connectors
+  const probs = PROB_IDS.filter(id => sel.has(id));
+  const connectors = isFormal ? CONNECTORS_FORMAL : CONNECTORS_INFORMAL;
+  const shuffled = [...connectors].sort(() => rng() - 0.5);
 
-  // Problems
-  ids.forEach((id, i) => {
-    const p = P[id];
-    const variants = tone === 'formal' ? p.v : p.vi;
-    const text = pick(variants);
-    if (i === 0) parts.push(text);
-    else parts.push(pick(CONNECTORS) + text.charAt(0).toLowerCase() + text.slice(1));
+  probs.forEach((id, i) => {
+    const variants = isFormal ? P[id].v : P[id].vi;
+    const variant = variants[Math.floor(rng() * variants.length)];
+    if (i === 0) {
+      t += variant + '\n\n';
+    } else {
+      if (rng() > 0.4) {
+        const conn = shuffled[i % shuffled.length];
+        const lower = variant.charAt(0).toLowerCase() + variant.slice(1);
+        t += conn + lower + '\n\n';
+      } else {
+        t += variant + '\n\n';
+      }
+    }
   });
 
-  // Close
-  parts.push(isUK ? pick(tt.uk_close) : pick(tt.gov_close));
+  if (photos.length > 0) {
+    t += isFormal
+      ? `К данному обращению прилагаются фотоматериалы (${photos.length} шт.), подтверждающие описанные нарушения.\n\n`
+      : `Прикладываю ${photos.length} фото — сами увидите, в каком всё состоянии.\n\n`;
+  }
 
-  // Date + signature
-  const d = new Date();
-  const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-  let sig = dateStr;
-  if (fio) sig += '\n' + fio;
-  if (apt) sig += ', кв. ' + apt;
-  parts.push(sig);
+  t += (isUK ? pick(tmpl.uk_close) : pick(tmpl.gov_close)) + '\n\n';
 
-  return parts.join('\n\n');
+  const date = new Date().toLocaleDateString('ru-RU');
+  t += `${date}\n${name}`;
+  return t;
 }
 
-// ====== UPDATE ======
 function upd() {
-  const area = document.getElementById('complaint-area');
-  const rb = document.getElementById('regen-btn');
+  // address is fixed
+  const area = document.getElementById('carea');
+  const rb = document.getElementById('rbtn');
   const bc = document.getElementById('bcopy');
   const bs = document.getElementById('bsend');
+
   const ts = document.getElementById('tone-switch');
 
   if (sel.size === 0) {
@@ -762,94 +855,129 @@ function upd() {
   if(ts) ts.style.display='flex';
   curText = gen();
   area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${esc(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать перед отправкой</div>`;
+  // Auto-resize textarea to fit content
   const ta = document.getElementById('complaint-ta');
   if(ta){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight+4, window.innerHeight*0.5)+'px'; }
   rb.style.display='inline'; bc.disabled=false; bs.disabled=false;
 }
 
-function regen() { seed++; upd(); toast('Текст обновлён'); }
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function regen(){seed++;upd();toast('Текст обновлён')}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
-// ====== COPY ======
-function copyAct() {
-  if(!curText) return;
-  clipCopy(curText);
-  toast('✅ Скопировано!');
+// ====== ACTIONS ======
+function copyTxt(){
+  if(!curText)return;
+  navigator.clipboard.writeText(curText).then(()=>toast('✅ Скопировано!')).catch(()=>{
+    const x=document.createElement('textarea');x.value=curText;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);toast('✅ Скопировано!');
+  });
 }
+function sendAct(){
+  if(!curText)return;
+  // Copy text to clipboard
+  const doCopy = navigator.clipboard.writeText(curText).catch(()=>{
+    const x=document.createElement('textarea');x.value=curText;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);
+  });
 
-// ====== CLIPBOARD (sync fallback) ======
-function clipCopy(text) {
-  try {
-    // Synchronous fallback — works reliably everywhere
-    const x = document.createElement('textarea');
-    x.value = text;
-    x.style.cssText = 'position:fixed;left:-9999px';
-    document.body.appendChild(x);
-    x.select();
-    x.setSelectionRange(0, text.length);
-    document.execCommand('copy');
-    document.body.removeChild(x);
-    return true;
-  } catch(e) { return false; }
-}
-
-// ====== SEND ======
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-function sendAct() {
-  if(!curText) return;
-
-  if(dest==='uk'){
-    const subj = 'Жалоба на содержание МКД — ул. Совхозная д.5';
-    const to = 'kontinent.reception@mail.ru';
-    const s = encodeURIComponent(subj);
-
-    // Always copy text to clipboard first
-    clipCopy(curText);
-
-    if (isMobile) {
-      // Mobile (Android/iOS): mailto body is unreliable.
-      // Open mailto with TO + subject only, user pastes body from clipboard.
-      const a = document.createElement('a');
-      a.href = `mailto:${to}?subject=${s}`;
-      a.click();
-      toast('✅ Текст скопирован! Вставьте в письмо (долгое нажатие → Вставить)', 4000);
+  doCopy.then(()=>{
+    if(dest==='uk'){
+      showSendModal('email');
+      const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
+      setTimeout(()=>{ window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`; }, 600);
     } else {
-      // Desktop: mailto with full body works fine
-      const b = encodeURIComponent(curText);
-      window.location.href = `mailto:${to}?subject=${s}&body=${b}`;
-      toast('📧 Открываем почту с текстом...');
+      showSendModal('portal');
+      setTimeout(()=>window.open(DEST_URL[dest],'_blank'), 600);
     }
+  });
+}
+
+function showSendModal(type){
+  const steps = document.getElementById('modal-steps');
+  const title = document.getElementById('modal-title');
+  const shareBtn = document.getElementById('modal-share-btn');
+  shareBtn.style.display = 'navigator' in window && 'share' in navigator ? 'flex' : 'none';
+
+  if(type==='email'){
+    title.textContent='Отправка на email';
+    steps.innerHTML=`
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Откроется почта</b>Тема и адрес уже заполнены</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле письма, затем «Вставить»</div></div>
+    `;
   } else {
-    clipCopy(curText);
-    toast('✅ Скопировано, открываем портал...');
-    setTimeout(() => window.open(DEST_URL[dest],'_blank'), 400);
+    title.textContent='Отправка на портал';
+    steps.innerHTML=`
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Откроется портал</b>Найдите форму подачи обращения</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле текста, затем «Вставить»</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><b>Сохраните номер</b>После отправки запишите номер заявки в чат дома</div></div>
+    `;
+  }
+
+  // Suggest next destination
+  const nextDest = getNextDest();
+  const nd = document.getElementById('modal-next-dest');
+  if(nextDest){
+    const destNames = {uk:'УК (email)',admin:'Администрация',ministry:'Мин. чистоты',governor:'Правительство МО',gis:'ГИС ЖКХ'};
+    nd.innerHTML=`<div class="next-dest"><p>Отправьте ту же жалобу ещё в одно место:</p><button onclick="closeModal();selectDest('${nextDest}')">Отправить в ${destNames[nextDest]}</button></div>`;
+  } else {
+    nd.innerHTML='';
+  }
+
+  document.getElementById('modal-overlay').classList.add('show');
+  document.getElementById('send-modal').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('show');
+  document.getElementById('send-modal').classList.remove('show');
+}
+
+function getNextDest(){
+  const idx = DEST_ORDER.indexOf(dest);
+  if(idx < DEST_ORDER.length - 1) return DEST_ORDER[idx + 1];
+  return null;
+}
+
+function selectDest(d){
+  const btn = document.querySelector(`.dest-btn[data-d="${d}"]`);
+  if(btn) setD(btn);
+}
+
+function shareWithNeighbor(){
+  const url = window.location.href;
+  const text = 'Помоги сменить УК! Генератор жалоб — за 2 минуты: ';
+  if(navigator.share){
+    navigator.share({title:'Жалоба на УК',text:text,url:url}).catch(()=>{});
   }
 }
 
 // ====== READY TEXTS ======
-function renderReady() {
-  const texts = [
-    {t:'🧹 Уборка подъезда', x:'Прошу обратить внимание на полное отсутствие уборки в подъезде дома по адресу: г. Химки, ул. Совхозная, д. 5. УК «Континент Комфорта» не производит влажную уборку лестничных клеток, холлов и лифтов. Полы покрыты грязью, в углах мусор. Уборка не проводится месяцами. Прошу провести проверку.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'🗑️ Мусоропровод', x:'Жалоба на мусоропровод в доме: г. Химки, ул. Совхозная, д. 5. Засорён, ковши сломаны, из ствола невыносимый запах. УК «Континент Комфорта» не принимает мер. Требую прочистку и ремонт.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'💡 Нет освещения', x:'Длительное отсутствие света на лестницах и в холлах: г. Химки, ул. Совхозная, д. 5. Опасность для жителей. Электрик отсутствует, заявки игнорируются. Прошу обязать УК восстановить освещение.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'🐀 Крысы и тараканы', x:'Антисанитария в доме: г. Химки, ул. Совхозная, д. 5. Крысы в подвале и дворе, тараканы в подъездах. УК «Континент Комфорта» не проводит обработку. Прошу обязать провести дезинсекцию и дератизацию.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'🏚️ Двор и мусорная площадка', x:'Двор и мусорная площадка: г. Химки, ул. Совхозная, д. 5. Территория не убирается, мусор разбросан у контейнеров. Дворника нет. Прошу провести проверку.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'🔧 Нет персонала', x:'УК «Континент Комфорта» прекратила обслуживание дома: г. Химки, ул. Совхозная, д. 5. Нет сантехника, электрика, дворника, уборщицы. Заявки без ответа. Оплата взимается. Прошу проверку.\n\n[ФИО], кв. [___], [дата]'},
-    {t:'📋 ВСЁ СРАЗУ', x:'Жалоба на УК «Континент Комфорта» (г. Химки, ул. Совхозная, д. 5). Нет уборки, мусоропровод засорён, зловоние, ковши сломаны, нет света, двор замусорен, тараканы и крысы, персонал отсутствует, заявки игнорируются. Оплата взимается в полном объёме. Прошу проверку и меры к УК.\n\n[ФИО], кв. [___], [дата]'}
+function renderReady(){
+  const texts=[
+    {t:'🧹 Уборка подъезда',x:'Прошу обратить внимание на полное отсутствие уборки в подъезде дома по адресу: г. Химки, ул. Совхозная, д. 5. УК «Континент Комфорта» не производит влажную уборку лестничных клеток, холлов и лифтов. Полы покрыты грязью, в углах мусор. Уборка не проводится месяцами. Прошу провести проверку. [ФИО], кв. [___], [дата]'},
+    {t:'🗑️ Мусоропровод',x:'Жалоба на мусоропровод в доме: г. Химки, ул. Совхозная, д. 5. Засорён, ковши сломаны, из ствола невыносимый запах. УК «Континент Комфорта» не принимает мер. Требую прочистку и ремонт. [ФИО], кв. [___], [дата]'},
+    {t:'💡 Нет освещения',x:'Длительное отсутствие света на лестницах и в холлах: г. Химки, ул. Совхозная, д. 5. Опасность для жителей. Электрик отсутствует, заявки игнорируются. Прошу обязать УК восстановить освещение. [ФИО], кв. [___], [дата]'},
+    {t:'🐀 Крысы и тараканы',x:'Антисанитария в доме: г. Химки, ул. Совхозная, д. 5. Крысы в подвале и дворе, тараканы в подъездах. УК «Континент Комфорта» не проводит обработку. Прошу обязать провести дезинсекцию и дератизацию. [ФИО], кв. [___], [дата]'},
+    {t:'🏚️ Двор и мусорная площадка',x:'Двор и мусорная площадка: г. Химки, ул. Совхозная, д. 5. Территория не убирается, мусор разбросан у контейнеров. Дворника нет. Прошу провести проверку. [ФИО], кв. [___], [дата]'},
+    {t:'🔧 Нет персонала',x:'УК «Континент Комфорта» прекратила обслуживание дома: г. Химки, ул. Совхозная, д. 5. Нет сантехника, электрика, дворника, уборщицы. Заявки без ответа. Оплата взимается. Прошу проверку. [ФИО], кв. [___], [дата]'},
+    {t:'📋 ВСЁ СРАЗУ',x:'Жалоба на УК «Континент Комфорта» (г. Химки, ул. Совхозная, д. 5). Нет уборки, мусоропровод засорён, зловоние, ковши сломаны, нет света, двор замусорен, тараканы и крысы, персонал отсутствует, заявки игнорируются. Оплата взимается в полном объёме. Прошу проверку и меры к УК. [ФИО], кв. [___], [дата]'}
   ];
-  document.getElementById('rlist').innerHTML = texts.map((r,i) =>
-    `<div class="ri"><div class="rt">${r.t}</div><div class="rx">${r.x}</div><button class="rc" onclick="cpR(${i})">📋 Скопировать</button></div>`
-  ).join('');
-  window._rt = texts;
+  document.getElementById('rlist').innerHTML=texts.map((r,i)=>`<div class="ri"><div class="rt">${r.t}</div><div class="rx">${r.x}</div><button class="rc" onclick="cpR(${i})">📋 Скопировать</button></div>`).join('');
+  window._rt=texts;
 }
-function cpR(i) { navigator.clipboard.writeText(window._rt[i].x).then(() => toast('✅ Скопировано!')); }
+function cpR(i){navigator.clipboard.writeText(window._rt[i].x).then(()=>toast('✅ Скопировано!'))}
 
 // ====== TOAST ======
-function toast(m, dur) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), dur||2500); }
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ====== GO ======
-init(); updSendBtn();
+init();updSendBtn();
+// Auto-fill QR URL from current page location
+const qrInput=document.getElementById('qr-url');
+if(qrInput && window.location.protocol.startsWith('http')){qrInput.value=window.location.href;updateQR()}
+// Show initial dest description
+const dd=document.getElementById('dest-desc');
+if(dd) dd.textContent=DEST_DESC[dest]||'';
 </script>
 </body>
 </html>
