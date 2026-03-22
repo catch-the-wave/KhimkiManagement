@@ -828,14 +828,13 @@ function sendAct(){
       const fullBody = encodeURIComponent(curText);
       const mailtoFull = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${fullBody}`;
 
-      // Modern browsers/apps support mailto up to ~32K chars.
-      // Always try full text first. Only fall back if extremely long (>28000).
+      // Use location.href for mailto — window.open doesn't pass body on iOS/most Android
       if (mailtoFull.length > 28000) {
         const shortBody = encodeURIComponent('(Текст жалобы скопирован — вставьте через Ctrl+V / долгое нажатие → Вставить)');
-        window.open(`mailto:kontinent.reception@mail.ru?subject=${subj}&body=${shortBody}`, '_blank');
+        window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${shortBody}`;
         toast('✅ Текст скопирован — вставьте в письмо');
       } else {
-        window.open(mailtoFull, '_blank');
+        window.location.href = mailtoFull;
         toast('📧 Открываем почту с текстом жалобы...');
       }
     });
