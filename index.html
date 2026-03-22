@@ -199,9 +199,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 <div class="container">
   <!-- MAIN -->
   <div id="tab-main" class="section active">
+    <!-- trust block hidden for now
     <div class="trust-block">
       <b>Массовые жалобы работают.</b> УК обязана ответить на каждую в течение 10 рабочих дней (ст. 161 ЖК РФ). 20-30 жалоб в день в течение 2-3 недель создают основание для проверки и смены УК. Жалобу может подать <b>любой жилец</b>, не только собственник.
     </div>
+    -->
     <div class="card">
       <div class="card-title">Чем вы недовольны?</div>
       <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
@@ -854,7 +856,7 @@ function upd() {
 
   if(ts) ts.style.display='flex';
   curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${esc(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать перед отправкой</div>`;
+  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать перед отправкой</div>`;
   // Auto-resize textarea to fit content
   const ta = document.getElementById('complaint-ta');
   if(ta){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight+4, window.innerHeight*0.5)+'px'; }
@@ -862,41 +864,89 @@ function upd() {
 }
 
 function regen(){seed++;upd();toast('Текст обновлён')}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // ====== ACTIONS ======
 function copyTxt(){
   if(!curText)return;
-  navigator.clipboard.writeText(curText).then(()=>toast('✅ Скопировано!')).catch(()=>{
-    const x=document.createElement('textarea');x.value=curText;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);toast('✅ Скопировано!');
+  clipCopy(curText).then(()=>toast('✅ Скопировано!'));
+}
+function clipCopy(text){
+  return navigator.clipboard.writeText(text).catch(()=>{
+    const x=document.createElement('textarea');x.value=text;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);
   });
 }
+
 function sendAct(){
   if(!curText)return;
-  // Copy text to clipboard
-  const doCopy = navigator.clipboard.writeText(curText).catch(()=>{
-    const x=document.createElement('textarea');x.value=curText;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);
-  });
+  // Check required fields
+  const name = document.getElementById('fullname').value.trim();
+  const apt = document.getElementById('apt').value.trim();
+  if(!name || !apt){
+    showFieldsModal(!name, !apt);
+    return;
+  }
 
-  doCopy.then(()=>{
-    if(dest==='uk'){
-      showSendModal('email');
-      const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
-      setTimeout(()=>{ window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`; }, 600);
-    } else {
+  if(dest==='uk'){
+    const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
+    const body = encodeURIComponent(curText);
+    const mailtoFull = `mailto:kontinent.reception@mail.ru?subject=${subj}&body=${body}`;
+
+    // Tier 1: short text — mailto with body works everywhere
+    if(mailtoFull.length <= 1500){
+      showSendModal('email-direct');
+      setTimeout(()=>{ window.location.href = mailtoFull; }, 600);
+    }
+    // Tier 2: long text + Web Share API — body pre-fills when user picks email
+    else if(navigator.share){
+      navigator.share({
+        title: 'Жалоба на содержание МКД — ул. Совхозная д.5',
+        text: curText
+      }).then(()=>{
+        toast('Жалоба отправлена');
+      }).catch(()=>{});
+      // Copy recipient to clipboard for convenience
+      clipCopy('kontinent.reception@mail.ru');
+      showSendModal('email-share');
+    }
+    // Tier 3: fallback — clipboard + mailto without body + instructions
+    else {
+      clipCopy(curText).then(()=>{
+        showSendModal('email-paste');
+        setTimeout(()=>{ window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`; }, 600);
+      });
+    }
+  } else {
+    clipCopy(curText).then(()=>{
       showSendModal('portal');
       setTimeout(()=>window.open(DEST_URL[dest],'_blank'), 600);
-    }
-  });
+    });
+  }
 }
 
 function showSendModal(type){
   const steps = document.getElementById('modal-steps');
   const title = document.getElementById('modal-title');
   const shareBtn = document.getElementById('modal-share-btn');
-  shareBtn.style.display = 'navigator' in window && 'share' in navigator ? 'flex' : 'none';
+  shareBtn.style.display = navigator.share ? 'flex' : 'none';
 
-  if(type==='email'){
+  if(type==='email-direct'){
+    // Tier 1: mailto with body — everything pre-filled
+    title.textContent='Открываем почту';
+    steps.innerHTML=`
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Всё готово</b>Адрес, тема и текст жалобы уже заполнены</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Проверьте и отправьте</b>Убедитесь, что текст на месте, и нажмите «Отправить»</div></div>
+    `;
+  } else if(type==='email-share'){
+    // Tier 2: Web Share API — text goes to body via share sheet
+    title.textContent='Отправка жалобы';
+    steps.innerHTML=`
+      <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Выберите почтовое приложение</b>В меню «Поделиться» выберите Mail, Gmail или Outlook</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Укажите адрес</b>Адрес УК скопирован: <b>kontinent.reception@mail.ru</b> — вставьте в поле «Кому»</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><b>Отправьте</b>Текст жалобы уже в письме</div></div>
+    `;
+  } else if(type==='email-paste'){
+    // Tier 3: clipboard fallback
     title.textContent='Отправка на email';
     steps.innerHTML=`
       <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
@@ -904,6 +954,7 @@ function showSendModal(type){
       <div class="step"><div class="step-num">3</div><div class="step-text"><b>Вставьте текст</b>Нажмите и удерживайте в поле письма, затем «Вставить»</div></div>
     `;
   } else {
+    // Portal
     title.textContent='Отправка на портал';
     steps.innerHTML=`
       <div class="step"><div class="step-num done">1</div><div class="step-text"><b>Текст скопирован</b>Жалоба уже в буфере обмена</div></div>
@@ -941,6 +992,22 @@ function getNextDest(){
 function selectDest(d){
   const btn = document.querySelector(`.dest-btn[data-d="${d}"]`);
   if(btn) setD(btn);
+}
+
+function showFieldsModal(noName, noApt){
+  const title = document.getElementById('modal-title');
+  const steps = document.getElementById('modal-steps');
+  const nd = document.getElementById('modal-next-dest');
+  const shareBtn = document.getElementById('modal-share-btn');
+  shareBtn.style.display='none';
+  nd.innerHTML='';
+  title.textContent='Заполните данные';
+  let items='';
+  if(noName) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите ФИО</b>Без имени жалоба не будет принята</div></div>`;
+  if(noApt) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите квартиру</b>Номер квартиры обязателен</div></div>`;
+  steps.innerHTML=items;
+  document.getElementById('modal-overlay').classList.add('show');
+  document.getElementById('send-modal').classList.add('show');
 }
 
 function shareWithNeighbor(){
