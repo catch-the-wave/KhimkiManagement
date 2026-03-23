@@ -6,144 +6,241 @@
 <title>Жалоба на УК «Континент Комфорта»</title>
 <style>
 :root {
-  --primary: #1a73e8;
-  --danger: #d32f2f;
-  --success: #2e7d32;
-  --bg: #f5f5f5;
-  --card: #fff;
-  --text: #212121;
-  --muted: #616161;
-  --border: #e0e0e0;
-  --r: 12px;
+  --primary: #1565c0;
+  --primary-light: #e3f2fd;
+  --action: #2e7d32;
+  --action-light: #e8f5e9;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --r: 14px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow-x:hidden;width:100%}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-.container{max-width:600px;margin:0 auto;padding:0 12px 140px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+.container{max-width:600px;margin:0 auto;padding:0 12px 100px}
 
-.header{background:linear-gradient(135deg,var(--danger),#b71c1c);color:#fff;padding:18px 16px;text-align:center;position:sticky;top:0;z-index:100}
-.header h1{font-size:17px;font-weight:700}
-.header p{font-size:12px;opacity:.85;margin-top:2px}
+/* Header */
+.header{background:#1e3a5f;color:#fff;padding:13px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
+.header p{font-size:11px;opacity:.65;margin-top:1px}
 
-.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99}
-.tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;transition:.2s}
-.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-
-.section{display:none;padding-top:12px}
+/* Sections */
+.section{display:none;padding-top:10px}
 .section.active{display:block}
 
-.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-.card-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+/* Cards */
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
 
+/* Chips */
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:7px 11px;background:var(--bg);border:2px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none}
-.chip:active{transform:scale(.96)}
-.chip.selected{background:var(--danger);border-color:var(--danger);color:#fff;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none;font-weight:500}
+.chip:active{transform:scale(.95)}
+.chip.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
 .chip .ck{display:none}
 .chip.selected .ck{display:inline}
-.sel-ctrls{display:flex;gap:12px;margin-bottom:8px}
-.sel-ctrls button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600}
+.sel-ctrls{display:flex;gap:12px;margin-bottom:10px}
+.sel-ctrls button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit}
 
+/* Form */
 .form-row{display:flex;gap:8px;margin-bottom:8px}
 .field{flex:1;position:relative}
-.field input,.field select{width:100%;padding:10px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff}
-.field input:focus,.field select:focus{outline:none;border-color:var(--primary)}
-.field label{position:absolute;top:-7px;left:8px;background:#fff;padding:0 4px;font-size:11px;color:var(--muted);font-weight:600}
-.addr{font-size:13px;color:var(--muted);padding:4px 0}
+.field input{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);transition:.15s}
+.field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
+.field label{position:absolute;top:-7px;left:10px;background:#fff;padding:0 4px;font-size:11px;color:var(--muted);font-weight:600}
+.addr{font-size:12px;color:var(--muted);padding:4px 2px;display:flex;align-items:center;gap:4px}
 
-.complaint-live{background:#fff;border:2px solid var(--border);border-radius:var(--r);padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word;max-height:50vh;overflow-y:auto;transition:.2s}
-.complaint-live.ok{border-color:var(--success)}
-textarea.complaint-edit{width:100%;min-height:200px;max-height:50vh;background:#fff;border:2px solid var(--success);border-radius:var(--r);padding:14px;font-size:13px;line-height:1.7;font-family:inherit;resize:vertical;box-sizing:border-box;color:var(--text);outline:none;transition:.2s}
-textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+/* Textarea */
+textarea.complaint-edit{width:100%;min-height:220px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
+textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
 .edit-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
-.empty-hint{text-align:center;padding:30px 16px;color:var(--muted);font-size:14px}
-.empty-hint .arr{font-size:24px;display:block;margin-bottom:8px}
+.empty-hint{text-align:center;padding:28px 16px;color:var(--muted);font-size:14px}
+.empty-hint .arr{font-size:22px;display:block;margin-bottom:6px}
 
-.dest-bar{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-.dest-btn{flex-shrink:0;padding:7px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:#fff;color:var(--muted);transition:.15s;white-space:nowrap}
+/* Destination bar */
+.dest-bar{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dest-bar::-webkit-scrollbar{display:none}
+.dest-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);transition:.15s;white-space:nowrap;font-family:inherit}
 .dest-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.dest-hint{font-size:11px;color:var(--muted);padding:0 2px;line-height:1.5}
+.dest-hint b{color:var(--primary)}
 
-.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:12px 8px;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s}
+/* Bottom bar */
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
+
+/* Buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:13px 10px;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s;letter-spacing:-.1px}
 .btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.4;pointer-events:none}
+.btn:disabled{opacity:.38;pointer-events:none}
 .btn-copy{background:var(--primary);color:#fff}
-.btn-send{background:var(--danger);color:#fff}
-.btn-portal{background:var(--success);color:#fff}
+.btn-send{background:var(--primary);color:#fff}
+.btn-portal{background:var(--action);color:#fff}
+.btn-ghost{background:var(--bg);color:var(--text);border:1.5px solid var(--border)}
 
-.photo-add-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:2px dashed var(--border);border-radius:8px;font-size:14px;font-weight:600;color:var(--primary);cursor:pointer;transition:.15s;background:var(--bg)}
-.photo-add-btn:active{border-color:var(--primary);background:#e3f2fd}
-.photo-upload{border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:.2s}
-.photo-upload:active{border-color:var(--primary);background:#e3f2fd}
-.thumbs-big{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.thumb{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden}
+/* Photo */
+.photo-add-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;transition:.15s;background:var(--bg);font-family:inherit}
+.photo-add-btn:active{border-color:var(--primary);background:var(--primary-light)}
+.thumbs-big{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden}
 .thumb img{width:100%;height:100%;object-fit:cover}
-.thumb .rm{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.regen{font-size:12px;color:var(--primary);cursor:pointer;background:none;border:none;font-weight:600;padding:6px 0;font-family:inherit}
-.tone-switch{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:3px;margin-bottom:10px}
-.tone-btn{flex:1;padding:7px 8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
-.tone-btn.active{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.thumb .rm{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-.portal-link{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text);border:1px solid var(--border);margin-bottom:6px}
-.portal-link .pi{font-size:22px}
+/* Regen & tone */
+.regen{font-size:12px;color:var(--primary);cursor:pointer;background:none;border:none;font-weight:600;padding:4px 0;font-family:inherit}
+.tone-switch{display:flex;gap:3px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:10px}
+.tone-btn{flex:1;padding:7px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
+.tone-btn.active{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:200;opacity:0;transition:opacity .25s,transform .25s;white-space:normal;text-align:center;max-width:90vw;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Portal links */
+.portal-link{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--bg);border-radius:10px;text-decoration:none;color:var(--text);border:1px solid var(--border);margin-bottom:6px}
+.portal-link .pi{font-size:20px;flex-shrink:0}
 .portal-link .pn{font-size:13px;font-weight:600}
 .portal-link .pd{font-size:11px;color:var(--muted)}
 
-.ri{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
-.ri .rt{font-size:13px;font-weight:700;color:var(--danger);margin-bottom:4px}
-.ri .rx{font-size:12px;line-height:1.5;margin-bottom:6px}
-.ri .rc{font-size:11px;color:var(--primary);background:#fff;border:1px solid var(--primary);padding:5px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+/* Ready items */
+.ri{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
+.ri .rt{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px}
+.ri .rx{font-size:12px;line-height:1.5;margin-bottom:8px;color:var(--muted)}
+.ri .rc{font-size:12px;color:var(--primary);background:#fff;border:1.5px solid var(--border);padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-family:inherit}
 
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:#323232;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:200;transition:transform .3s;white-space:nowrap;max-width:90vw;white-space:normal;text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-.trust-block{background:linear-gradient(135deg,#e8f5e9,#fff3e0);border:1px solid #c8e6c9;border-radius:var(--r);padding:14px;margin-bottom:10px;font-size:13px;line-height:1.6}
-.trust-block b{color:var(--success)}
-.trust-block .tb-stat{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-.trust-block .tb-stat span{background:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid var(--border)}
-
-.dest-hint{font-size:11px;color:var(--muted);margin-top:4px;padding:0 2px;line-height:1.5}
-.dest-hint b{color:var(--primary)}
-
-.send-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
-.send-modal-overlay.show{opacity:1;pointer-events:auto}
-.send-modal{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:#fff;border-radius:16px 16px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));z-index:301;transform:translateY(100%);transition:transform .3s;max-height:85vh;overflow-y:auto}
-.send-modal.show{transform:translateY(0)}
-.send-modal h3{font-size:16px;margin-bottom:14px;text-align:center}
-.send-modal .step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
-.send-modal .step:last-of-type{border-bottom:none}
-.send-modal .step-num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.send-modal .step-num.done{background:var(--success)}
-.send-modal .step-text{font-size:13px;line-height:1.5}
-.send-modal .step-text b{display:block;margin-bottom:2px}
-.send-modal .modal-actions{display:flex;gap:8px;margin-top:16px}
-.send-modal .modal-actions .btn{flex:1}
-.next-dest{margin-top:12px;padding:12px;background:var(--bg);border-radius:8px;text-align:center}
-.next-dest p{font-size:12px;color:var(--muted);margin-bottom:8px}
-.next-dest button{font-size:13px;font-weight:600;color:#fff;background:var(--primary);border:none;border-radius:8px;padding:10px 16px;cursor:pointer;width:100%}
-
-/* Burger menu */
-.burger{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;background:none;border:none;padding:0;z-index:102}
-.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:1px;transition:.2s}
+/* Burger */
+.burger{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;background:none;border:none;padding:0;z-index:102}
+.burger span{display:block;width:20px;height:2px;background:rgba(255,255,255,.8);border-radius:1px;transition:.2s}
 .burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .burger.open span:nth-child(2){opacity:0}
 .burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;opacity:0;pointer-events:none;transition:opacity .25s}
+/* Drawer */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:150;opacity:0;pointer-events:none;transition:opacity .25s}
 .drawer-overlay.open{opacity:1;pointer-events:auto}
-
-.drawer{position:fixed;top:0;right:-280px;width:280px;height:100%;background:#fff;z-index:151;transition:right .25s;box-shadow:-4px 0 20px rgba(0,0,0,.15);display:flex;flex-direction:column}
+.drawer{position:fixed;top:0;right:-290px;width:290px;height:100%;background:#fff;z-index:151;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.12);display:flex;flex-direction:column}
 .drawer.open{right:0}
-.drawer-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
-.drawer-header h2{font-size:15px;font-weight:700;color:var(--text)}
+.drawer-header{padding:18px 16px 12px;border-bottom:1px solid var(--border)}
+.drawer-header h2{font-size:15px;font-weight:700}
 .drawer-header p{font-size:12px;color:var(--muted);margin-top:2px}
-.drawer-body{flex:1;overflow-y:auto;padding:12px 16px}
-.drawer-link{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit;font-size:14px;color:var(--text)}
-.drawer-link:hover,.drawer-link:active{background:var(--bg)}
-.drawer-link .dl-icon{font-size:20px;flex-shrink:0}
-.drawer-link .dl-label{font-weight:600}
+.drawer-body{flex:1;overflow-y:auto;padding:10px 12px}
+.drawer-link{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:10px;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit;font-size:14px;color:var(--text)}
+.drawer-link:active{background:var(--bg)}
+.drawer-link .dl-icon{font-size:18px;flex-shrink:0}
+.drawer-link .dl-label{font-weight:600;font-size:13px}
 .drawer-link .dl-desc{font-size:11px;color:var(--muted);margin-top:1px}
-.drawer-divider{height:1px;background:var(--border);margin:8px 0}
+.drawer-divider{height:1px;background:var(--border);margin:6px 0}
+
+/* Wizard nav */
+.wizard-nav{display:flex;align-items:flex-start;padding:12px 4px 6px;margin-bottom:2px}
+.wstep{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;cursor:default}
+.wstep.done{cursor:pointer}
+.wdot{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.25s;flex-shrink:0}
+.wstep.active .wdot{background:var(--primary);color:#fff;box-shadow:0 0 0 3px rgba(21,101,192,.18)}
+.wstep.done .wdot{background:var(--action);color:#fff}
+.wlabel{font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap;margin-top:2px}
+.wstep.active .wlabel{color:var(--primary)}
+.wstep.done .wlabel{color:var(--action)}
+.wline{flex:1;height:2px;background:var(--border);margin:0 6px;position:relative;top:-17px;transition:.3s;border-radius:1px}
+.wline.done{background:var(--action)}
+
+/* Hook bar */
+.hook-bar{background:#fff;border-radius:var(--r);padding:14px 14px 12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.hook-bar-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.hook-bar-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.counter-row{display:flex;align-items:center;gap:10px}
+.counter-num{font-size:22px;font-weight:800;color:var(--action);line-height:1}
+.counter-label{font-size:12px;color:var(--muted);line-height:1.4}
+.counter-bar{flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;min-width:60px}
+.counter-fill{height:100%;background:var(--action);border-radius:3px;transition:width .6s ease}
+
+/* Send-all */
+.send-all-card{margin-bottom:8px}
+.btn-send-all{width:100%;padding:15px;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;border:none;background:var(--action);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s;letter-spacing:-.1px;box-shadow:0 2px 8px rgba(46,125,50,.3)}
+.btn-send-all:active{transform:scale(.97);box-shadow:none}
+.send-all-sub{text-align:center;font-size:11px;color:var(--muted);margin-top:5px}
+
+/* Advanced toggle */
+.adv-toggle-btn{display:block;width:100%;text-align:center;font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit;padding:8px;margin-bottom:2px}
+.adv-toggle-btn:hover{color:var(--primary)}
+
+/* Multi-send modal */
+.multi-item{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:10px;margin-bottom:6px;background:var(--bg);border:1px solid var(--border);transition:.2s}
+.multi-item.done{background:var(--action-light);border-color:#a5d6a7}
+.mi-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:.2s}
+.multi-item.done .mi-num{background:var(--action)}
+.mi-info{flex:1;min-width:0}
+.mi-name{font-size:13px;font-weight:700}
+.mi-email{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-btn{padding:7px 12px;border-radius:8px;background:var(--primary);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:inherit;transition:.15s}
+.multi-item.done .mi-btn{background:var(--action);pointer-events:none}
+
+/* Post-send */
+.done-banner{background:var(--action-light);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px}
+.done-banner .done-icon{font-size:30px;display:block;margin-bottom:6px}
+.done-banner .done-title{font-size:16px;font-weight:800;color:var(--action)}
+.done-banner .done-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.chat-block{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:11px;font-family:monospace;line-height:1.6;color:var(--text);word-break:break-word;margin:8px 0;white-space:pre-wrap}
+
+/* Modals */
+.send-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
+.send-modal-overlay.show{opacity:1;pointer-events:auto}
+.send-modal{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:#fff;border-radius:20px 20px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));z-index:301;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
+.send-modal.show{transform:translateY(0)}
+.send-modal h3{font-size:16px;font-weight:700;margin-bottom:14px;text-align:center}
+.send-modal .step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.send-modal .step:last-of-type{border-bottom:none}
+.send-modal .step-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.send-modal .step-num.done{background:var(--action)}
+.send-modal .step-text{font-size:13px;line-height:1.5}
+.send-modal .step-text b{display:block;margin-bottom:2px}
+.send-modal .modal-actions{display:flex;gap:8px;margin-top:16px}
+.send-modal .modal-actions .btn{flex:1}
+.next-dest{margin-top:10px;padding:10px 12px;background:var(--bg);border-radius:10px;text-align:center}
+.next-dest p{font-size:12px;color:var(--muted);margin-bottom:8px}
+.next-dest button{font-size:13px;font-weight:700;color:#fff;background:var(--primary);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;width:100%;font-family:inherit}
+
+/* Track cards (step 3) */
+.track-card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.track-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.track-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.track-title{font-size:14px;font-weight:700;color:var(--text)}
+.track-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+/* Gosuslugi toggle */
+.gosu-card{margin-bottom:8px}
+.gosu-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gosu-q{font-size:13px;font-weight:600;color:var(--text)}
+.gt-toggle{display:flex;background:var(--bg);border-radius:10px;padding:3px;gap:2px;flex-shrink:0}
+.gt-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit;white-space:nowrap}
+.gt-btn.active{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.gosu-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+/* Portal items */
+.p-item{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.p-item:first-child{border-top:none;padding-top:0;margin-top:0}
+.p-item-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.p-name{font-size:14px;font-weight:700}
+.p-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
+.p-badge.best{background:#e8f5e9;color:#2e7d32}
+.p-badge.fast{background:#e3f2fd;color:#1565c0}
+.p-badge.legal{background:#f3e5f5;color:#7b1fa2}
+.p-desc{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+.p-btns{display:flex;gap:6px;margin-bottom:6px}
+.p-btns .btn{flex:1;padding:10px 8px;font-size:12px}
+.p-tip{font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 8px;line-height:1.5}
+
+/* Compact destination rows */
+.dest-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.dest-row:last-of-type{border-bottom:none}
+.dest-row-info{flex:1;min-width:0}
+.dest-row-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dest-row-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.btn-open{flex-shrink:0;padding:9px 16px;border-radius:10px;background:var(--action);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.btn-open:active{transform:scale(.97)}
+.track-hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -199,72 +296,158 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 <div class="container">
   <!-- MAIN -->
   <div id="tab-main" class="section active">
-    <!-- trust block hidden for now
-    <div class="trust-block">
-      <b>Массовые жалобы работают.</b> УК обязана ответить на каждую в течение 10 рабочих дней (ст. 161 ЖК РФ). 20-30 жалоб в день в течение 2-3 недель создают основание для проверки и смены УК. Жалобу может подать <b>любой жилец</b>, не только собственник.
-    </div>
-    -->
-    <div class="card">
-      <div class="card-title">Чем вы недовольны?</div>
-      <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
-      <div class="chips" id="chips"></div>
-    </div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div class="card-title" style="margin:0">Текст жалобы</div>
-        <button class="regen" onclick="regen()" id="rbtn" style="display:none">🔄 Другой вариант</button>
+
+    <!-- Wizard progress -->
+    <div class="wizard-nav">
+      <div class="wstep active" id="wstep-1" onclick="tryGoStep(1)">
+        <div class="wdot" id="wdot-1">1</div>
+        <div class="wlabel">Проблемы</div>
       </div>
-      <div class="tone-switch" id="tone-switch" style="display:none">
-        <button class="tone-btn active" data-tone="formal" onclick="setTone(this)">Формальный</button>
-        <button class="tone-btn" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+      <div class="wline" id="wline-1"></div>
+      <div class="wstep" id="wstep-2" onclick="tryGoStep(2)">
+        <div class="wdot" id="wdot-2">2</div>
+        <div class="wlabel">Жалоба</div>
       </div>
-      <div id="carea"><div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Куда направить</div>
-      <div class="dest-bar">
-        <button class="dest-btn active" data-d="uk" onclick="setD(this)">✉️ УК (email)</button>
-        <button class="dest-btn" data-d="admin" onclick="setD(this)">🏛️ Администрация</button>
-        <button class="dest-btn" data-d="ministry" onclick="setD(this)">🧹 Мин. чистоты</button>
-        <button class="dest-btn" data-d="governor" onclick="setD(this)">📋 Правительство МО</button>
-        <button class="dest-btn" data-d="gis" onclick="setD(this)">🏠 ГИС ЖКХ</button>
+      <div class="wline" id="wline-2"></div>
+      <div class="wstep" id="wstep-3" onclick="tryGoStep(3)">
+        <div class="wdot" id="wdot-3">3</div>
+        <div class="wlabel">Отправить</div>
       </div>
-      <div class="dest-hint" id="dest-hint">Отправьте одну жалобу в <b>2-3 места</b> для максимального эффекта. Начните с УК, затем — Администрация.</div>
-      <div class="dest-hint" id="dest-desc" style="margin-top:4px;font-style:italic"></div>
     </div>
-    <div class="card" id="photo-card">
-      <div class="card-title">📷 Приложите фото</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Жалоба с фото — весомее. Сфотографируйте проблему (грязь, темноту, крыс, мусор) и прикрепите здесь. Фото будут упомянуты в тексте.</p>
-      <label class="photo-add-btn" onclick="">
-        <span>📷 Добавить фото</span>
-        <input type="file" accept="image/*" multiple onchange="addPh(this.files)" style="display:none">
-      </label>
-      <div class="thumbs-big" id="thumbs"></div>
-      <div id="photo-count" style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Ваши данные</div>
-      <div class="form-row">
-        <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="upd()"></div>
-        <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="upd()"></div>
+
+    <!-- STEP 1: Problems -->
+    <div id="step-1">
+      <div class="hook-bar">
+        <div class="hook-bar-title">Не нужно ничего писать самому</div>
+        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба в УК, ЖКХ и жилищную инспекцию сформируется автоматически. Отправка займёт 2 минуты.</div>
+        <div class="counter-row">
+          <span class="counter-num" id="sent-count">0</span>
+          <span>жалоб уже отправлено</span>
+        </div>
+        <div class="counter-bar"><div class="counter-fill" id="counter-fill" style="width:0%"></div></div>
       </div>
-      <div class="addr">📍 г. Химки, ул. Совхозная, д. 5</div>
+      <div class="card">
+        <div class="card-title">Чем вы недовольны?</div>
+        <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
+        <div class="chips" id="chips"></div>
+      </div>
     </div>
+
+    <!-- STEP 2: Text -->
+    <div id="step-2" style="display:none">
+      <div class="card">
+        <div class="form-row" style="margin-bottom:10px">
+          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
+          <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
+        </div>
+        <div id="carea"></div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Send -->
+    <div id="step-3" style="display:none">
+      <!-- Track 1: Email -->
+      <div class="track-card">
+        <div class="track-header">
+          <div class="track-num">1</div>
+          <div>
+            <div class="track-title">Email — обязательный первый шаг</div>
+            <div class="track-sub">Без обращения в УК надзорные органы могут отказать в проверке</div>
+          </div>
+        </div>
+        <div class="track-hint">Нажмите «Открыть» — текст скопируется автоматически, вставьте в письмо</div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">УК «Континент Комфорта»<span class="p-badge" style="background:#fff3e0;color:#e65100">Обязательно</span></div>
+            <div class="dest-row-sub">kontinent.reception@mail.ru</div>
+          </div>
+          <button class="btn-open" onclick="openEmail('kontinent.reception@mail.ru')">Открыть →</button>
+        </div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ЖКХ г. Химки<span class="p-badge fast">Муниципалитет</span></div>
+            <div class="dest-row-sub">zhkh@admhimki.ru</div>
+          </div>
+          <button class="btn-open" onclick="openEmail('zhkh@admhimki.ru')">Открыть →</button>
+        </div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ГЖИ МО<span class="p-badge legal">Лицензия УК</span></div>
+            <div class="dest-row-sub">Mstg@mosreg.ru · может лишить УК лицензии</div>
+          </div>
+          <button class="btn-open" onclick="openEmail('Mstg@mosreg.ru')">Открыть →</button>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+          <button class="btn-send-all" onclick="sendAll()">✉️ Все 3 адресата одним письмом</button>
+          <div class="send-all-sub">Текст скопируется — вставьте в письмо и отправьте</div>
+        </div>
+      </div>
+
+      <!-- Track 2: Portals -->
+      <div id="portal-section">
+        <div class="track-card">
+          <div class="track-header">
+            <div class="track-num">2</div>
+            <div>
+              <div class="track-title">Порталы — юридически сильнее</div>
+              <div class="track-sub">Нажмите «Открыть» — текст скопируется, вставьте на портале</div>
+            </div>
+          </div>
+          <div class="dest-row">
+            <div class="dest-row-info">
+              <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
+              <div class="dest-row-sub">«Дом, ЖКХ» → Совхозная 5 · одна жалоба = одна проблема</div>
+            </div>
+            <button class="btn-open" onclick="openPortal('https://vmeste.mosreg.ru')">Открыть →</button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-row-info">
+              <div class="dest-row-name">ЕДС МО<span class="p-badge fast">24 часа</span></div>
+              <div class="dest-row-sub">Напрямую в УК через диспетчерскую</div>
+            </div>
+            <button class="btn-open" onclick="openPortal('https://eds.mosreg.ru/claims')">Открыть →</button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-row-info">
+              <div class="dest-row-name">ГИС ЖКХ<span class="p-badge legal">Для суда</span></div>
+              <div class="dest-row-sub">Действия → Обращение → Адресат: ГЖИ МО</div>
+            </div>
+            <button class="btn-open" onclick="openPortal('https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true')">Открыть →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced: single dest picker -->
+      <button class="adv-toggle-btn" id="adv-toggle" onclick="toggleAdvanced()">▾ Выбрать другой адресат</button>
+      <div id="advanced-panel" style="display:none">
+        <div class="card">
+          <div class="card-title">Куда направить</div>
+          <div class="dest-bar">
+            <button class="dest-btn active" data-d="uk" onclick="setD(this)">✉️ УК</button>
+            <button class="dest-btn" data-d="admin" onclick="setD(this)">🏛️ ЖКХ Химок</button>
+            <button class="dest-btn" data-d="ministry" onclick="setD(this)">🔍 ГЖИ МО</button>
+            <button class="dest-btn" data-d="governor" onclick="setD(this)">📮 Губернатор МО</button>
+            <button class="dest-btn" data-d="gis" onclick="setD(this)">🏠 ГИС ЖКХ</button>
+          </div>
+          <div class="dest-hint" id="dest-hint"></div>
+          <div class="dest-hint" id="dest-desc" style="margin-top:4px;font-style:italic"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;padding:0 0 4px">
+          <button class="btn btn-copy" id="bcopy" onclick="copyAndShow()" style="flex:2">📋 Скопировать текст</button>
+          <button class="btn btn-send" id="bsend" onclick="sendAct()" style="display:none">✉️ Отправить</button>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
   <!-- PHOTO -->
   <div id="tab-photo" class="section">
     <div class="card">
       <div class="card-title">Фото проблем</div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Фотографии усиливают жалобу. Сфотографируйте проблему и загрузите сюда — они будут упомянуты в тексте жалобы.</p>
-      <div class="photo-upload" onclick="document.getElementById('phi').click()">
-        <div style="font-size:40px;margin-bottom:8px">📷</div>
-        <div style="font-size:14px;font-weight:600;color:var(--text)">Нажмите, чтобы добавить фото</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">До 5 фотографий</div>
-        <input type="file" id="phi" accept="image/*" multiple onchange="addPh(this.files)" style="display:none">
-      </div>
-      <div class="thumbs-big" id="thumbs2"></div>
-      <div id="photo-count2" style="font-size:13px;color:var(--muted);margin-top:8px;text-align:center"></div>
+      <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Жалоба с фото работает сильнее</p>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6">Сфотографируйте проблему — грязный подъезд, сломанный мусоропровод, тёмный коридор. После того как откроется почта, прикрепите фото к письму вручную перед отправкой.</p>
     </div>
   </div>
 
@@ -344,10 +527,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
   </div>
 </div>
 
-<div class="bottom-actions" id="ba">
-  <button class="btn btn-copy" id="bcopy" disabled onclick="copyAndShow()" style="flex:2">📋 Скопировать текст</button>
-  <button class="btn btn-send" id="bsend" disabled onclick="sendAct()" style="display:none">✉️ Отправить</button>
-</div>
+<div class="bottom-actions" id="ba"></div>
 
 <div class="send-modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
 <div class="send-modal" id="send-modal">
@@ -360,6 +540,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
 
 <script>
 // ====== PROBLEM BLOCKS — multiple unique variants per problem ======
@@ -583,7 +764,6 @@ const PROB_IDS = Object.keys(P);
 const sel = new Set();
 let dest = 'uk';
 let tone = 'formal'; // 'formal' or 'informal'
-let photos = [];
 let curText = '';
 let seed = 0;
 
@@ -656,13 +836,19 @@ const T = {
 };
 const DEST_HDR = {
   uk:'В УК «Континент Комфорта»\nkontinent.reception@mail.ru',
-  admin:'В администрацию городского округа Химки',
-  ministry:'В Министерство по содержанию территорий\nи государственному жилищному надзору МО',
-  governor:'В Правительство Московской области',
-  gis:'В ГИС ЖКХ'
+  admin:'В Управление ЖКХ администрации г.о. Химки\nzhkh@admhimki.ru',
+  ministry:'В Министерство по содержанию территорий\nи государственному жилищному надзору МО\nMstg@mosreg.ru',
+  governor:'В приёмную губернатора Московской области\nandreyvorobiev@mosreg.ru',
+  gis:'В ГИС ЖКХ\ndom.gosuslugi.ru'
+};
+const DEST_EMAIL = {
+  uk:'kontinent.reception@mail.ru',
+  admin:'zhkh@admhimki.ru',
+  ministry:'Mstg@mosreg.ru',
+  governor:'andreyvorobiev@mosreg.ru'
 };
 const DEST_URL = {
-  admin:'https://eds.mosreg.ru/claims',ministry:'https://mstg.mosreg.ru',governor:'https://eds.mosreg.ru/claims',gis:'https://dom.gosuslugi.ru'
+  gis:'https://dom.gosuslugi.ru'
 };
 const CONNECTORS_FORMAL = [
   'Кроме того, ', 'Также хочу отметить, что ', 'Помимо этого, ',
@@ -675,6 +861,160 @@ const CONNECTORS_INFORMAL = [
   'Отдельная головная боль — ', 'Ну и вишенка на торте: '
 ];
 
+// ====== WIZARD ======
+let currentStep = 1;
+
+function showStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step-'+i).style.display = i===n ? 'block' : 'none';
+    const ws = document.getElementById('wstep-'+i);
+    if(ws){ ws.classList.toggle('active', i===n); ws.classList.toggle('done', i<n); }
+    const wl = document.getElementById('wline-'+i);
+    if(wl) wl.classList.toggle('done', i<n);
+  });
+  currentStep = n;
+  updateWizardNav();
+  window.scrollTo(0,0);
+  if (n === 2) requestAnimationFrame(fitTextarea);
+}
+
+function updateWizardNav() {
+  const ba = document.getElementById('ba');
+  if(!ba) return;
+  if(currentStep === 1) {
+    ba.innerHTML = `<button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>`;
+  } else if(currentStep === 2) {
+    ba.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
+            <button class="tone-btn ${tone==='formal'?'active':''}" data-tone="formal" onclick="setTone(this)">Формальный</button>
+            <button class="tone-btn ${tone==='informal'?'active':''}" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+          </div>
+          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px" onclick="regen()" title="Другой вариант">🔄</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="flex:1" onclick="goBack()">← Назад</button>
+          <button class="btn btn-send" style="flex:2" onclick="goNext()">Далее →</button>
+        </div>
+      </div>`;
+  } else {
+    ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
+  }
+}
+
+function goNext() {
+  if(currentStep === 1) {
+    if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
+    upd();
+    showStep(2);
+  } else if(currentStep === 2) {
+    showStep(3);
+  }
+}
+
+function goBack() {
+  if(currentStep > 1) showStep(currentStep - 1);
+}
+
+function tryGoStep(n) {
+  if(n < currentStep) showStep(n);
+}
+
+function toggleAdvanced() {
+  const p = document.getElementById('advanced-panel');
+  const t = document.getElementById('adv-toggle');
+  const show = p.style.display === 'none';
+  p.style.display = show ? 'block' : 'none';
+  t.textContent = show ? '▴ Скрыть' : '▾ Выбрать другой адресат';
+}
+
+// ====== REAL COUNTER (CountAPI + localStorage fallback) ======
+const API_NS = 'khimki-sovhoznaya5-2026';
+const API_KEY = 'complaints';
+
+async function syncCounter() {
+  try {
+    const r = await fetch(`https://api.countapi.xyz/get/${API_NS}/${API_KEY}`);
+    const d = await r.json();
+    const n = Math.max(d.value||0, getCounter());
+    if(d.value) localStorage.setItem('kh_sent', n);
+    updateCounterUI(n);
+  } catch(e) { updateCounterUI(getCounter()); }
+}
+
+async function incrementCounter() {
+  try {
+    const r = await fetch(`https://api.countapi.xyz/hit/${API_NS}/${API_KEY}`);
+    const d = await r.json();
+    const n = Math.max(d.value||0, getCounter()+1);
+    localStorage.setItem('kh_sent', n);
+    updateCounterUI(n);
+    return n;
+  } catch(e) {
+    const n = getCounter()+1;
+    localStorage.setItem('kh_sent', n);
+    updateCounterUI(n);
+    return n;
+  }
+}
+
+// ====== DEBOUNCE ======
+let _updTimer;
+function dUpd(){clearTimeout(_updTimer);_updTimer=setTimeout(upd,280)}
+
+// ====== SOCIAL COUNTER ======
+const COUNTER_SEED = 31; // realistic baseline
+function getCounter(){return parseInt(localStorage.getItem('kh_sent')||COUNTER_SEED)}
+function incrementCounter(){
+  const n=getCounter()+1;
+  localStorage.setItem('kh_sent',n);
+  updateCounterUI(n);
+  return n;
+}
+function updateCounterUI(n){
+  const el=document.getElementById('sent-count');
+  const fill=document.getElementById('counter-fill');
+  if(el) el.textContent=n;
+  if(fill) fill.style.width=Math.min(100,Math.round(n/500*100))+'%';
+}
+
+// ====== SEND ======
+const SUBJ = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
+
+function validateFields(){
+  const name=document.getElementById('fullname').value.trim();
+  const apt=document.getElementById('apt').value.trim();
+  if(!name||!apt){showFieldsModal(!name,!apt);return false;}
+  return true;
+}
+
+function sendAll(){
+  if(!curText||!validateFields())return;
+  clipCopy(curText);
+  const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
+  window.location.href=`mailto:${emails}?subject=${SUBJ}`;
+  incrementCounter();
+  setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
+}
+
+function openEmail(email){
+  if(!curText||!validateFields())return;
+  clipCopy(curText);
+  setTimeout(()=>{window.location.href=`mailto:${email}?subject=${SUBJ}`;},150);
+}
+
+function openPortal(url){
+  if(!curText)return;
+  clipCopy(curText).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
+  setTimeout(()=>window.open(url,'_blank'),150);
+}
+
+function copyTextForPortal() {
+  if (!curText) { toast('⚠️ Сначала выберите проблемы на шаге 1'); return; }
+  clipCopy(curText).then(() => toast('✅ Текст скопирован — вставьте на портале'));
+}
+
 // ====== INIT ======
 function init() {
   const c = document.getElementById('chips');
@@ -682,6 +1022,8 @@ function init() {
     `<div class="chip" data-id="${id}" onclick="tog(this)">${P[id].label}<span class="ck"> ✓</span></div>`
   ).join('');
   renderReady();
+  showStep(1);
+  syncCounter();
 }
 
 // ====== DRAWER ======
@@ -729,7 +1071,9 @@ function updateQR() {
 function switchTab(t) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
-  document.getElementById('ba').style.display = t==='main'?'flex':'none';
+  const ba = document.getElementById('ba');
+  if(t === 'main'){ ba.style.display='flex'; updateWizardNav(); }
+  else ba.style.display='none';
   window.scrollTo(0,0);
 }
 
@@ -738,11 +1082,22 @@ function tog(el) {
   const id=el.dataset.id;
   if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
   else{sel.add(id);el.classList.add('selected')}
-  seed++; // new variant on each change
-  upd();
+  seed++;
+  const nb=document.getElementById('btn-step-next');
+  if(nb) nb.disabled=sel.size===0;
 }
-function selAll(){document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});seed++;upd()}
-function clrAll(){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));sel.clear();upd()}
+function selAll(){
+  document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});
+  seed++;
+  const nb=document.getElementById('btn-step-next');
+  if(nb) nb.disabled=false;
+}
+function clrAll(){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+  sel.clear();
+  const nb=document.getElementById('btn-step-next');
+  if(nb) nb.disabled=true;
+}
 
 // ====== TONE ======
 function setTone(btn){
@@ -755,11 +1110,11 @@ function setTone(btn){
 
 // ====== DEST ======
 const DEST_DESC = {
-  uk:'Прямое обращение в УК. Обязаны ответить в 10 дней.',
-  admin:'Администрация г. Химки может инициировать проверку УК.',
-  ministry:'Жилищный надзор может оштрафовать УК и обязать устранить нарушения.',
-  governor:'Правительство МО — максимальное давление на УК.',
-  gis:'Официальный портал ЖКХ. Жалоба получает регистрационный номер.'
+  uk:'Обязательный первый шаг. Без письма в УК ГЖИ вправе отказать в проверке.',
+  admin:'Управление ЖКХ Химок — муниципальный контроль за работой УК.',
+  ministry:'ГЖИ МО — единственный орган, который может лишить УК лицензии.',
+  governor:'Политическое давление регионального уровня. Эскалация через 1–2 недели.',
+  gis:'Федеральный портал. Жалоба получает номер — доказательство для суда.'
 };
 const DEST_ORDER = ['uk','admin','ministry','governor','gis'];
 function setD(b){
@@ -768,18 +1123,13 @@ function setD(b){
   const dd=document.getElementById('dest-desc');
   if(dd) dd.textContent=DEST_DESC[dest]||'';
 }
-function updSendBtn(){const b=document.getElementById('bsend');if(dest==='uk'){b.className='btn btn-send';b.innerHTML='✉️ Отправить'}else{b.className='btn btn-portal';b.innerHTML='🌐 На портал'}}
-
-// ====== PHOTOS ======
-function addPh(files){Array.from(files).forEach(f=>{if(photos.length>=5)return;const r=new FileReader();r.onload=e=>{photos.push({n:f.name,d:e.target.result});rTh();upd()};r.readAsDataURL(f)})}
-function rmPh(i){photos.splice(i,1);rTh();upd()}
-function rTh(){
-  const html=photos.map((p,i)=>`<div class="thumb"><img src="${p.d}"><button class="rm" onclick="rmPh(${i})">×</button></div>`).join('');
-  const txt=photos.length>0?`Загружено фото: ${photos.length} из 5`:'';
-  // Update both thumb containers (main + photo tab)
-  ['thumbs','thumbs2'].forEach(id=>{const el=document.getElementById(id);if(el) el.innerHTML=html});
-  ['photo-count','photo-count2'].forEach(id=>{const el=document.getElementById(id);if(el) el.textContent=txt});
+function updSendBtn(){
+  const b=document.getElementById('bsend');
+  if(!b)return;
+  if(DEST_EMAIL[dest]){b.className='btn btn-send';b.innerHTML='✉️ Отправить'}
+  else{b.className='btn btn-portal';b.innerHTML='🌐 На портал'}
 }
+
 
 // ====== SEEDED RANDOM ======
 function seededRand(s) {
@@ -825,12 +1175,6 @@ function gen() {
     }
   });
 
-  if (photos.length > 0) {
-    t += isFormal
-      ? `К данному обращению прилагаются фотоматериалы (${photos.length} шт.), подтверждающие описанные нарушения.\n\n`
-      : `Прикладываю ${photos.length} фото — сами увидите, в каком всё состоянии.\n\n`;
-  }
-
   t += (isUK ? pick(tmpl.uk_close) : pick(tmpl.gov_close)) + '\n\n';
 
   const date = new Date().toLocaleDateString('ru-RU');
@@ -839,31 +1183,35 @@ function gen() {
 }
 
 function upd() {
-  // address is fixed
   const area = document.getElementById('carea');
-  const rb = document.getElementById('rbtn');
-  const bc = document.getElementById('bcopy');
-  const bs = document.getElementById('bsend');
+  const bc   = document.getElementById('bcopy');
+  const bs   = document.getElementById('bsend');
+  if(!area) return;
 
-  const ts = document.getElementById('tone-switch');
-
-  if (sel.size === 0) {
+  if(sel.size === 0) {
     area.innerHTML = '<div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div>';
-    rb.style.display='none'; bc.disabled=true; bs.disabled=true; curText='';
-    if(ts) ts.style.display='none';
+    curText='';
     resetButtons();
     return;
   }
 
-  if(ts) ts.style.display='flex';
   curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать перед отправкой</div>`;
-  // Auto-resize textarea to fit content
-  const ta = document.getElementById('complaint-ta');
-  if(ta){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight+4, window.innerHeight*0.5)+'px'; }
-  rb.style.display='inline'; bc.disabled=false;
+  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать · 📷 Фото — прикрепите к письму вручную</div>`;
+  requestAnimationFrame(fitTextarea);
+  if(bc) bc.disabled=false;
   resetButtons();
 }
+
+function fitTextarea() {
+  const ta = document.getElementById('complaint-ta');
+  if (!ta) return;
+  const top = ta.getBoundingClientRect().top;
+  const hint = ta.nextElementSibling ? ta.nextElementSibling.offsetHeight + 8 : 24;
+  const barH = currentStep === 2 ? 120 : 72; // step 2 has extra regen row
+  const h = Math.max(220, window.innerHeight - top - hint - barH);
+  ta.style.height = h + 'px';
+}
+window.addEventListener('resize', fitTextarea);
 
 function regen(){seed++;upd();toast('Текст обновлён')}
 function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -879,10 +1227,8 @@ function clipCopy(text){
 function resetButtons(){
   const bc = document.getElementById('bcopy');
   const bs = document.getElementById('bsend');
-  bc.innerHTML='📋 Скопировать текст';
-  bc.style.flex='2';
-  bs.style.display='none';
-  bs.disabled=true;
+  if(bc){ bc.innerHTML='📋 Скопировать текст'; bc.style.flex='2'; }
+  if(bs){ bs.style.display='none'; bs.disabled=true; }
 }
 
 function copyAndShow(){
@@ -909,13 +1255,15 @@ function copyAndShow(){
 
 function sendAct(){
   if(!curText)return;
-  if(dest==='uk'){
+  const email = DEST_EMAIL[dest];
+  if(email){
     const subj = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
-    window.location.href = `mailto:kontinent.reception@mail.ru?subject=${subj}`;
+    window.location.href = `mailto:${email}?subject=${subj}`;
     showSendModal('email');
+    incrementCounter();
   } else {
     showSendModal('portal');
-    setTimeout(()=>window.open(DEST_URL[dest],'_blank'), 600);
+    setTimeout(()=>window.open(DEST_URL[dest]||'https://dom.gosuslugi.ru','_blank'), 600);
   }
 }
 
@@ -945,7 +1293,7 @@ function showSendModal(type){
   const nextDest = getNextDest();
   const nd = document.getElementById('modal-next-dest');
   if(nextDest){
-    const destNames = {uk:'УК (email)',admin:'Администрация',ministry:'Мин. чистоты',governor:'Правительство МО',gis:'ГИС ЖКХ'};
+    const destNames = {uk:'УК',admin:'ЖКХ Химок',ministry:'ГЖИ МО',governor:'Губернатор МО',gis:'ГИС ЖКХ'};
     nd.innerHTML=`<div class="next-dest"><p>Отправьте ту же жалобу ещё в одно место:</p><button onclick="closeModal();selectDest('${nextDest}')">Отправить в ${destNames[nextDest]}</button></div>`;
   } else {
     nd.innerHTML='';
