@@ -23,9 +23,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .container{max-width:600px;margin:0 auto;padding:0 12px 100px}
 
 /* Header */
-.header{background:#1e3a5f;color:#fff;padding:13px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.header{background:#1e3a5f;color:#fff;padding:13px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:padding .2s}
 .header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
 .header p{font-size:11px;opacity:.65;margin-top:1px}
+.header.compact{padding:8px 16px}
+.header.compact h1,.header.compact p{display:none}
 
 /* Sections */
 .section{display:none;padding-top:10px}
@@ -37,7 +39,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 /* Chips */
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none;font-weight:500}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none;font-weight:500}
 .chip:active{transform:scale(.95)}
 .chip.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
 .chip .ck{display:none}
@@ -233,12 +235,12 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 .p-tip{font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 8px;line-height:1.5}
 
 /* Compact destination rows */
-.dest-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.dest-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
 .dest-row:last-of-type{border-bottom:none}
 .dest-row-info{flex:1;min-width:0}
 .dest-row-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .dest-row-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
-.btn-open{flex-shrink:0;padding:9px 16px;border-radius:10px;background:var(--action);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.btn-open{flex-shrink:0;padding:9px 16px;border-radius:10px;background:var(--action);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;margin-top:2px}
 .btn-open:active{transform:scale(.97)}
 .track-hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.4}
 </style>
@@ -301,16 +303,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
     <div class="wizard-nav">
       <div class="wstep active" id="wstep-1" onclick="tryGoStep(1)">
         <div class="wdot" id="wdot-1">1</div>
-        <div class="wlabel">Проблемы</div>
+        <div class="wlabel">Жалоба</div>
       </div>
       <div class="wline" id="wline-1"></div>
       <div class="wstep" id="wstep-2" onclick="tryGoStep(2)">
         <div class="wdot" id="wdot-2">2</div>
-        <div class="wlabel">Жалоба</div>
-      </div>
-      <div class="wline" id="wline-2"></div>
-      <div class="wstep" id="wstep-3" onclick="tryGoStep(3)">
-        <div class="wdot" id="wdot-3">3</div>
         <div class="wlabel">Отправить</div>
       </div>
     </div>
@@ -319,122 +316,97 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
     <div id="step-1">
       <div class="hook-bar">
         <div class="hook-bar-title">Не нужно ничего писать самому</div>
-        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба в УК, ЖКХ и жилищную инспекцию сформируется автоматически. Отправка займёт 2 минуты.</div>
-        <div class="counter-row">
-          <span class="counter-num" id="sent-count">0</span>
-          <span>жалоб уже отправлено</span>
-        </div>
-        <div class="counter-bar"><div class="counter-fill" id="counter-fill" style="width:0%"></div></div>
+        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
       </div>
       <div class="card">
         <div class="card-title">Чем вы недовольны?</div>
         <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
         <div class="chips" id="chips"></div>
       </div>
-    </div>
-
-    <!-- STEP 2: Text -->
-    <div id="step-2" style="display:none">
-      <div class="card">
-        <div class="form-row" style="margin-bottom:10px">
-          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
-          <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
+      <div id="text-card" class="card" style="display:none;margin-top:8px">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
+          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
+            <button class="tone-btn active" data-tone="formal" onclick="setTone(this)">Формальный</button>
+            <button class="tone-btn" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+          </div>
+          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px" onclick="regen()" title="Другой вариант">🔄</button>
         </div>
         <div id="carea"></div>
       </div>
     </div>
 
-    <!-- STEP 3: Send -->
-    <div id="step-3" style="display:none">
-      <!-- Track 1: Email -->
+    <!-- STEP 2: Send -->
+    <div id="step-2" style="display:none">
+
+      <!-- Text preview -->
+      <div id="s3-preview" class="card" style="margin-bottom:12px"></div>
+
+      <!-- Hero send -->
+      <div style="padding:0 0 14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Осталось отправить</div>
+        <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
+        <div class="send-all-sub">УК + ЖКХ Химков + ГЖИ МО · текст уже скопирован</div>
+      </div>
+
+      <!-- Individual emails -->
       <div class="track-card">
         <div class="track-header">
-          <div class="track-num">1</div>
           <div>
             <div class="track-title">Email — обязательный первый шаг</div>
-            <div class="track-sub">Без обращения в УК надзорные органы могут отказать в проверке</div>
+            <div class="track-sub">Откройте почту — текст уже скопирован, вставьте в письмо</div>
           </div>
         </div>
-        <div class="track-hint">Нажмите «Открыть» — текст скопируется автоматически, вставьте в письмо</div>
         <div class="dest-row">
           <div class="dest-row-info">
             <div class="dest-row-name">УК «Континент Комфорта»<span class="p-badge" style="background:#fff3e0;color:#e65100">Обязательно</span></div>
-            <div class="dest-row-sub">kontinent.reception@mail.ru</div>
+            <div class="dest-row-sub">Обязательный первый шаг. Без письма в УК надзорные органы вправе отказать в проверке.</div>
           </div>
-          <button class="btn-open" onclick="openEmail('kontinent.reception@mail.ru')">Открыть →</button>
+          <button class="btn-open" onclick="openEmail('kontinent.reception@mail.ru','uk')">Открыть →</button>
         </div>
         <div class="dest-row">
           <div class="dest-row-info">
             <div class="dest-row-name">ЖКХ г. Химки<span class="p-badge fast">Муниципалитет</span></div>
-            <div class="dest-row-sub">zhkh@admhimki.ru</div>
+            <div class="dest-row-sub">Жалоба в муниципальный контроль. Администрация обязана ответить за 30 дней.</div>
           </div>
-          <button class="btn-open" onclick="openEmail('zhkh@admhimki.ru')">Открыть →</button>
+          <button class="btn-open" onclick="openEmail('zhkh@admhimki.ru','admin')">Открыть →</button>
         </div>
         <div class="dest-row">
           <div class="dest-row-info">
             <div class="dest-row-name">ГЖИ МО<span class="p-badge legal">Лицензия УК</span></div>
-            <div class="dest-row-sub">Mstg@mosreg.ru · может лишить УК лицензии</div>
+            <div class="dest-row-sub">Может лишить УК лицензии. Региональный надзор — самый мощный рычаг давления.</div>
           </div>
-          <button class="btn-open" onclick="openEmail('Mstg@mosreg.ru')">Открыть →</button>
-        </div>
-        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-          <button class="btn-send-all" onclick="sendAll()">✉️ Все 3 адресата одним письмом</button>
-          <div class="send-all-sub">Текст скопируется — вставьте в письмо и отправьте</div>
+          <button class="btn-open" onclick="openEmail('Mstg@mosreg.ru','ministry')">Открыть →</button>
         </div>
       </div>
 
-      <!-- Track 2: Portals -->
-      <div id="portal-section">
-        <div class="track-card">
-          <div class="track-header">
-            <div class="track-num">2</div>
-            <div>
-              <div class="track-title">Порталы — юридически сильнее</div>
-              <div class="track-sub">Нажмите «Открыть» — текст скопируется, вставьте на портале</div>
-            </div>
-          </div>
-          <div class="dest-row">
-            <div class="dest-row-info">
-              <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
-              <div class="dest-row-sub">«Дом, ЖКХ» → Совхозная 5 · одна жалоба = одна проблема</div>
-            </div>
-            <button class="btn-open" onclick="openPortal('https://vmeste.mosreg.ru')">Открыть →</button>
-          </div>
-          <div class="dest-row">
-            <div class="dest-row-info">
-              <div class="dest-row-name">ЕДС МО<span class="p-badge fast">24 часа</span></div>
-              <div class="dest-row-sub">Напрямую в УК через диспетчерскую</div>
-            </div>
-            <button class="btn-open" onclick="openPortal('https://eds.mosreg.ru/claims')">Открыть →</button>
-          </div>
-          <div class="dest-row">
-            <div class="dest-row-info">
-              <div class="dest-row-name">ГИС ЖКХ<span class="p-badge legal">Для суда</span></div>
-              <div class="dest-row-sub">Действия → Обращение → Адресат: ГЖИ МО</div>
-            </div>
-            <button class="btn-open" onclick="openPortal('https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true')">Открыть →</button>
+      <!-- Portals -->
+      <div class="track-card">
+        <div class="track-header">
+          <div>
+            <div class="track-title">Порталы — юридически сильнее email</div>
+            <div class="track-sub">Текст уже скопирован — откройте портал и вставьте</div>
           </div>
         </div>
-      </div>
-
-      <!-- Advanced: single dest picker -->
-      <button class="adv-toggle-btn" id="adv-toggle" onclick="toggleAdvanced()">▾ Выбрать другой адресат</button>
-      <div id="advanced-panel" style="display:none">
-        <div class="card">
-          <div class="card-title">Куда направить</div>
-          <div class="dest-bar">
-            <button class="dest-btn active" data-d="uk" onclick="setD(this)">✉️ УК</button>
-            <button class="dest-btn" data-d="admin" onclick="setD(this)">🏛️ ЖКХ Химок</button>
-            <button class="dest-btn" data-d="ministry" onclick="setD(this)">🔍 ГЖИ МО</button>
-            <button class="dest-btn" data-d="governor" onclick="setD(this)">📮 Губернатор МО</button>
-            <button class="dest-btn" data-d="gis" onclick="setD(this)">🏠 ГИС ЖКХ</button>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
+            <div class="dest-row-sub">Если отметить «не решено» — уходит на спецконтроль. Самое сильное давление на администрацию.</div>
           </div>
-          <div class="dest-hint" id="dest-hint"></div>
-          <div class="dest-hint" id="dest-desc" style="margin-top:4px;font-style:italic"></div>
+          <button class="btn-open" onclick="openPortal('https://vmeste.mosreg.ru','admin')">Открыть →</button>
         </div>
-        <div style="display:flex;gap:8px;margin-bottom:10px;padding:0 0 4px">
-          <button class="btn btn-copy" id="bcopy" onclick="copyAndShow()" style="flex:2">📋 Скопировать текст</button>
-          <button class="btn btn-send" id="bsend" onclick="sendAct()" style="display:none">✉️ Отправить</button>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ЕДС МО<span class="p-badge fast">24 часа</span></div>
+            <div class="dest-row-sub">Напрямую в УК через единую диспетчерскую МО. Самый быстрый ответ.</div>
+          </div>
+          <button class="btn-open" onclick="openPortal('https://eds.mosreg.ru/claims','uk')">Открыть →</button>
+        </div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ГИС ЖКХ<span class="p-badge legal">Для суда</span></div>
+            <div class="dest-row-sub">Федеральный уровень. Жалоба — официальное юридическое доказательство для суда. Действия → Обращение → Адресат: ГЖИ МО.</div>
+          </div>
+          <button class="btn-open" onclick="openPortal('https://dom.gosuslugi.ru','gis')">Открыть →</button>
         </div>
       </div>
 
@@ -865,7 +837,7 @@ const CONNECTORS_INFORMAL = [
 let currentStep = 1;
 
 function showStep(n) {
-  [1,2,3].forEach(i => {
+  [1,2].forEach(i => {
     document.getElementById('step-'+i).style.display = i===n ? 'block' : 'none';
     const ws = document.getElementById('wstep-'+i);
     if(ws){ ws.classList.toggle('active', i===n); ws.classList.toggle('done', i<n); }
@@ -873,31 +845,33 @@ function showStep(n) {
     if(wl) wl.classList.toggle('done', i<n);
   });
   currentStep = n;
+  const hdr = document.querySelector('.header');
+  if(hdr) hdr.classList.toggle('compact', n > 1);
   updateWizardNav();
   window.scrollTo(0,0);
-  if (n === 2) requestAnimationFrame(fitTextarea);
+  if (n === 1) {
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.toggle('active', b.dataset.tone === tone));
+    requestAnimationFrame(fitTextarea);
+  }
+  if (n === 2) renderS3Preview();
 }
 
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
+  const prevName = (document.getElementById('fullname')||{}).value||'';
+  const prevApt  = (document.getElementById('apt')||{}).value||'';
   if(currentStep === 1) {
-    ba.innerHTML = `<button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>`;
-  } else if(currentStep === 2) {
     ba.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:8px;width:100%">
-        <div style="display:flex;gap:6px;align-items:center">
-          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
-            <button class="tone-btn ${tone==='formal'?'active':''}" data-tone="formal" onclick="setTone(this)">Формальный</button>
-            <button class="tone-btn ${tone==='informal'?'active':''}" data-tone="informal" onclick="setTone(this)">Неформальный</button>
-          </div>
-          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px" onclick="regen()" title="Другой вариант">🔄</button>
+        <div class="form-row" style="margin:0">
+          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
+          <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="flex:1" onclick="goBack()">← Назад</button>
-          <button class="btn btn-send" style="flex:2" onclick="goNext()">Далее →</button>
-        </div>
+        <button class="btn btn-send" style="flex:1" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>
       </div>`;
+    if(prevName) document.getElementById('fullname').value = prevName;
+    if(prevApt)  document.getElementById('apt').value  = prevApt;
   } else {
     ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
   }
@@ -906,10 +880,10 @@ function updateWizardNav() {
 function goNext() {
   if(currentStep === 1) {
     if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
-    upd();
+    if(!validateFields()) return;
+    if(curText) clipCopy(textWithHeader('uk'));
     showStep(2);
-  } else if(currentStep === 2) {
-    showStep(3);
+    setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
   }
 }
 
@@ -983,30 +957,68 @@ function updateCounterUI(n){
 const SUBJ = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
 
 function validateFields(){
-  const name=document.getElementById('fullname').value.trim();
-  const apt=document.getElementById('apt').value.trim();
+  const name=(document.getElementById('fullname')||{value:''}).value.trim();
+  const apt=(document.getElementById('apt')||{value:''}).value.trim();
   if(!name||!apt){showFieldsModal(!name,!apt);return false;}
   return true;
 }
 
+const S3_LIMIT = 220;
+let s3Expanded = false;
+
+function renderS3Preview() {
+  const el = document.getElementById('s3-preview');
+  if (!el || !curText) return;
+  s3Expanded = false;
+  const short = curText.length > S3_LIMIT ? curText.slice(0, S3_LIMIT).replace(/\s\S*$/, '') + '…' : curText;
+  const needToggle = curText.length > S3_LIMIT;
+  el.innerHTML = `
+    <div id="s3-text" style="font-size:12px;line-height:1.6;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
+    ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:6px;font-family:inherit;padding:0">Показать полностью ↓</button>` : ''}
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+      <button class="btn btn-ghost" style="width:100%" onclick="copyS3(this)">📋 Скопировать текст</button>
+    </div>`;
+}
+
+function toggleS3Preview() {
+  s3Expanded = !s3Expanded;
+  const textEl = document.getElementById('s3-text');
+  const btn = document.getElementById('s3-toggle');
+  if (!textEl || !curText) return;
+  textEl.innerHTML = escTA(s3Expanded ? curText : curText.slice(0, S3_LIMIT).replace(/\s\S*$/, '') + '…');
+  if (btn) btn.textContent = s3Expanded ? 'Свернуть ↑' : 'Показать полностью ↓';
+}
+
+function copyS3(btn) {
+  if (!curText) return;
+  clipCopy(curText).then(() => {
+    if (btn) { btn.textContent = '✅ Скопировано'; setTimeout(() => { btn.textContent = '📋 Скопировать текст'; }, 2000); }
+  });
+}
+
+function textWithHeader(destKey) {
+  if (!destKey || !DEST_HDR[destKey] || !curText) return curText;
+  return DEST_HDR[destKey] + '\n\n' + curText;
+}
+
 function sendAll(){
   if(!curText||!validateFields())return;
-  clipCopy(curText);
+  clipCopy(textWithHeader('uk'));
   const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
   window.location.href=`mailto:${emails}?subject=${SUBJ}`;
   incrementCounter();
   setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
 }
 
-function openEmail(email){
+function openEmail(email, destKey){
   if(!curText||!validateFields())return;
-  clipCopy(curText);
+  clipCopy(textWithHeader(destKey));
   setTimeout(()=>{window.location.href=`mailto:${email}?subject=${SUBJ}`;},150);
 }
 
-function openPortal(url){
+function openPortal(url, destKey){
   if(!curText)return;
-  clipCopy(curText).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
+  clipCopy(textWithHeader(destKey)).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
   setTimeout(()=>window.open(url,'_blank'),150);
 }
 
@@ -1085,18 +1097,21 @@ function tog(el) {
   seed++;
   const nb=document.getElementById('btn-step-next');
   if(nb) nb.disabled=sel.size===0;
+  upd();
 }
 function selAll(){
   document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});
   seed++;
   const nb=document.getElementById('btn-step-next');
   if(nb) nb.disabled=false;
+  upd();
 }
 function clrAll(){
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
   sel.clear();
   const nb=document.getElementById('btn-step-next');
   if(nb) nb.disabled=true;
+  upd();
 }
 
 // ====== TONE ======
@@ -1141,18 +1156,17 @@ function seededRand(s) {
 // ====== GENERATE ======
 function gen() {
   if (sel.size === 0) return '';
-  const name = document.getElementById('fullname').value.trim() || '[ФИО]';
-  const apt = document.getElementById('apt').value.trim() || '[кв.]';
+  const name = (document.getElementById('fullname')||{value:''}).value.trim() || '[ФИО]';
+  const apt  = (document.getElementById('apt')||{value:''}).value.trim() || '[кв.]';
   const isUK = dest === 'uk';
   const isFormal = tone === 'formal';
   const tmpl = T[tone];
   const rng = seededRand(seed);
   const pick = arr => arr[Math.floor(rng() * arr.length)];
 
-  let t = DEST_HDR[dest] + '\n\n';
-  t += (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
+  let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
   t += pick(tmpl.open).replace('{n}',name).replace('{a}',apt) + '\n\n';
-  t += (isUK ? pick(tmpl.uk_intro) : pick(tmpl.gov_intro)) + '\n\n';
+  t += pick(tmpl.uk_intro) + '\n\n';
 
   // Build problem paragraphs with connectors
   const probs = PROB_IDS.filter(id => sel.has(id));
@@ -1188,15 +1202,18 @@ function upd() {
   const bs   = document.getElementById('bsend');
   if(!area) return;
 
+  const tc = document.getElementById('text-card');
   if(sel.size === 0) {
-    area.innerHTML = '<div class="empty-hint"><span class="arr">☝️</span>Выберите проблемы — текст появится здесь</div>';
+    area.innerHTML = '';
     curText='';
+    if(tc) tc.style.display='none';
     resetButtons();
     return;
   }
 
+  if(tc) tc.style.display='block';
   curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea><div class="edit-hint">✏️ Можно отредактировать · 📷 Фото — прикрепите к письму вручную</div>`;
+  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
   requestAnimationFrame(fitTextarea);
   if(bc) bc.disabled=false;
   resetButtons();
@@ -1206,9 +1223,7 @@ function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
   const top = ta.getBoundingClientRect().top;
-  const hint = ta.nextElementSibling ? ta.nextElementSibling.offsetHeight + 8 : 24;
-  const barH = currentStep === 2 ? 120 : 72; // step 2 has extra regen row
-  const h = Math.max(220, window.innerHeight - top - hint - barH);
+  const h = Math.max(100, window.innerHeight - top - 8 - 120);
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);
@@ -1234,8 +1249,8 @@ function resetButtons(){
 function copyAndShow(){
   if(!curText)return;
   // Check required fields
-  const name = document.getElementById('fullname').value.trim();
-  const apt = document.getElementById('apt').value.trim();
+  const name = (document.getElementById('fullname')||{value:''}).value.trim();
+  const apt  = (document.getElementById('apt')||{value:''}).value.trim();
   if(!name || !apt){
     showFieldsModal(!name, !apt);
     return;
