@@ -2,6 +2,15 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
+// Load .env file if present
+try {
+  const envFile = fs.readFileSync(path.join(__dirname, '.env'), 'utf-8');
+  envFile.split('\n').forEach(line => {
+    const m = line.match(/^\s*([\w]+)\s*=\s*(.*)$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, '');
+  });
+} catch {}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
