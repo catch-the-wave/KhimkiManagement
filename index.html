@@ -27,7 +27,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
 .header p{font-size:11px;opacity:.65;margin-top:1px}
 .header.compact{padding:8px 16px}
-.header.compact h1,.header.compact p{display:none}
+.header.compact h1,.header.compact p,.header.compact #header-model{display:none}
 
 /* Sections */
 .section{display:none;padding-top:10px}
@@ -250,6 +250,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УК «Континент Комфорта»</h1>
   <p>г. Химки, ул. Совхозная, д. 5</p>
+  <div id="header-model" style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+    <span style="font-size:11px;opacity:.7">🤖</span>
+    <select id="model-select" onchange="switchModel(this.value)" style="padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:200px">
+    </select>
+  </div>
   <button class="burger" id="burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
 </div>
 
@@ -285,13 +290,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
       <span class="dl-icon">🖨️</span>
       <div><div class="dl-label">QR-код для лифта</div><div class="dl-desc">Макет объявления для печати</div></div>
     </button>
-    <div class="drawer-divider"></div>
-    <div style="padding:12px">
-      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">🤖 Модель ИИ</div>
-      <select id="model-select" onchange="switchModel(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);font-size:12px;font-family:inherit;background:#fff;color:var(--text)">
-      </select>
-      <div id="model-hint" style="font-size:10px;color:var(--muted);margin-top:4px"></div>
-    </div>
     <div class="drawer-divider"></div>
     <div style="padding:12px;font-size:11px;color:var(--muted);line-height:1.5">
       <strong>Совет дома</strong><br>
@@ -777,23 +775,19 @@ function loadModels() {
     sel.innerHTML = data.models.map(m =>
       `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
     ).join('');
-    document.getElementById('model-hint').textContent = data.current;
     modelsLoaded = true;
   }).catch(() => {});
 }
 
 function switchModel(modelId) {
-  const hint = document.getElementById('model-hint');
-  if (hint) hint.textContent = 'Переключение...';
   fetch('/api/models', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: modelId })
   }).then(r => r.json()).then(data => {
-    if (hint) hint.textContent = '✓ ' + data.current;
     toast('Модель: ' + data.current);
   }).catch(() => {
-    if (hint) hint.textContent = 'Ошибка переключения';
+    toast('Ошибка переключения модели');
   });
 }
 function updateQR() {

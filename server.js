@@ -13,12 +13,13 @@ try {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
-let currentModel = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || process.env.GROQ_API_KEY || '';
+let currentModel = process.env.AI_MODEL || 'google/gemini-2.0-flash-001';
 
 const AVAILABLE_MODELS = [
-  { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
-  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
+  { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash' },
+  { id: 'x-ai/grok-3-mini-beta', name: 'Grok 3 Mini' },
+  { id: 'meta-llama/llama-3.3-70b-instruct', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
@@ -48,9 +49,15 @@ app.post('/api/models', (req, res) => {
   res.json({ current: currentModel });
 });
 
+// Sanitize AI response: remove non-Cyrillic/Latin stray characters (Chinese, etc.)
+function sanitizeText(text) {
+  // Remove CJK characters that sometimes leak from multilingual models
+  return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u3000-\u303f\uff00-\uffef\u2e80-\u2eff\u3100-\u312f]/g, '');
+}
+
 // AI text generation endpoint
 app.post('/api/generate', async (req, res) => {
-  if (!GROQ_API_KEY || !systemPrompt) {
+  if (!OPENROUTER_API_KEY || !systemPrompt) {
     return res.status(503).json({ error: 'AI generation not configured' });
   }
 
@@ -84,11 +91,13 @@ app.post('/api/generate', async (req, res) => {
   const startTime = Date.now();
 
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://khimki-complaint.app',
+        'X-Title': 'Khimki Complaint Generator'
       },
       body: JSON.stringify({
         model: currentModel,
@@ -103,12 +112,12 @@ app.post('/api/generate', async (req, res) => {
 
     if (!response.ok) {
       const err = await response.text();
-      console.error(`❌ Groq API error (${response.status}):`, err);
+      console.error(`❌ OpenRouter API error (${response.status}):`, err);
       return res.status(502).json({ error: 'AI service error' });
     }
 
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content?.trim();
+    let text = data.choices?.[0]?.message?.content?.trim();
     const elapsed = Date.now() - startTime;
     const usage = data.usage;
 
@@ -120,9 +129,11 @@ app.post('/api/generate', async (req, res) => {
       return res.status(502).json({ error: 'Empty AI response' });
     }
 
+    text = sanitizeText(text);
+
     res.json({ text, model: currentModel });
   } catch (err) {
-    console.error('❌ Groq request failed:', err.message);
+    console.error('❌ OpenRouter request failed:', err.message);
     res.status(502).json({ error: 'AI service unavailable' });
   }
 });
@@ -130,6 +141,6 @@ app.post('/api/generate', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 Model: ${currentModel}`);
-  console.log(`🔑 Groq API: ${GROQ_API_KEY ? 'configured' : 'NOT configured (set GROQ_API_KEY)'}`);
+  console.log(`🔑 OpenRouter API: ${OPENROUTER_API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY)'}`);
   console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}\n`);
 });
