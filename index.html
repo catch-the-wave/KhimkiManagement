@@ -312,11 +312,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <p>Материалы и инструменты</p>
   </div>
   <div class="drawer-body">
-    <div id="drawer-model-picker" style="padding:10px 10px 4px;display:none">
+    <div id="drawer-model-picker" style="padding:10px 10px 4px">
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Модель ИИ</div>
       <select id="drawer-model-select" onchange="switchModel(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:13px;font-family:inherit;background:var(--card);color:var(--text);outline:none;cursor:pointer"></select>
     </div>
-    <div class="drawer-divider" id="drawer-model-divider" style="display:none"></div>
+    <div class="drawer-divider" id="drawer-model-divider"></div>
     <button class="drawer-link" onclick="switchTab('ready');toggleDrawer()">
       <span class="dl-icon">📄</span>
       <div><div class="dl-label">Готовые тексты жалоб</div><div class="dl-desc">7 шаблонов по каждой теме</div></div>
