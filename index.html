@@ -872,7 +872,7 @@ function updateWizardNav() {
           <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
           <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
         </div>
-        <button class="btn btn-send" style="flex:1" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>
+        <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
