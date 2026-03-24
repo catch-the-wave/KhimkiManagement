@@ -29,9 +29,9 @@ const API_URL = useOpenRouter
 const API_NAME = useOpenRouter ? 'OpenRouter' : 'Groq';
 let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-flash-001' : 'llama-3.3-70b-versatile');
 
-// Token limits from env: MIN_TOKENS=100, MAX_TOKENS=500
-const MIN_TOKENS = parseInt(process.env.MIN_TOKENS, 10) || 100;
-const MAX_TOKENS = parseInt(process.env.MAX_TOKENS, 10) || 500;
+// Token limits — mutable, configurable at runtime
+let minTokens = parseInt(process.env.MIN_TOKENS, 10) || 100;
+let maxTokens = parseInt(process.env.MAX_TOKENS, 10) || 500;
 
 // Models from env: MODELS=id:Name,id2:Name2  — or use defaults
 function parseModels(envVar, defaults) {
@@ -57,7 +57,8 @@ const DEFAULT_GROQ_MODELS = [
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
-const AVAILABLE_MODELS = useOpenRouter
+// Mutable model list — configurable at runtime
+let availableModels = useOpenRouter
   ? parseModels('OPENROUTER_MODELS', DEFAULT_OPENROUTER_MODELS)
   : parseModels('GROQ_MODELS', DEFAULT_GROQ_MODELS);
 
@@ -74,17 +75,57 @@ app.use(express.static(__dirname));
 
 // Model management endpoints
 app.get('/api/models', (req, res) => {
-  res.json({ models: AVAILABLE_MODELS, current: currentModel });
+  res.json({ models: availableModels, current: currentModel });
 });
 
 app.post('/api/models', (req, res) => {
   const { model } = req.body;
-  if (!model || !AVAILABLE_MODELS.find(m => m.id === model)) {
+  if (!model || !availableModels.find(m => m.id === model)) {
     return res.status(400).json({ error: 'Invalid model' });
   }
   currentModel = model;
   console.log(`\n🔄 Model switched to: ${model}\n`);
   res.json({ current: currentModel });
+});
+
+// Runtime settings: tokens range
+app.get('/api/settings', (req, res) => {
+  res.json({ minTokens, maxTokens, models: availableModels, current: currentModel });
+});
+
+app.post('/api/settings', (req, res) => {
+  const { min_tokens, max_tokens } = req.body;
+  if (min_tokens != null) minTokens = Math.max(50, parseInt(min_tokens, 10) || 100);
+  if (max_tokens != null) maxTokens = Math.max(minTokens, parseInt(max_tokens, 10) || 500);
+  console.log(`\n⚙️ Tokens updated: ${minTokens}–${maxTokens}\n`);
+  res.json({ minTokens, maxTokens });
+});
+
+// Runtime model list management: add/remove without redeploy
+app.post('/api/models/add', (req, res) => {
+  const { id, name } = req.body;
+  if (!id) return res.status(400).json({ error: 'Model id required' });
+  if (availableModels.find(m => m.id === id)) {
+    return res.status(409).json({ error: 'Model already exists' });
+  }
+  availableModels.push({ id, name: name || id });
+  console.log(`\n➕ Model added: ${id} (${name || id})\n`);
+  res.json({ models: availableModels });
+});
+
+app.post('/api/models/remove', (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).json({ error: 'Model id required' });
+  const before = availableModels.length;
+  availableModels = availableModels.filter(m => m.id !== id);
+  if (availableModels.length === before) {
+    return res.status(404).json({ error: 'Model not found' });
+  }
+  if (currentModel === id && availableModels.length > 0) {
+    currentModel = availableModels[0].id;
+  }
+  console.log(`\n➖ Model removed: ${id}\n`);
+  res.json({ models: availableModels, current: currentModel });
 });
 
 // Sanitize AI response: remove non-Cyrillic/Latin stray characters (Chinese, etc.)
@@ -147,7 +188,7 @@ app.post('/api/generate', async (req, res) => {
           { role: 'user', content: userMessage }
         ],
         temperature: 0.9,
-        max_tokens: Math.floor(Math.random() * (MAX_TOKENS - MIN_TOKENS + 1)) + MIN_TOKENS
+        max_tokens: Math.floor(Math.random() * (maxTokens - minTokens + 1)) + minTokens
       })
     });
 
@@ -183,6 +224,6 @@ app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 Model: ${currentModel}`);
   console.log(`🔑 ${API_NAME} API: ${API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY or GROQ_API_KEY)'}`);
-  console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}`);
-  console.log(`📏 Tokens range: ${MIN_TOKENS}–${MAX_TOKENS}\n`);
+  console.log(`📋 Available models: ${availableModels.map(m => m.id).join(', ')}`);
+  console.log(`📏 Tokens range: ${minTokens}–${maxTokens}\n`);
 });
