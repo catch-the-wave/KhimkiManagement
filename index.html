@@ -286,6 +286,13 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
       <div><div class="dl-label">QR-код для лифта</div><div class="dl-desc">Макет объявления для печати</div></div>
     </button>
     <div class="drawer-divider"></div>
+    <div style="padding:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)">🤖 Модель ИИ</div>
+      <select id="model-select" onchange="switchModel(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);font-size:12px;font-family:inherit;background:#fff;color:var(--text)">
+      </select>
+      <div id="model-hint" style="font-size:10px;color:var(--muted);margin-top:4px"></div>
+    </div>
+    <div class="drawer-divider"></div>
     <div style="padding:12px;font-size:11px;color:var(--muted);line-height:1.5">
       <strong>Совет дома</strong><br>
       Нужно 20–30 жалоб/день в течение 2–3 недель. Жалобу может подать любой жилец, не только собственник.
@@ -570,7 +577,7 @@ function updateWizardNav() {
           <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄</button>
+          <button class="btn btn-ghost" style="flex:none;width:30%;padding:0;font-size:14px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё</button>
           <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
         </div>
       </div>`;
@@ -757,6 +764,37 @@ function toggleDrawer() {
   d.classList.toggle('open', !isOpen);
   o.classList.toggle('open', !isOpen);
   b.classList.toggle('open', !isOpen);
+  if (!isOpen) loadModels();
+}
+
+// ====== MODEL SELECTOR ======
+let modelsLoaded = false;
+function loadModels() {
+  if (modelsLoaded) return;
+  fetch('/api/models').then(r => r.json()).then(data => {
+    const sel = document.getElementById('model-select');
+    if (!sel) return;
+    sel.innerHTML = data.models.map(m =>
+      `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
+    ).join('');
+    document.getElementById('model-hint').textContent = data.current;
+    modelsLoaded = true;
+  }).catch(() => {});
+}
+
+function switchModel(modelId) {
+  const hint = document.getElementById('model-hint');
+  if (hint) hint.textContent = 'Переключение...';
+  fetch('/api/models', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: modelId })
+  }).then(r => r.json()).then(data => {
+    if (hint) hint.textContent = '✓ ' + data.current;
+    toast('Модель: ' + data.current);
+  }).catch(() => {
+    if (hint) hint.textContent = 'Ошибка переключения';
+  });
 }
 function updateQR() {
   const url = document.getElementById('qr-url').value.trim();
