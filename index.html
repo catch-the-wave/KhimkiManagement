@@ -612,7 +612,7 @@ function updateWizardNav() {
   const prevApt  = elA ? elA.value : savedApt;
   if(currentStep === 1) {
     ba.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%;padding-top:6px">
         <div class="form-row" style="margin:0">
           <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
           <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
