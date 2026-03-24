@@ -933,7 +933,7 @@ function setTone(btn){
   btn.classList.add('active');
   tone=btn.dataset.tone;
   seed++;
-  upd();
+  regenOnSwitch();
 }
 
 // ====== LENGTH ======
@@ -942,7 +942,13 @@ function setLength(btn){
   btn.classList.add('active');
   length=btn.dataset.length;
   seed++;
-  upd();
+  regenOnSwitch();
+}
+
+// Auto-regenerate via AI when tone/length changes (if text is visible)
+function regenOnSwitch(){
+  if(sel.size===0){upd();return;}
+  regen();
 }
 
 // ====== DEST ======
