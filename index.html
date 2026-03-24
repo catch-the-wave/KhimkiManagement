@@ -250,12 +250,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УК «Континент Комфорта»</h1>
   <p>г. Химки, ул. Совхозная, д. 5</p>
-  <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px">
-    <select id="model-select" onchange="switchModel(this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:150px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M7 10l5 5 5-5z%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:20px">
-    </select>
-    <a href="/admin" style="color:rgba(255,255,255,.6);font-size:18px;text-decoration:none;line-height:1" title="Админка">&#9881;</a>
-    <button class="burger" id="burger" onclick="toggleDrawer()" style="position:static;transform:none"><span></span><span></span><span></span></button>
-  </div>
+  <button class="burger" id="burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
 </div>
 
 <!-- Drawer overlay -->
@@ -281,6 +276,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
       <span class="dl-icon">🖨️</span>
       <div><div class="dl-label">QR-код для лифта</div><div class="dl-desc">Макет объявления для печати</div></div>
     </button>
+    <div class="drawer-divider"></div>
+    <a href="/admin" class="drawer-link" style="text-decoration:none">
+      <span class="dl-icon">⚙️</span>
+      <div><div class="dl-label">Админка</div><div class="dl-desc">Модели, токены, температура</div></div>
+    </a>
     <div class="drawer-divider"></div>
     <div style="padding:12px;font-size:11px;color:var(--muted);line-height:1.5">
       <strong>Совет дома</strong><br>
