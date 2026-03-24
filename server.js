@@ -29,7 +29,21 @@ const API_URL = useOpenRouter
 const API_NAME = useOpenRouter ? 'OpenRouter' : 'Groq';
 let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-flash-001' : 'llama-3.3-70b-versatile');
 
-const OPENROUTER_MODELS = [
+// Token limits from env: MIN_TOKENS=100, MAX_TOKENS=500
+const MIN_TOKENS = parseInt(process.env.MIN_TOKENS, 10) || 100;
+const MAX_TOKENS = parseInt(process.env.MAX_TOKENS, 10) || 500;
+
+// Models from env: MODELS=id:Name,id2:Name2  — or use defaults
+function parseModels(envVar, defaults) {
+  const raw = process.env[envVar];
+  if (!raw) return defaults;
+  return raw.split(',').map(entry => {
+    const [id, ...nameParts] = entry.trim().split(':');
+    return { id: id.trim(), name: nameParts.join(':').trim() || id.trim() };
+  }).filter(m => m.id);
+}
+
+const DEFAULT_OPENROUTER_MODELS = [
   { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash' },
   { id: 'x-ai/grok-3-mini-beta', name: 'Grok 3 Mini' },
   { id: 'x-ai/grok-4.20-beta', name: 'Grok 4.20' },
@@ -37,13 +51,15 @@ const OPENROUTER_MODELS = [
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
-const GROQ_MODELS = [
+const DEFAULT_GROQ_MODELS = [
   { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
   { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
-const AVAILABLE_MODELS = useOpenRouter ? OPENROUTER_MODELS : GROQ_MODELS;
+const AVAILABLE_MODELS = useOpenRouter
+  ? parseModels('OPENROUTER_MODELS', DEFAULT_OPENROUTER_MODELS)
+  : parseModels('GROQ_MODELS', DEFAULT_GROQ_MODELS);
 
 // Load prompt template
 let systemPrompt = '';
@@ -131,7 +147,7 @@ app.post('/api/generate', async (req, res) => {
           { role: 'user', content: userMessage }
         ],
         temperature: 0.9,
-        max_tokens: Math.floor(Math.random() * 401) + 100
+        max_tokens: Math.floor(Math.random() * (MAX_TOKENS - MIN_TOKENS + 1)) + MIN_TOKENS
       })
     });
 
@@ -167,5 +183,6 @@ app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 Model: ${currentModel}`);
   console.log(`🔑 ${API_NAME} API: ${API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY or GROQ_API_KEY)'}`);
-  console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}\n`);
+  console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}`);
+  console.log(`📏 Tokens range: ${MIN_TOKENS}–${MAX_TOKENS}\n`);
 });
