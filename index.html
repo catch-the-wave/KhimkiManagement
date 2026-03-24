@@ -390,8 +390,8 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       <div id="text-card" class="card" style="display:none;margin-top:8px">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-tone="formal" onclick="setTone(this)">Формальный</button>
-            <button class="tone-btn" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+            <button class="tone-btn active" data-tone="informal" onclick="setTone(this)">Неформальный</button>
+            <button class="tone-btn" data-tone="formal" onclick="setTone(this)">Формальный</button>
           </div>
         </div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
@@ -582,7 +582,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 const PROB_IDS = Object.keys(P);
 const sel = new Set();
 let dest = 'uk';
-let tone = 'formal';
+let tone = 'informal';
 let length = 'medium';
 let curText = '';
 let seed = Math.floor(Math.random() * 1000000);
