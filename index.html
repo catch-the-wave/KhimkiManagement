@@ -1118,7 +1118,7 @@ async function regenAI(){
       requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
     }
     requestAnimationFrame(fitTextarea);
-    toast('✨ Текст сгенерирован ИИ за '+sec+'с');
+    toast('✨ Текст сгенерирован ИИ');
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){
