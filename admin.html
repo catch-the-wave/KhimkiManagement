@@ -81,7 +81,8 @@ label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bot
         <div style="font-family:monospace;word-break:break-all;background:#fff;padding:6px;border-radius:4px;margin-bottom:6px">
           MIN_TOKENS=<span id="hint-min">100</span><br>
           MAX_TOKENS=<span id="hint-max">500</span><br>
-          TEMPERATURE=<span id="hint-temp">0.7</span>
+          TEMPERATURE=<span id="hint-temp">0.7</span><br>
+          SHOW_MODEL_PICKER=<span id="hint-picker">true</span>
         </div>
         <button style="background:var(--primary);color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit" onclick="copyParamsHint()">📋 Скопировать все</button>
       </div>
@@ -201,10 +202,12 @@ function updateParamsHint() {
   const min = $('min-tok').value;
   const max = $('max-tok').value;
   const temp = parseFloat($('temp').value).toFixed(2);
+  const picker = $('show-picker').checked ? 'true' : 'false';
   $('hint-min').textContent = min;
   $('hint-max').textContent = max;
   $('hint-temp').textContent = temp;
-  window._paramsHint = `MIN_TOKENS=${min}\nMAX_TOKENS=${max}\nTEMPERATURE=${temp}`;
+  $('hint-picker').textContent = picker;
+  window._paramsHint = `MIN_TOKENS=${min}\nMAX_TOKENS=${max}\nTEMPERATURE=${temp}\nSHOW_MODEL_PICKER=${picker}`;
 }
 
 function copyParamsHint() {
