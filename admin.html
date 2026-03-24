@@ -70,6 +70,10 @@ label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bot
         <input type="range" id="temp" min="0" max="2" step="0.05" style="width:100%;margin-top:4px" oninput="document.getElementById('temp-val').textContent=parseFloat(this.value).toFixed(2)">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px"><span>0 — точно</span><span>1 — баланс</span><span>2 — хаос</span></div>
       </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:10px;cursor:pointer">
+        <input type="checkbox" id="show-picker" style="width:16px;height:16px;cursor:pointer">
+        Показывать выбор модели в хедере
+      </label>
       <button class="btn btn-primary" onclick="saveTokens()">Сохранить</button>
 
       <div style="background:var(--bg);border-radius:8px;padding:10px;margin-top:12px;font-size:10px;color:var(--muted);line-height:1.4">
@@ -153,6 +157,7 @@ async function loadSettings() {
     $('max-tok').value = d.maxTokens;
     $('temp').value = d.temperature ?? 0.7;
     $('temp-val').textContent = parseFloat(d.temperature ?? 0.7).toFixed(2);
+    $('show-picker').checked = d.showModelPicker !== false;
     updateParamsHint();
     renderModels(d.models);
   } catch {}
@@ -178,7 +183,7 @@ async function saveTokens() {
     const r = await fetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ min_tokens: +$('min-tok').value, max_tokens: +$('max-tok').value, temperature: +$('temp').value })
+      body: JSON.stringify({ min_tokens: +$('min-tok').value, max_tokens: +$('max-tok').value, temperature: +$('temp').value, show_model_picker: $('show-picker').checked })
     });
     if (r.ok) {
       const d = await r.json();
