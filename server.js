@@ -19,8 +19,6 @@ let currentModel = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 const AVAILABLE_MODELS = [
   { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
   { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
-  { id: 'qwen/qwen3-32b', name: 'Qwen 3 32B' },
-  { id: 'moonshotai/kimi-k2-instruct-0905', name: 'Kimi K2 Instruct' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
