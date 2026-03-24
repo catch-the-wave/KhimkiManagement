@@ -71,6 +71,52 @@ try {
 }
 
 app.use(express.json());
+
+// Admin auth
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_TOKEN = ADMIN_PASSWORD ? require('crypto').createHash('sha256').update(ADMIN_PASSWORD).digest('hex').slice(0, 32) : '';
+
+function parseCookies(req) {
+  const raw = req.headers.cookie || '';
+  const obj = {};
+  raw.split(';').forEach(c => {
+    const [k, ...v] = c.trim().split('=');
+    if (k) obj[k.trim()] = v.join('=').trim();
+  });
+  return obj;
+}
+
+function requireAdmin(req, res, next) {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const cookies = parseCookies(req);
+  if (cookies.admin_token === ADMIN_TOKEN) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+app.post('/api/admin/login', (req, res) => {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const { password } = req.body;
+  if (password !== ADMIN_PASSWORD) return res.status(401).json({ error: 'Wrong password' });
+  res.setHeader('Set-Cookie', `admin_token=${ADMIN_TOKEN}; Path=/; Max-Age=${30*24*3600}; SameSite=Lax`);
+  res.json({ ok: true });
+});
+
+app.get('/api/admin/check', (req, res) => {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const cookies = parseCookies(req);
+  res.json({ authenticated: cookies.admin_token === ADMIN_TOKEN });
+});
+
+// Serve admin page
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Protect admin API endpoints
+app.use('/api/settings', requireAdmin);
+app.use('/api/models/add', requireAdmin);
+app.use('/api/models/remove', requireAdmin);
+
 app.use(express.static(__dirname));
 
 // Model management endpoints

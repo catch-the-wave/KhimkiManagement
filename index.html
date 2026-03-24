@@ -253,6 +253,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
   <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px">
     <select id="model-select" onchange="switchModel(this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:150px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M7 10l5 5 5-5z%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:20px">
     </select>
+    <a href="/admin" style="color:rgba(255,255,255,.6);font-size:18px;text-decoration:none;line-height:1" title="Админка">&#9881;</a>
     <button class="burger" id="burger" onclick="toggleDrawer()" style="position:static;transform:none"><span></span><span></span><span></span></button>
   </div>
 </div>
@@ -766,8 +767,8 @@ function toggleDrawer() {
 
 // ====== MODEL SELECTOR ======
 let modelsLoaded = false;
-function loadModels() {
-  if (modelsLoaded) return;
+function loadModels(force) {
+  if (modelsLoaded && !force) return;
   fetch('/api/models').then(r => r.json()).then(data => {
     const sel = document.getElementById('model-select');
     if (!sel) return;
