@@ -17,15 +17,11 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
 let currentModel = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 const AVAILABLE_MODELS = [
-  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
   { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
-  { id: 'llama3-70b-8192', name: 'Llama 3 70B' },
-  { id: 'llama3-8b-8192', name: 'Llama 3 8B' },
-  { id: 'gemma2-9b-it', name: 'Gemma 2 9B' },
-  { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B' },
-  { id: 'deepseek-r1-distill-llama-70b', name: 'DeepSeek R1 70B' },
-  { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B' },
-  { id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B' },
+  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
+  { id: 'qwen/qwen3-32b', name: 'Qwen 3 32B' },
+  { id: 'moonshotai/kimi-k2-instruct-0905', name: 'Kimi K2 Instruct' },
+  { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
 // Load prompt template
