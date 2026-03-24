@@ -268,18 +268,9 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
     <p>Материалы и инструменты</p>
   </div>
   <div class="drawer-body">
-    <button class="drawer-link" onclick="switchTab('main');toggleDrawer()" style="background:var(--bg)">
-      <span class="dl-icon">🏠</span>
-      <div><div class="dl-label">Конструктор жалобы</div><div class="dl-desc">Собрать и отправить жалобу</div></div>
-    </button>
-    <div class="drawer-divider"></div>
     <button class="drawer-link" onclick="switchTab('ready');toggleDrawer()">
       <span class="dl-icon">📄</span>
       <div><div class="dl-label">Готовые тексты жалоб</div><div class="dl-desc">7 шаблонов по каждой теме</div></div>
-    </button>
-    <button class="drawer-link" onclick="switchTab('photo');toggleDrawer()">
-      <span class="dl-icon">📷</span>
-      <div><div class="dl-label">Фото проблем</div><div class="dl-desc">Загрузить фото для жалобы</div></div>
     </button>
     <button class="drawer-link" onclick="switchTab('where');toggleDrawer()">
       <span class="dl-icon">📍</span>
@@ -416,15 +407,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 
     </div>
 
-  </div>
-
-  <!-- PHOTO -->
-  <div id="tab-photo" class="section">
-    <div class="card">
-      <div class="card-title">Фото проблем</div>
-      <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Жалоба с фото работает сильнее</p>
-      <p style="font-size:12px;color:var(--muted);line-height:1.6">Сфотографируйте проблему — грязный подъезд, сломанный мусоропровод, тёмный коридор. После того как откроется почта, прикрепите фото к письму вручную перед отправкой.</p>
-    </div>
   </div>
 
   <!-- READY -->
