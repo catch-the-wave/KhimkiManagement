@@ -828,18 +828,15 @@ function loadModels(force) {
     const opts = data.models.map(m =>
       `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
     ).join('');
-    const sel = document.getElementById('model-select');
-    if (sel) sel.innerHTML = opts;
     const dsel = document.getElementById('drawer-model-select');
     if (dsel) dsel.innerHTML = opts;
-    const picker = document.getElementById('model-picker');
-    if (picker) picker.style.display = data.showModelPicker ? 'block' : 'none';
     const dp = document.getElementById('drawer-model-picker');
     const dd = document.getElementById('drawer-model-divider');
-    if (dp) dp.style.display = 'block';
-    if (dd) dd.style.display = 'block';
+    const show = data.showModelPicker ? 'block' : 'none';
+    if (dp) dp.style.display = show;
+    if (dd) dd.style.display = show;
     modelsLoaded = true;
-  }).catch(() => {});
+  }).catch(() => { modelsLoaded = false; });
 }
 
 function switchModel(modelId) {
