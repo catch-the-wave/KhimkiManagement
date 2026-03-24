@@ -835,6 +835,8 @@ const CONNECTORS_INFORMAL = [
 
 // ====== WIZARD ======
 let currentStep = 1;
+let savedName = '';
+let savedApt = '';
 
 function showStep(n) {
   [1,2].forEach(i => {
@@ -859,8 +861,10 @@ function showStep(n) {
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
-  const prevName = (document.getElementById('fullname')||{}).value||'';
-  const prevApt  = (document.getElementById('apt')||{}).value||'';
+  const elN = document.getElementById('fullname');
+  const prevName = elN ? elN.value : savedName;
+  const elA = document.getElementById('apt');
+  const prevApt  = elA ? elA.value : savedApt;
   if(currentStep === 1) {
     ba.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:8px;width:100%">
@@ -881,6 +885,8 @@ function goNext() {
   if(currentStep === 1) {
     if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
     if(!validateFields()) return;
+    savedName = document.getElementById('fullname').value.trim();
+    savedApt = document.getElementById('apt').value.trim();
     if(curText) clipCopy(textWithHeader('uk'));
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
@@ -957,8 +963,10 @@ function updateCounterUI(n){
 const SUBJ = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
 
 function validateFields(){
-  const name=(document.getElementById('fullname')||{value:''}).value.trim();
-  const apt=(document.getElementById('apt')||{value:''}).value.trim();
+  const el=document.getElementById('fullname');
+  const name=el?el.value.trim():savedName;
+  const elA=document.getElementById('apt');
+  const apt=elA?elA.value.trim():savedApt;
   if(!name||!apt){showFieldsModal(!name,!apt);return false;}
   return true;
 }
@@ -1156,8 +1164,10 @@ function seededRand(s) {
 // ====== GENERATE ======
 function gen() {
   if (sel.size === 0) return '';
-  const name = (document.getElementById('fullname')||{value:''}).value.trim() || '[ФИО]';
-  const apt  = (document.getElementById('apt')||{value:''}).value.trim() || '[кв.]';
+  const elN = document.getElementById('fullname');
+  const name = (elN?elN.value.trim():savedName) || '[ФИО]';
+  const elA = document.getElementById('apt');
+  const apt  = (elA?elA.value.trim():savedApt) || '[кв.]';
   const isUK = dest === 'uk';
   const isFormal = tone === 'formal';
   const tmpl = T[tone];
@@ -1249,8 +1259,10 @@ function resetButtons(){
 function copyAndShow(){
   if(!curText)return;
   // Check required fields
-  const name = (document.getElementById('fullname')||{value:''}).value.trim();
-  const apt  = (document.getElementById('apt')||{value:''}).value.trim();
+  const el=document.getElementById('fullname');
+  const name = el?el.value.trim():savedName;
+  const elA=document.getElementById('apt');
+  const apt  = elA?elA.value.trim():savedApt;
   if(!name || !apt){
     showFieldsModal(!name, !apt);
     return;
