@@ -911,12 +911,42 @@ function gen() {
   const rng = seededRand(seed);
   const pick = arr => arr[Math.floor(rng() * arr.length)];
 
+  const probs = PROB_IDS.filter(id => sel.has(id));
+  const isShort = rng() > 0.5;
+
+  if (isShort) {
+    // ---- SHORT format: compact, problems as bullet list in 1-2 paragraphs ----
+    let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
+    t += pick(tmpl.short_open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+    t += pick(isUK ? tmpl.short_uk_intro : tmpl.short_gov_intro) + '\n';
+
+    // Combine problems into a compact list
+    const items = probs.map(id => {
+      const variants = isFormal ? P[id].s : P[id].si;
+      return pick(variants);
+    });
+
+    if (probs.length <= 2) {
+      // For 1-2 problems: join in one sentence
+      t += items.join('; ') + '.\n\n';
+    } else {
+      // For 3+ problems: numbered/dash list
+      items.forEach(item => { t += '— ' + item + ';\n'; });
+      t = t.slice(0, -2) + '.\n\n';
+    }
+
+    t += (isUK ? pick(tmpl.short_uk_close) : pick(tmpl.short_gov_close)) + '\n\n';
+    const date = new Date().toLocaleDateString('ru-RU');
+    t += `${date}\n${name}`;
+    return t;
+  }
+
+  // ---- LONG format (original) ----
   let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
   t += pick(tmpl.open).replace('{n}',name).replace('{a}',apt) + '\n\n';
   t += pick(isUK ? tmpl.uk_intro : tmpl.gov_intro) + '\n\n';
 
   // Build problem paragraphs with connectors
-  const probs = PROB_IDS.filter(id => sel.has(id));
   const connectors = isFormal ? CONNECTORS_FORMAL : CONNECTORS_INFORMAL;
   const shuffled = [...connectors].sort(() => rng() - 0.5);
 
