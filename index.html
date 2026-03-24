@@ -1005,7 +1005,7 @@ function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
   const top = ta.getBoundingClientRect().top;
-  const h = Math.max(100, window.innerHeight - top - 8 - 120);
+  const h = Math.max(160, window.innerHeight - top - 8 - 85);
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);
