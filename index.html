@@ -92,7 +92,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .addr{font-size:12px;color:var(--muted);padding:4px 2px;display:flex;align-items:center;gap:4px}
 
 /* Textarea */
-textarea.complaint-edit{width:100%;min-height:220px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;padding-bottom:16px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
+textarea.complaint-edit{width:100%;min-height:320px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;padding-bottom:16px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
 textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
 /* Skeleton loader for AI generation */
 .skeleton-loading{padding:16px 14px;min-height:220px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);box-sizing:border-box}
@@ -1076,7 +1076,7 @@ function upd() {
   if(tc) tc.style.display='block';
   if(regenBtn) regenBtn.style.display='block';
   curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
+  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
   requestAnimationFrame(fitTextarea);
   if(bc) bc.disabled=false;
   resetButtons();
@@ -1085,8 +1085,8 @@ function upd() {
 function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
-  const top = ta.getBoundingClientRect().top;
-  const h = Math.max(window.innerHeight * 0.45, window.innerHeight - top - 8 - 85);
+  ta.style.height = 'auto';
+  const h = Math.max(ta.scrollHeight + 4, window.innerHeight * 0.45);
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);
@@ -1137,7 +1137,7 @@ async function regenAI(){
     curText=data.text;
     if(area){
       area.style.opacity='0';
-      area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
+      area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
       requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
     }
     requestAnimationFrame(fitTextarea);
