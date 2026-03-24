@@ -838,7 +838,7 @@ function loadModels(force) {
     if (dsel) dsel.innerHTML = opts;
     const dp = document.getElementById('drawer-model-picker');
     const dd = document.getElementById('drawer-model-divider');
-    const show = data.showModelPicker ? 'block' : 'none';
+    const show = (data.models && data.models.length) ? 'block' : 'none';
     if (dp) dp.style.display = show;
     if (dd) dd.style.display = show;
     modelsLoaded = true;
