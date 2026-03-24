@@ -78,6 +78,11 @@ label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bot
       <div class="card-title">Модели</div>
       <div id="model-status" class="status"></div>
       <div id="model-list"></div>
+      <div style="background:var(--bg);border-radius:8px;padding:10px;margin:10px 0;font-size:11px;color:var(--muted);line-height:1.4">
+        <div style="font-weight:600;margin-bottom:4px">Для Railway OPENROUTER_MODELS:</div>
+        <div id="env-hint" style="font-family:monospace;font-size:10px;word-break:break-all;max-height:80px;overflow-y:auto"></div>
+        <button style="background:var(--primary);color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:6px;font-family:inherit" onclick="copyEnvHint()">📋 Скопировать</button>
+      </div>
       <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
         <label>Добавить модель</label>
         <input type="text" id="new-model-id" placeholder="provider/model-name" style="margin-bottom:6px">
@@ -149,6 +154,12 @@ function renderModels(models) {
       <button class="btn-danger" onclick="removeModel('${esc(m.id)}')">Удалить</button>
     </div>`
   ).join('');
+
+  // Generate env var hint
+  const envStr = models.map(m => `${m.id}:${m.name}`).join(',');
+  const envPretty = models.map(m => `${m.id}:${m.name}`).join('\n');
+  $('env-hint').innerHTML = `<div style="white-space:pre-wrap">${esc(envPretty)}</div>`;
+  window._envHint = envStr;
 }
 
 async function saveTokens() {
@@ -212,6 +223,13 @@ function showStatus(elId, msg, isErr) {
 }
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function copyEnvHint() {
+  if (!window._envHint) return;
+  navigator.clipboard.writeText(window._envHint).then(() => {
+    showStatus('model-status', '✅ Скопировано в буфер обмена');
+  });
+}
 
 checkAuth();
 </script>
