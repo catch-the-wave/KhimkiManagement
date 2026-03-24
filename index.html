@@ -293,7 +293,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 </style>
 </head>
 <body>
-<script>var t=localStorage.getItem('theme');if(t==='dark'||(t==null&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');</script>
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УК «Континент Комфорта»</h1>
@@ -1290,8 +1290,7 @@ function updateThemeIcons(dark) {
 }
 (function initTheme() {
   const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = saved ? saved === 'dark' : prefersDark;
+  const isDark = saved === 'dark';
   if (isDark) {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
