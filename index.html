@@ -37,17 +37,17 @@
   --primary-glow: rgba(74,158,255,.15);
   --action: #4ade80;
   --action-light: #162316;
-  --bg: #111113;
-  --card: #1c1c1e;
-  --text: #e5e5e7;
-  --muted: #8e8e93;
-  --border: #2c2c2e;
-  --header-bg: #1c1c1e;
-  --bottom-bg: rgba(17,17,19,.95);
-  --toast-bg: #2c2c2e;
-  --drawer-bg: #1c1c1e;
-  --tone-active-bg: #2c2c2e;
-  --shadow: 0 1px 3px rgba(0,0,0,.3);
+  --bg: #0f0f0f;
+  --card: #1a1a1a;
+  --text: #e0e0e0;
+  --muted: #888;
+  --border: #2a2a2a;
+  --header-bg: #141414;
+  --bottom-bg: rgba(15,15,15,.97);
+  --toast-bg: #2a2a2a;
+  --drawer-bg: #1a1a1a;
+  --tone-active-bg: #252525;
+  --shadow: none;
   --badge-best-bg: #162316; --badge-best-c: #4ade80;
   --badge-fast-bg: #1a2440; --badge-fast-c: #60a5fa;
   --badge-legal-bg: #261a2e; --badge-legal-c: #c084fc;
@@ -56,26 +56,25 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow-x:hidden;width:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
-.container{max-width:600px;margin:0 auto;padding:0 12px 100px}
+.container{max-width:600px;margin:0 auto;padding:0 14px 110px}
 
 /* Header */
 .header{background:var(--header-bg);color:#fff;padding:13px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:padding .2s}
 .header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
 .header p{font-size:11px;opacity:.65;margin-top:1px}
-.header.compact{padding:8px 16px}
-.header.compact h1,.header.compact p{display:none}
+.header.compact{padding:10px 16px}
 
 /* Sections */
 .section{display:none;padding-top:10px}
 .section.active{display:block}
 
 /* Cards */
-.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
 
 /* Chips */
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:.15s;user-select:none;-webkit-user-select:none;font-weight:500}
 .chip:active{transform:scale(.95)}
 .chip.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
 .chip .ck{display:none}
@@ -107,14 +106,14 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .dest-hint b{color:var(--primary)}
 
 /* Bottom bar */
-.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:12px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:10px;z-index:100;max-width:600px;margin:0 auto}
 
 /* Buttons */
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:13px 10px;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s;letter-spacing:-.1px}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.38;pointer-events:none}
 .btn-copy{background:var(--primary);color:#fff}
-.btn-send{background:var(--primary);color:#fff}
+.btn-send{background:var(--primary);color:#fff;font-size:15px;padding:14px 10px}
 .btn-portal{background:var(--action);color:#fff}
 .btn-ghost{background:var(--bg);color:var(--text);border:1.5px solid var(--border)}
 
@@ -172,7 +171,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .drawer-divider{height:1px;background:var(--border);margin:6px 0}
 
 /* Wizard nav */
-.wizard-nav{display:flex;align-items:flex-start;padding:12px 4px 6px;margin-bottom:2px}
+.wizard-nav{display:flex;align-items:flex-start;padding:14px 4px 8px;margin-bottom:4px}
 .wstep{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;cursor:default}
 .wstep.done{cursor:pointer}
 .wdot{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.25s;flex-shrink:0}
@@ -298,9 +297,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УК «Континент Комфорта»</h1>
   <p>г. Химки, ул. Совхозная, д. 5</p>
-  <div id="model-picker" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);display:none">
-    <select id="model-select" onchange="switchModel(this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:130px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M7 10l5 5 5-5z%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:18px"></select>
-  </div>
+  <button id="theme-header-btn" onclick="toggleThemeBtn()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:18px;cursor:pointer;padding:6px;line-height:1" title="Сменить тему">🌙</button>
   <button class="burger" id="burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
 </div>
 
@@ -1278,6 +1275,17 @@ if(dd) dd.textContent=DEST_DESC[dest]||'';
 function toggleTheme(dark) {
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   localStorage.setItem('theme', dark ? 'dark' : 'light');
+  updateThemeIcons(dark);
+}
+function toggleThemeBtn() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  toggleTheme(!isDark);
+  const cb = document.getElementById('theme-cb');
+  if (cb) cb.checked = !isDark;
+}
+function updateThemeIcons(dark) {
+  const hb = document.getElementById('theme-header-btn');
+  if (hb) hb.textContent = dark ? '☀️' : '🌙';
 }
 (function initTheme() {
   const saved = localStorage.getItem('theme');
@@ -1288,6 +1296,7 @@ function toggleTheme(dark) {
   }
   const cb = document.getElementById('theme-cb');
   if (cb) cb.checked = isDark;
+  updateThemeIcons(isDark);
 })();
 </script>
 </body>
