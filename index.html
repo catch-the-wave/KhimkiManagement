@@ -934,7 +934,44 @@ function fitTextarea() {
 }
 window.addEventListener('resize', fitTextarea);
 
-function regen(){seed++;upd();toast('Текст обновлён')}
+function regen(){
+  // Try AI first, fallback to local templates
+  regenAI().catch(()=>{
+    seed++;upd();toast('Текст обновлён');
+  });
+}
+
+async function regenAI(){
+  if(sel.size===0) throw 'no selection';
+  const elN=document.getElementById('fullname');
+  const name=(elN?elN.value.trim():savedName)||'';
+  const elA=document.getElementById('apt');
+  const apt=(elA?elA.value.trim():savedApt)||'';
+  if(!name||!apt) throw 'no fields';
+
+  const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
+  const btn=document.querySelector('[onclick="regen()"]');
+  if(btn){btn.disabled=true;btn.textContent='⏳';}
+
+  try{
+    const res=await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,apt,problems,tone,dest})
+    });
+    if(!res.ok) throw 'api error';
+    const data=await res.json();
+    if(!data.text) throw 'empty';
+
+    curText=data.text;
+    const area=document.getElementById('carea');
+    if(area) area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
+    requestAnimationFrame(fitTextarea);
+    toast('✨ Текст сгенерирован ИИ');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='🔄';}
+  }
+}
 function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // ====== ACTIONS ======
