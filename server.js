@@ -6,9 +6,15 @@ const path = require('path');
 try {
   const envFile = fs.readFileSync(path.join(__dirname, '.env'), 'utf-8');
   envFile.split('\n').forEach(line => {
-    const m = line.match(/^\s*([\w]+)\s*=\s*(.*)$/);
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, '');
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    const eq = line.indexOf('=');
+    if (eq < 1) return;
+    const key = line.slice(0, eq).trim();
+    const val = line.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
+    if (!process.env[key] && val) process.env[key] = val;
   });
+  console.log('📄 .env loaded');
 } catch {}
 
 const app = express();
