@@ -198,10 +198,17 @@ app.post('/api/generate', async (req, res) => {
     return res.status(503).json({ error: 'AI generation not configured' });
   }
 
-  const { name, apt, problems, tone, dest } = req.body;
+  const { name, apt, problems, tone, dest, length } = req.body;
   if (!name || !apt || !problems || !problems.length) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
+  const LENGTH_CONFIG = {
+    short:  { instruction: 'Напиши очень коротко — 2-3 предложения максимум.', max_tokens: 200 },
+    medium: { instruction: 'Напиши в меру — 1-2 абзаца.', max_tokens: 600 },
+    long:   { instruction: 'Напиши развёрнуто — 3-4 абзаца с деталями.', max_tokens: 1200 },
+  };
+  const lengthCfg = LENGTH_CONFIG[length] || LENGTH_CONFIG.medium;
 
   const destNames = {
     uk: 'УО «Континент Комфорта»',
@@ -216,12 +223,13 @@ app.post('/api/generate', async (req, res) => {
     `Квартира: ${apt}`,
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
     `Получатель: ${destNames[dest] || destNames.uk}`,
+    `Объём: ${lengthCfg.instruction}`,
     `Проблемы: ${problems.join(', ')}`
   ].join('\n');
 
   console.log('\n' + '='.repeat(60));
   console.log(`📤 AI REQUEST | Model: ${currentModel}`);
-  console.log(`   Name: ${name} | Apt: ${apt} | Tone: ${tone} | Dest: ${dest}`);
+  console.log(`   Name: ${name} | Apt: ${apt} | Tone: ${tone} | Length: ${length || 'medium'} | Dest: ${dest}`);
   console.log(`   Problems: ${problems.join(', ')}`);
   console.log('-'.repeat(60));
 
@@ -246,7 +254,7 @@ app.post('/api/generate', async (req, res) => {
           { role: 'user', content: userMessage }
         ],
         temperature,
-        max_tokens: Math.floor(Math.random() * (maxTokens - minTokens + 1)) + minTokens
+        max_tokens: lengthCfg.max_tokens
       })
     });
 
