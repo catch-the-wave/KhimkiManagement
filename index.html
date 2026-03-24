@@ -329,7 +329,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
             <button class="tone-btn active" data-tone="formal" onclick="setTone(this)">Формальный</button>
             <button class="tone-btn" data-tone="informal" onclick="setTone(this)">Неформальный</button>
           </div>
-          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px" onclick="regen()" title="Другой вариант">🔄</button>
         </div>
         <div id="carea"></div>
       </div>
@@ -570,10 +569,14 @@ function updateWizardNav() {
           <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
           <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
         </div>
-        <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="flex:none;width:52px;padding:0;font-size:22px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄</button>
+          <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+        </div>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
+    if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='block'; }
   } else {
     ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
   }
@@ -909,15 +912,18 @@ function upd() {
   if(!area) return;
 
   const tc = document.getElementById('text-card');
+  const regenBtn = document.getElementById('btn-regen');
   if(sel.size === 0) {
     area.innerHTML = '';
     curText='';
     if(tc) tc.style.display='none';
+    if(regenBtn) regenBtn.style.display='none';
     resetButtons();
     return;
   }
 
   if(tc) tc.style.display='block';
+  if(regenBtn) regenBtn.style.display='block';
   curText = gen();
   area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
   requestAnimationFrame(fitTextarea);
