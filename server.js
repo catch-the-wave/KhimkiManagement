@@ -119,7 +119,15 @@ app.use('/api/settings', requireAdmin);
 app.use('/api/models/add', requireAdmin);
 app.use('/api/models/remove', requireAdmin);
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+    }
+  }
+}));
 
 // Model management endpoints
 app.get('/api/models', (req, res) => {
