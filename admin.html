@@ -71,6 +71,16 @@ label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bot
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px"><span>0 — точно</span><span>1 — баланс</span><span>2 — хаос</span></div>
       </div>
       <button class="btn btn-primary" onclick="saveTokens()">Сохранить</button>
+
+      <div style="background:var(--bg);border-radius:8px;padding:10px;margin-top:12px;font-size:10px;color:var(--muted);line-height:1.4">
+        <div style="font-weight:600;margin-bottom:4px">Для Railway Variables (постоянно):</div>
+        <div style="font-family:monospace;word-break:break-all;background:#fff;padding:6px;border-radius:4px;margin-bottom:6px">
+          MIN_TOKENS=<span id="hint-min">100</span><br>
+          MAX_TOKENS=<span id="hint-max">500</span><br>
+          TEMPERATURE=<span id="hint-temp">0.7</span>
+        </div>
+        <button style="background:var(--primary);color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit" onclick="copyParamsHint()">📋 Скопировать все</button>
+      </div>
     </div>
 
     <!-- Models -->
@@ -143,6 +153,7 @@ async function loadSettings() {
     $('max-tok').value = d.maxTokens;
     $('temp').value = d.temperature ?? 0.7;
     $('temp-val').textContent = parseFloat(d.temperature ?? 0.7).toFixed(2);
+    updateParamsHint();
     renderModels(d.models);
   } catch {}
 }
@@ -175,9 +186,27 @@ async function saveTokens() {
       $('max-tok').value = d.maxTokens;
       $('temp').value = d.temperature;
       $('temp-val').textContent = parseFloat(d.temperature).toFixed(2);
+      updateParamsHint();
       showStatus('token-status', `Сохранено: токены ${d.minTokens}–${d.maxTokens}, температура ${d.temperature}`);
     } else showStatus('token-status', 'Ошибка', true);
   } catch { showStatus('token-status', 'Ошибка соединения', true); }
+}
+
+function updateParamsHint() {
+  const min = $('min-tok').value;
+  const max = $('max-tok').value;
+  const temp = parseFloat($('temp').value).toFixed(2);
+  $('hint-min').textContent = min;
+  $('hint-max').textContent = max;
+  $('hint-temp').textContent = temp;
+  window._paramsHint = `MIN_TOKENS=${min}\nMAX_TOKENS=${max}\nTEMPERATURE=${temp}`;
+}
+
+function copyParamsHint() {
+  if (!window._paramsHint) return;
+  navigator.clipboard.writeText(window._paramsHint).then(() => {
+    showStatus('token-status', '✅ Скопировано в буфер обмена');
+  });
 }
 
 async function addModel() {
