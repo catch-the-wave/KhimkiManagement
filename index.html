@@ -266,6 +266,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
     <p>Материалы и инструменты</p>
   </div>
   <div class="drawer-body">
+    <div id="drawer-model-picker" style="padding:10px 10px 4px;display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Модель ИИ</div>
+      <select id="drawer-model-select" onchange="switchModel(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:13px;font-family:inherit;background:#fff;color:var(--text);outline:none;cursor:pointer"></select>
+    </div>
+    <div class="drawer-divider" id="drawer-model-divider" style="display:none"></div>
     <button class="drawer-link" onclick="switchTab('ready');toggleDrawer()">
       <span class="dl-icon">📄</span>
       <div><div class="dl-label">Готовые тексты жалоб</div><div class="dl-desc">7 шаблонов по каждой теме</div></div>
@@ -765,14 +770,19 @@ let modelsLoaded = false;
 function loadModels(force) {
   if (modelsLoaded && !force) return;
   fetch('/api/settings').then(r => r.json()).then(data => {
+    const opts = data.models.map(m =>
+      `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
+    ).join('');
     const sel = document.getElementById('model-select');
+    if (sel) sel.innerHTML = opts;
+    const dsel = document.getElementById('drawer-model-select');
+    if (dsel) dsel.innerHTML = opts;
     const picker = document.getElementById('model-picker');
-    if (sel) {
-      sel.innerHTML = data.models.map(m =>
-        `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
-      ).join('');
-    }
     if (picker) picker.style.display = data.showModelPicker ? 'block' : 'none';
+    const dp = document.getElementById('drawer-model-picker');
+    const dd = document.getElementById('drawer-model-divider');
+    if (dp) dp.style.display = 'block';
+    if (dd) dd.style.display = 'block';
     modelsLoaded = true;
   }).catch(() => {});
 }
