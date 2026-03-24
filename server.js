@@ -32,7 +32,7 @@ let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-f
 const OPENROUTER_MODELS = [
   { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash' },
   { id: 'x-ai/grok-3-mini-beta', name: 'Grok 3 Mini' },
-  { id: 'x-ai/grok-4-0420', name: 'Grok 4.20' },
+  { id: 'x-ai/grok-4.20-beta', name: 'Grok 4.20' },
   { id: 'meta-llama/llama-3.3-70b-instruct', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
