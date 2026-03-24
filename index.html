@@ -94,6 +94,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 /* Textarea */
 textarea.complaint-edit{width:100%;min-height:220px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;padding-bottom:16px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
 textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+/* Skeleton loader for AI generation */
+.skeleton-loading{padding:16px 14px;min-height:220px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);box-sizing:border-box}
+.skeleton-line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,transparent 50%,var(--border) 75%);background-size:200% 100%;animation:skPulse 1.4s ease-in-out infinite;margin-bottom:12px}
+.skeleton-line:nth-child(2){width:92%}.skeleton-line:nth-child(3){width:85%}.skeleton-line:nth-child(4){width:96%}.skeleton-line:nth-child(5){width:78%}.skeleton-line:nth-child(6){width:88%}.skeleton-line:nth-child(7){width:60%}
+@keyframes skPulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-status{text-align:center;font-size:12px;color:var(--muted);margin-top:14px}
 .edit-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
 .empty-hint{text-align:center;padding:28px 16px;color:var(--muted);font-size:14px}
 .empty-hint .arr{font-size:22px;display:block;margin-bottom:6px}
@@ -1083,7 +1089,15 @@ async function regenAI(){
   if(!problems.length) return false;
 
   const btn=document.querySelector('[onclick="regen()"]');
-  if(btn){btn.disabled=true;btn.textContent='⏳';}
+  if(btn){btn.disabled=true;btn.textContent='⏳ 0с';}
+
+  // Show skeleton loader
+  const area=document.getElementById('carea');
+  if(area) area.innerHTML=`<div class="skeleton-loading">${'<div class="skeleton-line"></div>'.repeat(7)}<div class="skeleton-status">ИИ пишет жалобу…</div></div>`;
+
+  // Timer on button
+  let sec=0;
+  const timer=setInterval(()=>{sec++;if(btn)btn.textContent='⏳ '+sec+'с';},1000);
 
   try{
     console.log('[AI] Requesting generation...',{name,apt,problems:problems.length,tone,dest});
@@ -1098,16 +1112,20 @@ async function regenAI(){
     if(!data.text) return false;
 
     curText=data.text;
-    const area=document.getElementById('carea');
-    if(area) area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
+    if(area){
+      area.style.opacity='0';
+      area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
+      requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
+    }
     requestAnimationFrame(fitTextarea);
-    toast('✨ Текст сгенерирован ИИ');
+    toast('✨ Текст сгенерирован ИИ за '+sec+'с');
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){
     console.log('[AI] Error:',e);
     return false;
   }finally{
+    clearInterval(timer);
     if(btn){btn.disabled=false;btn.textContent='🔄';}
   }
 }
