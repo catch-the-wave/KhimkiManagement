@@ -858,6 +858,12 @@ function showStep(n) {
   if (n === 2) renderS3Preview();
 }
 
+function canGoNext(){
+  const n=document.getElementById('fullname');
+  const a=document.getElementById('apt');
+  return sel.size>0 && (!n||n.value.trim()!=='') && (!a||a.value.trim()!=='');
+}
+function syncNextBtn(){const b=document.getElementById('btn-step-next');if(b)b.disabled=!canGoNext();}
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
@@ -872,7 +878,7 @@ function updateWizardNav() {
           <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
           <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
         </div>
-        <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${sel.size===0?'disabled':''}>Далее →</button>
+        <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
@@ -941,7 +947,7 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
-function dUpd(){clearTimeout(_updTimer);_updTimer=setTimeout(upd,280)}
+function dUpd(){syncNextBtn();clearTimeout(_updTimer);_updTimer=setTimeout(upd,280)}
 
 // ====== SOCIAL COUNTER ======
 const COUNTER_SEED = 31; // realistic baseline
@@ -1103,22 +1109,19 @@ function tog(el) {
   if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
   else{sel.add(id);el.classList.add('selected')}
   seed++;
-  const nb=document.getElementById('btn-step-next');
-  if(nb) nb.disabled=sel.size===0;
+  syncNextBtn();
   upd();
 }
 function selAll(){
   document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});
   seed++;
-  const nb=document.getElementById('btn-step-next');
-  if(nb) nb.disabled=false;
+  syncNextBtn();
   upd();
 }
 function clrAll(){
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
   sel.clear();
-  const nb=document.getElementById('btn-step-next');
-  if(nb) nb.disabled=true;
+  syncNextBtn();
   upd();
 }
 
