@@ -86,6 +86,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .form-row{display:flex;gap:8px;margin-bottom:8px}
 .field{flex:1;position:relative}
 .field input{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--card);color:var(--text);transition:.15s}
+.field input::placeholder{color:var(--muted);opacity:.5}
 .field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
 .field label{position:absolute;top:-7px;left:10px;background:var(--card);padding:0 4px;font-size:11px;color:var(--muted);font-weight:600}
 .addr{font-size:12px;color:var(--muted);padding:4px 2px;display:flex;align-items:center;gap:4px}
@@ -171,16 +172,16 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .drawer-divider{height:1px;background:var(--border);margin:6px 0}
 
 /* Wizard nav */
-.wizard-nav{display:flex;align-items:flex-start;padding:14px 4px 8px;margin-bottom:4px}
-.wstep{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;cursor:default}
+.wizard-nav{display:flex;align-items:flex-start;padding:8px 4px 4px;margin-bottom:2px}
+.wstep{display:flex;flex-direction:column;align-items:center;gap:3px;flex:0 0 auto;cursor:default}
 .wstep.done{cursor:pointer}
-.wdot{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.25s;flex-shrink:0}
+.wdot{width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--muted);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.25s;flex-shrink:0}
 .wstep.active .wdot{background:var(--primary);color:#fff;box-shadow:0 0 0 3px var(--primary-glow)}
 .wstep.done .wdot{background:var(--action);color:#fff}
-.wlabel{font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap;margin-top:2px}
+.wlabel{font-size:9px;color:var(--muted);font-weight:600;white-space:nowrap;margin-top:1px}
 .wstep.active .wlabel{color:var(--primary)}
 .wstep.done .wlabel{color:var(--action)}
-.wline{flex:1;height:2px;background:var(--border);margin:0 6px;position:relative;top:-17px;transition:.3s;border-radius:1px}
+.wline{flex:1;height:2px;background:var(--border);margin:0 6px;position:relative;top:-14px;transition:.3s;border-radius:1px}
 .wline.done{background:var(--action)}
 
 /* Hook bar */
@@ -1058,7 +1059,7 @@ function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
   const top = ta.getBoundingClientRect().top;
-  const h = Math.max(160, window.innerHeight - top - 8 - 85);
+  const h = Math.max(window.innerHeight * 0.45, window.innerHeight - top - 8 - 85);
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);
