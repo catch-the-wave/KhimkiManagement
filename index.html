@@ -401,6 +401,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
             <button class="tone-btn" data-length="long" onclick="setLength(this)">Подробно</button>
           </div>
         </div>
+        <div id="model-badge" style="display:none;margin-bottom:8px;font-size:11px;color:var(--muted);display:none"><span style="font-weight:600">Модель:</span> <span id="model-badge-name"></span></div>
         <div id="carea"></div>
       </div>
     </div>
@@ -850,7 +851,7 @@ function toggleDrawer() {
 let modelsLoaded = false;
 function loadModels(force) {
   if (modelsLoaded && !force) return;
-  fetch('/api/settings').then(r => r.json()).then(data => {
+  fetch('/api/models').then(r => r.json()).then(data => {
     const opts = data.models.map(m =>
       `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
     ).join('');
@@ -861,6 +862,11 @@ function loadModels(force) {
     const show = (data.models && data.models.length) ? 'block' : 'none';
     if (dp) dp.style.display = show;
     if (dd) dd.style.display = show;
+    // Update model badge on main page
+    const curModel = data.models.find(m => m.id === data.current);
+    const mb = document.getElementById('model-badge');
+    const mbn = document.getElementById('model-badge-name');
+    if (mb && mbn && curModel) { mbn.textContent = curModel.name; mb.style.display = 'block'; }
     modelsLoaded = true;
   }).catch(() => { modelsLoaded = false; });
 }
@@ -872,6 +878,9 @@ function switchModel(modelId) {
     body: JSON.stringify({ model: modelId })
   }).then(r => r.json()).then(data => {
     toast('Модель: ' + data.current);
+    const mbn = document.getElementById('model-badge-name');
+    if (mbn) mbn.textContent = data.current;
+    loadModels(true);
   }).catch(() => {
     toast('Ошибка переключения модели');
   });
