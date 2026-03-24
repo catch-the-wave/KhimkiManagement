@@ -981,9 +981,9 @@ window.addEventListener('resize', fitTextarea);
 function regen(){
   // Try AI first, fallback to local templates
   regenAI().then(ok=>{
-    if(!ok){seed++;upd();toast('Текст обновлён');}
+    if(!ok){seed++;upd();toast('✨ Текст обновлён');}
   }).catch(()=>{
-    seed++;upd();toast('Текст обновлён');
+    seed++;upd();toast('✨ Текст обновлён');
   });
 }
 
