@@ -113,7 +113,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .dest-hint b{color:var(--primary)}
 
 /* Bottom bar */
-.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:12px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:10px;z-index:100;max-width:600px;margin:0 auto}
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
 
 /* Buttons */
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:13px 10px;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s;letter-spacing:-.1px}
@@ -396,8 +396,8 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         </div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
           <div class="tone-switch" id="length-switch" style="flex:1;margin:0">
-            <button class="tone-btn" data-length="short" onclick="setLength(this)">Коротко</button>
-            <button class="tone-btn active" data-length="medium" onclick="setLength(this)">Обычно</button>
+            <button class="tone-btn active" data-length="short" onclick="setLength(this)">Коротко</button>
+            <button class="tone-btn" data-length="medium" onclick="setLength(this)">Обычно</button>
             <button class="tone-btn" data-length="long" onclick="setLength(this)">Подробно</button>
           </div>
         </div>
@@ -583,7 +583,7 @@ const PROB_IDS = Object.keys(P);
 const sel = new Set();
 let dest = 'uk';
 let tone = 'informal';
-let length = 'medium';
+let length = 'short';
 let curText = '';
 let seed = Math.floor(Math.random() * 1000000);
 
@@ -628,14 +628,12 @@ function updateWizardNav() {
   const prevApt  = elA ? elA.value : savedApt;
   if(currentStep === 1) {
     ba.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
-        <div class="form-row" style="margin:0">
-          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" oninput="dUpd()"></div>
-          <div class="field"><label>Квартира</label><input type="text" id="apt" placeholder="№" inputmode="numeric" oninput="dUpd()"></div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="flex:none;width:30%;padding:0;font-size:14px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё</button>
-          <button class="btn btn-send" style="flex:1" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+      <div style="display:flex;flex-direction:column;gap:6px;width:100%">
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
+          <div class="field" style="flex:0 0 64px"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
+          <button class="btn btn-ghost" style="flex:none;width:40px;height:40px;padding:0;font-size:16px;display:none;border-radius:10px" id="btn-regen" onclick="regen()" title="Другой вариант">🔄</button>
+          <button class="btn btn-send" style="flex:none;padding:10px 20px;font-size:14px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
         </div>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
@@ -647,6 +645,7 @@ function updateWizardNav() {
 }
 
 function goNext() {
+  if(document.activeElement) document.activeElement.blur();
   if(currentStep === 1) {
     if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
     if(!validateFields()) return;
@@ -740,7 +739,19 @@ function validateFields(){
   const name=el?el.value.trim():savedName;
   const elA=document.getElementById('apt');
   const apt=elA?elA.value.trim():savedApt;
-  if(!name||!apt){showFieldsModal(!name,!apt);return false;}
+  if(!name||!apt){
+    const target=!name&&el?el:(!apt&&elA?elA:null);
+    if(target){
+      setTimeout(()=>{
+        target.scrollIntoView({behavior:'smooth',block:'center'});
+        target.focus();
+      },150);
+      toast(!name?'Укажите ФИО':'Укажите номер квартиры');
+    } else {
+      showFieldsModal(!name,!apt);
+    }
+    return false;
+  }
   return true;
 }
 
