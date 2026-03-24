@@ -629,7 +629,15 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
-function dUpd(){syncNextBtn();clearTimeout(_updTimer);_updTimer=setTimeout(upd,280)}
+function dUpd(){
+  syncNextBtn();
+  clearTimeout(_updTimer);
+  _updTimer=setTimeout(upd,280);
+  const n=document.getElementById('fullname');
+  const a=document.getElementById('apt');
+  if(n) localStorage.setItem('kh_name', n.value);
+  if(a) localStorage.setItem('kh_apt', a.value);
+}
 
 // ====== SOCIAL COUNTER ======
 const COUNTER_SEED = 31; // realistic baseline
@@ -726,6 +734,8 @@ function copyTextForPortal() {
 
 // ====== INIT ======
 function init() {
+  savedName = localStorage.getItem('kh_name') || '';
+  savedApt  = localStorage.getItem('kh_apt')  || '';
   const c = document.getElementById('chips');
   c.innerHTML = PROB_IDS.map(id =>
     `<div class="chip" data-id="${id}" onclick="tog(this)">${P[id].label}<span class="ck"> ✓</span></div>`

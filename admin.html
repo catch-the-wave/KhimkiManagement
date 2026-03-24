@@ -59,11 +59,16 @@ label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bot
 
     <!-- Token settings -->
     <div class="card">
-      <div class="card-title">Длина ответа (токены)</div>
+      <div class="card-title">Параметры генерации</div>
       <div id="token-status" class="status"></div>
       <div class="row">
-        <div><label>Минимум</label><input type="number" id="min-tok" min="50" max="2000"></div>
-        <div><label>Максимум</label><input type="number" id="max-tok" min="50" max="2000"></div>
+        <div><label>Токены мин.</label><input type="number" id="min-tok" min="50" max="2000"></div>
+        <div><label>Токены макс.</label><input type="number" id="max-tok" min="50" max="2000"></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Температура (креативность): <span id="temp-val">0.7</span></label>
+        <input type="range" id="temp" min="0" max="2" step="0.05" style="width:100%;margin-top:4px" oninput="document.getElementById('temp-val').textContent=parseFloat(this.value).toFixed(2)">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px"><span>0 — точно</span><span>1 — баланс</span><span>2 — хаос</span></div>
       </div>
       <button class="btn btn-primary" onclick="saveTokens()">Сохранить</button>
     </div>
@@ -131,6 +136,8 @@ async function loadSettings() {
     const d = await r.json();
     $('min-tok').value = d.minTokens;
     $('max-tok').value = d.maxTokens;
+    $('temp').value = d.temperature ?? 0.7;
+    $('temp-val').textContent = parseFloat(d.temperature ?? 0.7).toFixed(2);
     renderModels(d.models);
   } catch {}
 }
@@ -149,13 +156,15 @@ async function saveTokens() {
     const r = await fetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ min_tokens: +$('min-tok').value, max_tokens: +$('max-tok').value })
+      body: JSON.stringify({ min_tokens: +$('min-tok').value, max_tokens: +$('max-tok').value, temperature: +$('temp').value })
     });
     if (r.ok) {
       const d = await r.json();
       $('min-tok').value = d.minTokens;
       $('max-tok').value = d.maxTokens;
-      showStatus('token-status', 'Сохранено: ' + d.minTokens + '–' + d.maxTokens);
+      $('temp').value = d.temperature;
+      $('temp-val').textContent = parseFloat(d.temperature).toFixed(2);
+      showStatus('token-status', `Сохранено: токены ${d.minTokens}–${d.maxTokens}, температура ${d.temperature}`);
     } else showStatus('token-status', 'Ошибка', true);
   } catch { showStatus('token-status', 'Ошибка соединения', true); }
 }

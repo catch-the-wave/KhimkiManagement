@@ -32,6 +32,7 @@ let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-f
 // Token limits — mutable, configurable at runtime
 let minTokens = parseInt(process.env.MIN_TOKENS, 10) || 100;
 let maxTokens = parseInt(process.env.MAX_TOKENS, 10) || 500;
+let temperature = parseFloat(process.env.TEMPERATURE) || 0.7;
 
 // Models from env: MODELS=id:Name,id2:Name2  — or use defaults
 function parseModels(envVar, defaults) {
@@ -136,15 +137,16 @@ app.post('/api/models', (req, res) => {
 
 // Runtime settings: tokens range
 app.get('/api/settings', (req, res) => {
-  res.json({ minTokens, maxTokens, models: availableModels, current: currentModel });
+  res.json({ minTokens, maxTokens, temperature, models: availableModels, current: currentModel });
 });
 
 app.post('/api/settings', (req, res) => {
-  const { min_tokens, max_tokens } = req.body;
+  const { min_tokens, max_tokens, temperature: t } = req.body;
   if (min_tokens != null) minTokens = Math.max(50, parseInt(min_tokens, 10) || 100);
   if (max_tokens != null) maxTokens = Math.max(minTokens, parseInt(max_tokens, 10) || 500);
-  console.log(`\n⚙️ Tokens updated: ${minTokens}–${maxTokens}\n`);
-  res.json({ minTokens, maxTokens });
+  if (t != null) temperature = Math.min(2, Math.max(0, parseFloat(t) || 0.7));
+  console.log(`\n⚙️ Settings updated: tokens ${minTokens}–${maxTokens}, temp ${temperature}\n`);
+  res.json({ minTokens, maxTokens, temperature });
 });
 
 // Runtime model list management: add/remove without redeploy
@@ -233,7 +235,7 @@ app.post('/api/generate', async (req, res) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage }
         ],
-        temperature: 0.9,
+        temperature,
         max_tokens: Math.floor(Math.random() * (maxTokens - minTokens + 1)) + minTokens
       })
     });
