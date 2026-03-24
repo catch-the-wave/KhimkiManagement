@@ -936,38 +936,48 @@ window.addEventListener('resize', fitTextarea);
 
 function regen(){
   // Try AI first, fallback to local templates
-  regenAI().catch(()=>{
+  regenAI().then(ok=>{
+    if(!ok){seed++;upd();toast('Текст обновлён');}
+  }).catch(()=>{
     seed++;upd();toast('Текст обновлён');
   });
 }
 
 async function regenAI(){
-  if(sel.size===0) throw 'no selection';
+  if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=(elN?elN.value.trim():savedName)||'';
+  const name=(elN?elN.value.trim():savedName)||'[ФИО]';
   const elA=document.getElementById('apt');
-  const apt=(elA?elA.value.trim():savedApt)||'';
-  if(!name||!apt) throw 'no fields';
+  const apt=(elA?elA.value.trim():savedApt)||'[кв.]';
 
   const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
+  if(!problems.length) return false;
+
   const btn=document.querySelector('[onclick="regen()"]');
   if(btn){btn.disabled=true;btn.textContent='⏳';}
 
   try{
+    console.log('[AI] Requesting generation...',{name,apt,problems:problems.length,tone,dest});
     const res=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({name,apt,problems,tone,dest})
     });
-    if(!res.ok) throw 'api error';
+    console.log('[AI] Response status:',res.status);
+    if(!res.ok) return false;
     const data=await res.json();
-    if(!data.text) throw 'empty';
+    if(!data.text) return false;
 
     curText=data.text;
     const area=document.getElementById('carea');
     if(area) area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value">${escTA(curText)}</textarea>`;
     requestAnimationFrame(fitTextarea);
     toast('✨ Текст сгенерирован ИИ');
+    console.log('[AI] Success, text length:',curText.length);
+    return true;
+  }catch(e){
+    console.log('[AI] Error:',e);
+    return false;
   }finally{
     if(btn){btn.disabled=false;btn.textContent='🔄';}
   }
