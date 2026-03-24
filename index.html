@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Жалоба на УК «Континент Комфорта»</title>
 <style>
 :root {
@@ -250,11 +253,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УК «Континент Комфорта»</h1>
   <p>г. Химки, ул. Совхозная, д. 5</p>
-  <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px">
-    <select id="model-select" onchange="switchModel(this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:150px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M7 10l5 5 5-5z%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:20px">
-    </select>
-    <button class="burger" id="burger" onclick="toggleDrawer()" style="position:static;transform:none"><span></span><span></span><span></span></button>
+  <div id="model-picker" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);display:none">
+    <select id="model-select" onchange="switchModel(this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.25);font-size:11px;font-family:inherit;background:rgba(255,255,255,.12);color:#fff;outline:none;cursor:pointer;max-width:130px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22white%22><path d=%22M7 10l5 5 5-5z%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:18px"></select>
   </div>
+  <button class="burger" id="burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
 </div>
 
 <!-- Drawer overlay -->
@@ -267,18 +269,14 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
     <p>Материалы и инструменты</p>
   </div>
   <div class="drawer-body">
-    <button class="drawer-link" onclick="switchTab('main');toggleDrawer()" style="background:var(--bg)">
-      <span class="dl-icon">🏠</span>
-      <div><div class="dl-label">Конструктор жалобы</div><div class="dl-desc">Собрать и отправить жалобу</div></div>
-    </button>
-    <div class="drawer-divider"></div>
+    <div id="drawer-model-picker" style="padding:10px 10px 4px;display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Модель ИИ</div>
+      <select id="drawer-model-select" onchange="switchModel(this.value)" style="width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:13px;font-family:inherit;background:#fff;color:var(--text);outline:none;cursor:pointer"></select>
+    </div>
+    <div class="drawer-divider" id="drawer-model-divider" style="display:none"></div>
     <button class="drawer-link" onclick="switchTab('ready');toggleDrawer()">
       <span class="dl-icon">📄</span>
       <div><div class="dl-label">Готовые тексты жалоб</div><div class="dl-desc">7 шаблонов по каждой теме</div></div>
-    </button>
-    <button class="drawer-link" onclick="switchTab('photo');toggleDrawer()">
-      <span class="dl-icon">📷</span>
-      <div><div class="dl-label">Фото проблем</div><div class="dl-desc">Загрузить фото для жалобы</div></div>
     </button>
     <button class="drawer-link" onclick="switchTab('where');toggleDrawer()">
       <span class="dl-icon">📍</span>
@@ -289,6 +287,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
       <span class="dl-icon">🖨️</span>
       <div><div class="dl-label">QR-код для лифта</div><div class="dl-desc">Макет объявления для печати</div></div>
     </button>
+    <div class="drawer-divider"></div>
+    <a href="/admin" class="drawer-link" style="text-decoration:none">
+      <span class="dl-icon">⚙️</span>
+      <div><div class="dl-label">Админка</div><div class="dl-desc">Модели, токены, температура</div></div>
+    </a>
     <div class="drawer-divider"></div>
     <div style="padding:12px;font-size:11px;color:var(--muted);line-height:1.5">
       <strong>Совет дома</strong><br>
@@ -417,15 +420,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px r
 
   </div>
 
-  <!-- PHOTO -->
-  <div id="tab-photo" class="section">
-    <div class="card">
-      <div class="card-title">Фото проблем</div>
-      <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Жалоба с фото работает сильнее</p>
-      <p style="font-size:12px;color:var(--muted);line-height:1.6">Сфотографируйте проблему — грязный подъезд, сломанный мусоропровод, тёмный коридор. После того как откроется почта, прикрепите фото к письму вручную перед отправкой.</p>
-    </div>
-  </div>
-
   <!-- READY -->
   <div id="tab-ready" class="section">
     <div class="card">
@@ -525,7 +519,7 @@ const sel = new Set();
 let dest = 'uk';
 let tone = 'formal';
 let curText = '';
-let seed = 0;
+let seed = Math.floor(Math.random() * 1000000);
 
 
 // ====== WIZARD ======
@@ -646,7 +640,15 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
-function dUpd(){syncNextBtn();clearTimeout(_updTimer);_updTimer=setTimeout(upd,280)}
+function dUpd(){
+  syncNextBtn();
+  clearTimeout(_updTimer);
+  _updTimer=setTimeout(upd,280);
+  const n=document.getElementById('fullname');
+  const a=document.getElementById('apt');
+  if(n) localStorage.setItem('kh_name', n.value);
+  if(a) localStorage.setItem('kh_apt', a.value);
+}
 
 // ====== SOCIAL COUNTER ======
 const COUNTER_SEED = 31; // realistic baseline
@@ -743,6 +745,8 @@ function copyTextForPortal() {
 
 // ====== INIT ======
 function init() {
+  savedName = localStorage.getItem('kh_name') || '';
+  savedApt  = localStorage.getItem('kh_apt')  || '';
   const c = document.getElementById('chips');
   c.innerHTML = PROB_IDS.map(id =>
     `<div class="chip" data-id="${id}" onclick="tog(this)">${P[id].label}<span class="ck"> ✓</span></div>`
@@ -766,14 +770,22 @@ function toggleDrawer() {
 
 // ====== MODEL SELECTOR ======
 let modelsLoaded = false;
-function loadModels() {
-  if (modelsLoaded) return;
-  fetch('/api/models').then(r => r.json()).then(data => {
-    const sel = document.getElementById('model-select');
-    if (!sel) return;
-    sel.innerHTML = data.models.map(m =>
+function loadModels(force) {
+  if (modelsLoaded && !force) return;
+  fetch('/api/settings').then(r => r.json()).then(data => {
+    const opts = data.models.map(m =>
       `<option value="${m.id}" ${m.id === data.current ? 'selected' : ''}>${m.name}</option>`
     ).join('');
+    const sel = document.getElementById('model-select');
+    if (sel) sel.innerHTML = opts;
+    const dsel = document.getElementById('drawer-model-select');
+    if (dsel) dsel.innerHTML = opts;
+    const picker = document.getElementById('model-picker');
+    if (picker) picker.style.display = data.showModelPicker ? 'block' : 'none';
+    const dp = document.getElementById('drawer-model-picker');
+    const dd = document.getElementById('drawer-model-divider');
+    if (dp) dp.style.display = 'block';
+    if (dd) dd.style.display = 'block';
     modelsLoaded = true;
   }).catch(() => {});
 }
@@ -996,7 +1008,7 @@ function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
   const top = ta.getBoundingClientRect().top;
-  const h = Math.max(100, window.innerHeight - top - 8 - 120);
+  const h = Math.max(160, window.innerHeight - top - 8 - 85);
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);

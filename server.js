@@ -29,20 +29,40 @@ const API_URL = useOpenRouter
 const API_NAME = useOpenRouter ? 'OpenRouter' : 'Groq';
 let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-flash-001' : 'llama-3.3-70b-versatile');
 
-const OPENROUTER_MODELS = [
+// Token limits — mutable, configurable at runtime
+let minTokens = parseInt(process.env.MIN_TOKENS, 10) || 100;
+let maxTokens = parseInt(process.env.MAX_TOKENS, 10) || 500;
+let temperature = parseFloat(process.env.TEMPERATURE) || 0.7;
+let showModelPicker = process.env.SHOW_MODEL_PICKER !== 'false';
+
+// Models from env: MODELS=id:Name,id2:Name2  — or use defaults
+function parseModels(envVar, defaults) {
+  const raw = process.env[envVar];
+  if (!raw) return defaults;
+  return raw.split(',').map(entry => {
+    const [id, ...nameParts] = entry.trim().split(':');
+    return { id: id.trim(), name: nameParts.join(':').trim() || id.trim() };
+  }).filter(m => m.id);
+}
+
+const DEFAULT_OPENROUTER_MODELS = [
   { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash' },
   { id: 'x-ai/grok-3-mini-beta', name: 'Grok 3 Mini' },
+  { id: 'x-ai/grok-4.20-beta', name: 'Grok 4.20' },
   { id: 'meta-llama/llama-3.3-70b-instruct', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
-const GROQ_MODELS = [
+const DEFAULT_GROQ_MODELS = [
   { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
   { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
 
-const AVAILABLE_MODELS = useOpenRouter ? OPENROUTER_MODELS : GROQ_MODELS;
+// Mutable model list — configurable at runtime
+let availableModels = useOpenRouter
+  ? parseModels('OPENROUTER_MODELS', DEFAULT_OPENROUTER_MODELS)
+  : parseModels('GROQ_MODELS', DEFAULT_GROQ_MODELS);
 
 // Load prompt template
 let systemPrompt = '';
@@ -53,21 +73,109 @@ try {
 }
 
 app.use(express.json());
+
+// Admin auth
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_TOKEN = ADMIN_PASSWORD ? require('crypto').createHash('sha256').update(ADMIN_PASSWORD).digest('hex').slice(0, 32) : '';
+
+function parseCookies(req) {
+  const raw = req.headers.cookie || '';
+  const obj = {};
+  raw.split(';').forEach(c => {
+    const [k, ...v] = c.trim().split('=');
+    if (k) obj[k.trim()] = v.join('=').trim();
+  });
+  return obj;
+}
+
+function requireAdmin(req, res, next) {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const cookies = parseCookies(req);
+  if (cookies.admin_token === ADMIN_TOKEN) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+app.post('/api/admin/login', (req, res) => {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const { password } = req.body;
+  if (password !== ADMIN_PASSWORD) return res.status(401).json({ error: 'Wrong password' });
+  res.setHeader('Set-Cookie', `admin_token=${ADMIN_TOKEN}; Path=/; Max-Age=${30*24*3600}; SameSite=Lax`);
+  res.json({ ok: true });
+});
+
+app.get('/api/admin/check', (req, res) => {
+  if (!ADMIN_PASSWORD) return res.status(403).json({ error: 'ADMIN_PASSWORD not set' });
+  const cookies = parseCookies(req);
+  res.json({ authenticated: cookies.admin_token === ADMIN_TOKEN });
+});
+
+// Serve admin page
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Protect admin API endpoints
+app.use('/api/settings', requireAdmin);
+app.use('/api/models/add', requireAdmin);
+app.use('/api/models/remove', requireAdmin);
+
 app.use(express.static(__dirname));
 
 // Model management endpoints
 app.get('/api/models', (req, res) => {
-  res.json({ models: AVAILABLE_MODELS, current: currentModel });
+  res.json({ models: availableModels, current: currentModel });
 });
 
 app.post('/api/models', (req, res) => {
   const { model } = req.body;
-  if (!model || !AVAILABLE_MODELS.find(m => m.id === model)) {
+  if (!model || !availableModels.find(m => m.id === model)) {
     return res.status(400).json({ error: 'Invalid model' });
   }
   currentModel = model;
   console.log(`\n🔄 Model switched to: ${model}\n`);
   res.json({ current: currentModel });
+});
+
+// Runtime settings: tokens range
+app.get('/api/settings', (req, res) => {
+  res.json({ minTokens, maxTokens, temperature, showModelPicker, models: availableModels, current: currentModel });
+});
+
+app.post('/api/settings', (req, res) => {
+  const { min_tokens, max_tokens, temperature: t } = req.body;
+  if (min_tokens != null) minTokens = Math.max(50, parseInt(min_tokens, 10) || 100);
+  if (max_tokens != null) maxTokens = Math.max(minTokens, parseInt(max_tokens, 10) || 500);
+  if (t != null) temperature = Math.min(2, Math.max(0, parseFloat(t) || 0.7));
+  if (req.body.show_model_picker != null) showModelPicker = !!req.body.show_model_picker;
+  console.log(`\n⚙️ Settings updated: tokens ${minTokens}–${maxTokens}, temp ${temperature}\n`);
+  res.json({ minTokens, maxTokens, temperature, showModelPicker });
+});
+
+// Runtime model list management: add/remove without redeploy
+app.post('/api/models/add', (req, res) => {
+  const { id, name } = req.body;
+  if (!id) return res.status(400).json({ error: 'Model id required' });
+  if (availableModels.find(m => m.id === id)) {
+    return res.status(409).json({ error: 'Model already exists' });
+  }
+  availableModels.push({ id, name: name || id });
+  console.log(`\n➕ Model added: ${id} (${name || id})\n`);
+  res.json({ models: availableModels });
+});
+
+app.post('/api/models/remove', (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).json({ error: 'Model id required' });
+  const before = availableModels.length;
+  availableModels = availableModels.filter(m => m.id !== id);
+  if (availableModels.length === before) {
+    return res.status(404).json({ error: 'Model not found' });
+  }
+  if (currentModel === id && availableModels.length > 0) {
+    currentModel = availableModels[0].id;
+  }
+  console.log(`\n➖ Model removed: ${id}\n`);
+  res.json({ models: availableModels, current: currentModel });
 });
 
 // Sanitize AI response: remove non-Cyrillic/Latin stray characters (Chinese, etc.)
@@ -129,8 +237,8 @@ app.post('/api/generate', async (req, res) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage }
         ],
-        temperature: 0.9,
-        max_tokens: 1500
+        temperature,
+        max_tokens: Math.floor(Math.random() * (maxTokens - minTokens + 1)) + minTokens
       })
     });
 
@@ -166,5 +274,6 @@ app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 Model: ${currentModel}`);
   console.log(`🔑 ${API_NAME} API: ${API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY or GROQ_API_KEY)'}`);
-  console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}\n`);
+  console.log(`📋 Available models: ${availableModels.map(m => m.id).join(', ')}`);
+  console.log(`📏 Tokens range: ${minTokens}–${maxTokens}\n`);
 });

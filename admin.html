@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка</title>
+<style>
+:root{--primary:#1565c0;--bg:#f0f2f5;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--danger:#dc2626;--action:#2e7d32}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.wrap{max-width:480px;margin:0 auto;padding:16px 12px}
+.header{background:#1e3a5f;color:#fff;padding:13px 16px;text-align:center}
+.header h1{font-size:16px;font-weight:700}
+.header p{font-size:11px;opacity:.65;margin-top:1px}
+.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+.back{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--primary);text-decoration:none;margin-bottom:12px}
+input[type=text],input[type=password],input[type=number]{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);transition:.15s}
+input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.btn{display:block;width:100%;padding:12px;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s;text-align:center}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-danger{background:var(--danger);color:#fff;padding:6px 12px;font-size:12px;border-radius:8px;width:auto}
+.btn-add{background:var(--action);color:#fff}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.row>*{flex:1}
+.model-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:10px;margin-bottom:6px;border:1px solid var(--border)}
+.model-item .m-id{flex:1;font-size:13px;font-weight:600;word-break:break-all}
+.model-item .m-name{font-size:11px;color:var(--muted)}
+.status{font-size:12px;padding:6px 10px;border-radius:8px;margin-bottom:10px;display:none}
+.status.ok{display:block;background:#e8f5e9;color:var(--action)}
+.status.err{display:block;background:#fce4ec;color:var(--danger)}
+#login-section,#admin-section{display:none}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Админка</h1>
+  <p>Управление моделями и настройками</p>
+</div>
+<div class="wrap">
+  <a href="/" class="back">&larr; Назад к генератору</a>
+
+  <!-- Login -->
+  <div id="login-section">
+    <div class="card">
+      <div class="card-title">Вход</div>
+      <div id="login-status" class="status"></div>
+      <label>Пароль</label>
+      <input type="password" id="pwd" placeholder="Введите пароль" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="height:10px"></div>
+      <button class="btn btn-primary" onclick="doLogin()">Войти</button>
+    </div>
+  </div>
+
+  <!-- Admin panel -->
+  <div id="admin-section">
+
+    <!-- Token settings -->
+    <div class="card">
+      <div class="card-title">Параметры генерации</div>
+      <div id="token-status" class="status"></div>
+      <div class="row">
+        <div><label>Токены мин.</label><input type="number" id="min-tok" min="50" max="2000"></div>
+        <div><label>Токены макс.</label><input type="number" id="max-tok" min="50" max="2000"></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Температура (креативность): <span id="temp-val">0.7</span></label>
+        <input type="range" id="temp" min="0" max="2" step="0.05" style="width:100%;margin-top:4px" oninput="document.getElementById('temp-val').textContent=parseFloat(this.value).toFixed(2)">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px"><span>0 — точно</span><span>1 — баланс</span><span>2 — хаос</span></div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:10px;cursor:pointer">
+        <input type="checkbox" id="show-picker" style="width:16px;height:16px;cursor:pointer">
+        Показывать выбор модели в хедере
+      </label>
+      <button class="btn btn-primary" onclick="saveTokens()">Сохранить</button>
+
+      <div style="background:var(--bg);border-radius:8px;padding:10px;margin-top:12px;font-size:10px;color:var(--muted);line-height:1.4">
+        <div style="font-weight:600;margin-bottom:4px">Для Railway Variables (постоянно):</div>
+        <div style="font-family:monospace;word-break:break-all;background:#fff;padding:6px;border-radius:4px;margin-bottom:6px">
+          MIN_TOKENS=<span id="hint-min">100</span><br>
+          MAX_TOKENS=<span id="hint-max">500</span><br>
+          TEMPERATURE=<span id="hint-temp">0.7</span><br>
+          SHOW_MODEL_PICKER=<span id="hint-picker">true</span>
+        </div>
+        <button style="background:var(--primary);color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit" onclick="copyParamsHint()">📋 Скопировать все</button>
+      </div>
+    </div>
+
+    <!-- Models -->
+    <div class="card">
+      <div class="card-title">Модели</div>
+      <div id="model-status" class="status"></div>
+      <div id="model-list"></div>
+      <div style="background:var(--bg);border-radius:8px;padding:10px;margin:10px 0;font-size:11px;color:var(--muted);line-height:1.4">
+        <div style="font-weight:600;margin-bottom:4px">Для Railway OPENROUTER_MODELS:</div>
+        <div id="env-hint" style="font-family:monospace;font-size:10px;word-break:break-all;max-height:80px;overflow-y:auto"></div>
+        <button style="background:var(--primary);color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:6px;font-family:inherit" onclick="copyEnvHint()">📋 Скопировать</button>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
+        <label>Добавить модель</label>
+        <input type="text" id="new-model-id" placeholder="provider/model-name" style="margin-bottom:6px">
+        <input type="text" id="new-model-name" placeholder="Отображаемое имя (необязательно)" style="margin-bottom:8px">
+        <button class="btn btn-add" onclick="addModel()">Добавить</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+async function checkAuth() {
+  try {
+    const r = await fetch('/api/admin/check');
+    const d = await r.json();
+    if (d.authenticated) { showAdmin(); loadSettings(); }
+    else $('login-section').style.display = 'block';
+  } catch {
+    $('login-section').style.display = 'block';
+  }
+}
+
+async function doLogin() {
+  const pwd = $('pwd').value;
+  if (!pwd) return;
+  try {
+    const r = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    if (r.ok) {
+      $('login-section').style.display = 'none';
+      showAdmin();
+      loadSettings();
+    } else {
+      showStatus('login-status', 'Неверный пароль', true);
+    }
+  } catch {
+    showStatus('login-status', 'Ошибка соединения', true);
+  }
+}
+
+function showAdmin() {
+  $('login-section').style.display = 'none';
+  $('admin-section').style.display = 'block';
+}
+
+async function loadSettings() {
+  try {
+    const r = await fetch('/api/settings');
+    if (r.status === 401) { $('login-section').style.display = 'block'; $('admin-section').style.display = 'none'; return; }
+    const d = await r.json();
+    $('min-tok').value = d.minTokens;
+    $('max-tok').value = d.maxTokens;
+    $('temp').value = d.temperature ?? 0.7;
+    $('temp-val').textContent = parseFloat(d.temperature ?? 0.7).toFixed(2);
+    $('show-picker').checked = d.showModelPicker !== false;
+    updateParamsHint();
+    renderModels(d.models);
+  } catch {}
+}
+
+function renderModels(models) {
+  $('model-list').innerHTML = models.map(m =>
+    `<div class="model-item">
+      <div><div class="m-id">${esc(m.id)}</div><div class="m-name">${esc(m.name)}</div></div>
+      <button class="btn-danger" onclick="removeModel('${esc(m.id)}')">Удалить</button>
+    </div>`
+  ).join('');
+
+  // Generate env var hint
+  const envStr = models.map(m => `${m.id}:${m.name}`).join(',');
+  const envPretty = models.map(m => `${m.id}:${m.name}`).join('\n');
+  $('env-hint').innerHTML = `<div style="white-space:pre-wrap">${esc(envPretty)}</div>`;
+  window._envHint = envStr;
+}
+
+async function saveTokens() {
+  try {
+    const r = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ min_tokens: +$('min-tok').value, max_tokens: +$('max-tok').value, temperature: +$('temp').value, show_model_picker: $('show-picker').checked })
+    });
+    if (r.ok) {
+      const d = await r.json();
+      $('min-tok').value = d.minTokens;
+      $('max-tok').value = d.maxTokens;
+      $('temp').value = d.temperature;
+      $('temp-val').textContent = parseFloat(d.temperature).toFixed(2);
+      updateParamsHint();
+      showStatus('token-status', `Сохранено: токены ${d.minTokens}–${d.maxTokens}, температура ${d.temperature}`);
+    } else showStatus('token-status', 'Ошибка', true);
+  } catch { showStatus('token-status', 'Ошибка соединения', true); }
+}
+
+function updateParamsHint() {
+  const min = $('min-tok').value;
+  const max = $('max-tok').value;
+  const temp = parseFloat($('temp').value).toFixed(2);
+  const picker = $('show-picker').checked ? 'true' : 'false';
+  $('hint-min').textContent = min;
+  $('hint-max').textContent = max;
+  $('hint-temp').textContent = temp;
+  $('hint-picker').textContent = picker;
+  window._paramsHint = `MIN_TOKENS=${min}\nMAX_TOKENS=${max}\nTEMPERATURE=${temp}\nSHOW_MODEL_PICKER=${picker}`;
+}
+
+function copyParamsHint() {
+  if (!window._paramsHint) return;
+  navigator.clipboard.writeText(window._paramsHint).then(() => {
+    showStatus('token-status', '✅ Скопировано в буфер обмена');
+  });
+}
+
+async function addModel() {
+  const id = $('new-model-id').value.trim();
+  const name = $('new-model-name').value.trim();
+  if (!id) return;
+  try {
+    const r = await fetch('/api/models/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, name: name || id })
+    });
+    const d = await r.json();
+    if (r.ok) {
+      renderModels(d.models);
+      $('new-model-id').value = '';
+      $('new-model-name').value = '';
+      showStatus('model-status', 'Добавлена: ' + id);
+    } else showStatus('model-status', d.error || 'Ошибка', true);
+  } catch { showStatus('model-status', 'Ошибка соединения', true); }
+}
+
+async function removeModel(id) {
+  try {
+    const r = await fetch('/api/models/remove', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+    const d = await r.json();
+    if (r.ok) {
+      renderModels(d.models);
+      showStatus('model-status', 'Удалена: ' + id);
+    } else showStatus('model-status', d.error || 'Ошибка', true);
+  } catch { showStatus('model-status', 'Ошибка соединения', true); }
+}
+
+function showStatus(elId, msg, isErr) {
+  const el = $(elId);
+  el.textContent = msg;
+  el.className = 'status ' + (isErr ? 'err' : 'ok');
+  setTimeout(() => { el.style.display = 'none'; el.className = 'status'; }, 3000);
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function copyEnvHint() {
+  if (!window._envHint) return;
+  navigator.clipboard.writeText(window._envHint).then(() => {
+    showStatus('model-status', '✅ Скопировано в буфер обмена');
+  });
+}
+
+checkAuth();
+</script>
+</body>
+</html>
