@@ -19,15 +19,30 @@ try {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || process.env.GROQ_API_KEY || '';
-let currentModel = process.env.AI_MODEL || 'google/gemini-2.0-flash-001';
 
-const AVAILABLE_MODELS = [
+// Auto-detect API provider: OpenRouter preferred, Groq as fallback
+const useOpenRouter = !!process.env.OPENROUTER_API_KEY;
+const API_KEY = process.env.OPENROUTER_API_KEY || process.env.GROQ_API_KEY || '';
+const API_URL = useOpenRouter
+  ? 'https://openrouter.ai/api/v1/chat/completions'
+  : 'https://api.groq.com/openai/v1/chat/completions';
+const API_NAME = useOpenRouter ? 'OpenRouter' : 'Groq';
+let currentModel = process.env.AI_MODEL || (useOpenRouter ? 'google/gemini-2.0-flash-001' : 'llama-3.3-70b-versatile');
+
+const OPENROUTER_MODELS = [
   { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash' },
   { id: 'x-ai/grok-3-mini-beta', name: 'Grok 3 Mini' },
   { id: 'meta-llama/llama-3.3-70b-instruct', name: 'Llama 3.3 70B' },
   { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
 ];
+
+const GROQ_MODELS = [
+  { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B (fast)' },
+  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
+  { id: 'meta-llama/llama-4-scout-17b-16e-instruct', name: 'Llama 4 Scout 17B' },
+];
+
+const AVAILABLE_MODELS = useOpenRouter ? OPENROUTER_MODELS : GROQ_MODELS;
 
 // Load prompt template
 let systemPrompt = '';
@@ -63,7 +78,7 @@ function sanitizeText(text) {
 
 // AI text generation endpoint
 app.post('/api/generate', async (req, res) => {
-  if (!OPENROUTER_API_KEY || !systemPrompt) {
+  if (!API_KEY || !systemPrompt) {
     return res.status(503).json({ error: 'AI generation not configured' });
   }
 
@@ -97,14 +112,17 @@ app.post('/api/generate', async (req, res) => {
   const startTime = Date.now();
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const headers = {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    if (useOpenRouter) {
+      headers['HTTP-Referer'] = 'https://khimki-complaint.app';
+      headers['X-Title'] = 'Khimki Complaint Generator';
+    }
+    const response = await fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://khimki-complaint.app',
-        'X-Title': 'Khimki Complaint Generator'
-      },
+      headers,
       body: JSON.stringify({
         model: currentModel,
         messages: [
@@ -118,7 +136,7 @@ app.post('/api/generate', async (req, res) => {
 
     if (!response.ok) {
       const err = await response.text();
-      console.error(`❌ OpenRouter API error (${response.status}):`, err);
+      console.error(`❌ ${API_NAME} API error (${response.status}):`, err);
       return res.status(502).json({ error: 'AI service error' });
     }
 
@@ -139,7 +157,7 @@ app.post('/api/generate', async (req, res) => {
 
     res.json({ text, model: currentModel });
   } catch (err) {
-    console.error('❌ OpenRouter request failed:', err.message);
+    console.error(`❌ ${API_NAME} request failed:`, err.message);
     res.status(502).json({ error: 'AI service unavailable' });
   }
 });
@@ -147,6 +165,6 @@ app.post('/api/generate', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 Model: ${currentModel}`);
-  console.log(`🔑 OpenRouter API: ${OPENROUTER_API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY)'}`);
+  console.log(`🔑 ${API_NAME} API: ${API_KEY ? 'configured' : 'NOT configured (set OPENROUTER_API_KEY or GROQ_API_KEY)'}`);
   console.log(`📋 Available models: ${AVAILABLE_MODELS.map(m => m.id).join(', ')}\n`);
 });
