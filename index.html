@@ -946,9 +946,10 @@ function regen(){
 async function regenAI(){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=(elN?elN.value.trim():savedName)||'[ФИО]';
+  const name=elN?elN.value.trim():savedName;
   const elA=document.getElementById('apt');
-  const apt=(elA?elA.value.trim():savedApt)||'[кв.]';
+  const apt=elA?elA.value.trim():savedApt;
+  if(!name||!apt){showFieldsModal(!name,!apt);return false;}
 
   const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
   if(!problems.length) return false;
