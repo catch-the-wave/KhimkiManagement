@@ -1304,7 +1304,7 @@ function showPrivacyModal(){
       <span style="flex-shrink:0">🔒</span>
       <span>Мы не сохраняем данные. Они только в тексте письма.</span>
     </div>
-    <button class="btn btn-send" onclick="closeModal()" style="width:100%;margin-bottom:16px;padding:14px;font-size:15px">Указать ФИО</button>
+    <button class="btn btn-send" onclick="closeModalAndFocusFields()" style="width:100%;margin-bottom:16px;padding:14px;font-size:15px">← Указать данные</button>
     <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
       <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--muted);line-height:1.5" onclick="event.stopPropagation()">
         <input type="checkbox" id="skip-personal-cb" onchange="toggleSkipPersonal()" style="margin-top:2px;flex-shrink:0;width:16px;height:16px">
@@ -1318,6 +1318,27 @@ function showPrivacyModal(){
   if(modalActions) modalActions.style.display='none';
   document.getElementById('modal-overlay').classList.add('show');
   document.getElementById('send-modal').classList.add('show');
+}
+
+function closeModalAndFocusFields(){
+  closeModal();
+  const elN = document.getElementById('fullname');
+  const elA = document.getElementById('apt');
+  const nameEmpty = !elN || !elN.value.trim();
+  const aptEmpty = !elA || !elA.value.trim();
+  // Highlight empty fields
+  [elN, elA].forEach(el => {
+    if(!el) return;
+    const isEmpty = !el.value.trim();
+    if(isEmpty) {
+      el.style.borderColor = 'var(--primary)';
+      el.style.boxShadow = '0 0 0 3px var(--primary-glow)';
+      setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
+    }
+  });
+  // Focus first empty field
+  const target = nameEmpty ? elN : (aptEmpty ? elA : elN);
+  if(target) setTimeout(() => target.focus(), 300);
 }
 
 function toggleSkipPersonal(){
