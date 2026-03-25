@@ -660,10 +660,10 @@ function updateWizardNav() {
     ba.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:8px;width:100%">
         <div style="display:flex;gap:8px;align-items:center">
-          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()" onblur="substituteNameInText()"></div>
-          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
+          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()" onfocus="onNameFocus()" onblur="onNameBlur()"></div>
+          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()" onfocus="onNameFocus()" onblur="onNameBlur()"></div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div id="ba-btns" style="display:flex;gap:8px;align-items:center">
           <button class="btn btn-ghost" style="flex:none;padding:10px 14px;font-size:13px;border-radius:10px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё вариант</button>
           <button class="btn btn-send" style="flex:1;padding:10px 14px;font-size:13px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
         </div>
@@ -774,6 +774,27 @@ function dUpd(){
   if(a) localStorage.setItem('kh_apt', a.value);
   // Reset skip if user starts filling in data
   if((n && n.value.trim()) || (a && a.value.trim())) skipPersonalData = false;
+}
+
+let _nameFocusTimer;
+function onNameFocus(){
+  clearTimeout(_nameFocusTimer);
+  const btns=document.getElementById('ba-btns');
+  if(!btns||!curText) return;
+  btns.innerHTML=`<button class="btn btn-send" style="flex:1;padding:10px 14px;font-size:13px;border-radius:10px" onclick="regenWithName()">🔄 Обновить текст</button>`;
+}
+function onNameBlur(){
+  _nameFocusTimer=setTimeout(()=>{
+    const f=document.activeElement;
+    const n=document.getElementById('fullname');
+    const a=document.getElementById('apt');
+    if(f===n||f===a) return;
+    updateWizardNav();
+  },150);
+}
+function regenWithName(){
+  if(document.activeElement) document.activeElement.blur();
+  regenAI(true).then(ok=>{if(!ok){seed++;upd();}});
 }
 
 function substituteNameInText(){
