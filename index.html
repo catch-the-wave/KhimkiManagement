@@ -86,8 +86,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .chip.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
 .chip .ck{display:none}
 .chip.selected .ck{display:inline}
-.sel-ctrls{display:flex;gap:12px;margin-bottom:10px}
-.sel-ctrls button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit}
 
 /* Form */
 .form-row{display:flex;gap:8px;margin-bottom:8px}
@@ -390,8 +388,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
       </div>
       <div class="card">
-        <div class="card-title">Чем вы недовольны?</div>
-        <div class="sel-ctrls"><button id="sel-toggle-btn" onclick="toggleSelAll()">Выбрать все</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="card-title" style="margin-bottom:0">Чем вы недовольны?</div>
+          <button id="sel-toggle-btn" onclick="toggleSelAll()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit">Выбрать все</button>
+        </div>
         <div class="chips" id="chips"></div>
       </div>
       <div id="text-card" class="card" style="display:none;margin-top:8px">
