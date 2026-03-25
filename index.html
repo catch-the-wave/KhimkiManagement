@@ -1155,13 +1155,9 @@ function regen(){
 async function regenAI(silent){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=(elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '');
+  const name=(elN?elN.value.trim():savedName) || 'Жилец дома';
   const elA=document.getElementById('apt');
   const apt=(elA?elA.value.trim():savedApt) || '';
-  if(!name && !skipPersonalData){
-    if(!silent) showPrivacyModal();
-    return false;
-  }
 
   const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
   if(!problems.length) return false;
