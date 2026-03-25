@@ -279,6 +279,10 @@ app.post('/api/generate', async (req, res) => {
 
     text = sanitizeText(text);
 
+    // Replace date placeholders the model might generate
+    const today = new Date().toLocaleDateString('ru-RU');
+    text = text.replace(/\[Текущая дата\]|\[дата\]|\[DATE\]|\[Дата\]/gi, today);
+
     res.json({ text, model: currentModel });
   } catch (err) {
     console.error(`❌ ${API_NAME} request failed:`, err.message);

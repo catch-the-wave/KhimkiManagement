@@ -1032,7 +1032,7 @@ function gen() {
   };
 
   const probs = PROB_IDS.filter(id => sel.has(id));
-  const isShort = rng() > 0.5;
+  const isShort = length === 'short';
 
   if (isShort) {
     // ---- SHORT format: compact, problems as bullet list in 1-2 paragraphs ----
