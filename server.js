@@ -198,7 +198,7 @@ app.post('/api/generate', async (req, res) => {
     return res.status(503).json({ error: 'AI generation not configured' });
   }
 
-  const { name, apt, problems, tone, dest, length } = req.body;
+  const { name, apt, problems, tone, dest, length, building } = req.body;
   if (!name || !problems || !problems.length) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
@@ -226,8 +226,9 @@ app.post('/api/generate', async (req, res) => {
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
     `Получатель: ${destNames[dest] || destNames.uk}`,
     `Объём: ${lengthCfg.instruction}`,
-    `Проблемы: ${problems.join(', ')}`
-  ].join('\n');
+    `Проблемы: ${problems.join(', ')}`,
+    building && building !== '5' ? `Важно: жилец из дома ${building} (ул. Совхозная, д. ${building}), а не из дома 5` : null
+  ].filter(Boolean).join('\n');
 
   console.log('\n' + '='.repeat(60));
   console.log(`📤 AI REQUEST | Model: ${currentModel}`);

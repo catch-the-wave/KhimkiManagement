@@ -409,6 +409,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         </div>
         <div id="model-badge" style="display:none"></div>
         <div id="carea"></div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:8px;cursor:pointer">
+          <input type="checkbox" id="chk-dom3" onchange="onDom3Change(this.checked)" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer">
+          Я из дома 3
+        </label>
         <div id="name-hint" style="display:none;text-align:center;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--primary);background:var(--primary-light);border-radius:10px;line-height:1.5">
           👇 Укажите ФИО внизу — оно автоматически подставится в текст
         </div>
@@ -595,7 +599,8 @@ let dest = 'uk';
 let tone = 'informal';
 let length = 'short';
 let curText = '';
-let nameInText = 'Жилец дома'; // имя которое сейчас стоит в тексте
+let nameInText = 'Жилец дома';
+let fromDom3 = false; // имя которое сейчас стоит в тексте
 let seed = Math.floor(Math.random() * 1000000);
 
 
@@ -795,6 +800,10 @@ function onNameBlur(){
 }
 function regenWithName(){
   if(document.activeElement) document.activeElement.blur();
+  regenAI(true).then(ok=>{if(!ok){seed++;upd();}});
+}
+function onDom3Change(checked){
+  fromDom3=checked;
   regenAI(true).then(ok=>{if(!ok){seed++;upd();}});
 }
 
@@ -1173,6 +1182,7 @@ function gen() {
 
   const date = new Date().toLocaleDateString('ru-RU');
   t += `${date}\n${name}`;
+  if(fromDom3) t = t.replaceAll('д. 5', 'д. 3');
   return t;
 }
 
@@ -1260,7 +1270,7 @@ async function regenAI(silent){
     const res=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name,apt,problems,tone,dest,length})
+      body:JSON.stringify({name,apt,problems,tone,dest,length,building:fromDom3?'3':'5'})
     });
     console.log('[AI] Response status:',res.status);
     if(!res.ok) return false;
