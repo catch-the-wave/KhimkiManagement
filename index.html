@@ -595,6 +595,7 @@ let dest = 'uk';
 let tone = 'informal';
 let length = 'short';
 let curText = '';
+let nameInText = 'Жилец дома'; // имя которое сейчас стоит в тексте
 let seed = Math.floor(Math.random() * 1000000);
 
 
@@ -659,7 +660,7 @@ function updateWizardNav() {
     ba.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:8px;width:100%">
         <div style="display:flex;gap:8px;align-items:center">
-          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
+          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()" onblur="substituteNameInText()"></div>
           <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
@@ -773,6 +774,19 @@ function dUpd(){
   if(a) localStorage.setItem('kh_apt', a.value);
   // Reset skip if user starts filling in data
   if((n && n.value.trim()) || (a && a.value.trim())) skipPersonalData = false;
+}
+
+function substituteNameInText(){
+  if(!curText || !nameInText) return;
+  const n=document.getElementById('fullname');
+  const newName=(n?n.value.trim():savedName)||'Жилец дома';
+  if(newName===nameInText) return;
+  const updated=curText.replaceAll(nameInText, newName);
+  if(updated===curText) return;
+  curText=updated;
+  nameInText=newName;
+  const ta=document.getElementById('complaint-ta');
+  if(ta) ta.value=curText;
 }
 
 // ====== SOCIAL COUNTER ======
@@ -1232,6 +1246,7 @@ async function regenAI(silent){
     if(!data.text) return false;
 
     curText=data.text;
+    nameInText=name; // запоминаем какое имя сейчас в тексте
     if(area){
       area.style.opacity='0';
       area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
