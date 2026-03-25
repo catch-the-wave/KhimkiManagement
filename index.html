@@ -683,6 +683,7 @@ function updateWizardNav() {
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
     if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='flex'; }
+    syncNextBtn();
   } else {
     ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
   }
