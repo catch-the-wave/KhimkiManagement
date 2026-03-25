@@ -789,6 +789,7 @@ function onNameBlur(){
     const n=document.getElementById('fullname');
     const a=document.getElementById('apt');
     if(f===n||f===a) return;
+    window.scrollTo(0,0);
     updateWizardNav();
   },150);
 }
