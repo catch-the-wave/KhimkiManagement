@@ -1259,6 +1259,7 @@ function upd() {
   regenAI(true).then(ok=>{
     if(!ok){
       // Fallback to local template
+      track('ai_failed', { problems_count: sel.size, reason: 'api_error' });
       curText = gen();
       area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
       requestAnimationFrame(fitTextarea);
@@ -1267,6 +1268,7 @@ function upd() {
     resetButtons();
     syncNameHint();
   }).catch(()=>{
+    track('ai_failed', { problems_count: sel.size, reason: 'exception' });
     curText = gen();
     area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
     requestAnimationFrame(fitTextarea);
