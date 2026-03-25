@@ -400,7 +400,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
       </div>
       <div class="card">
-        <div style="font-size:17px;font-weight:700;margin-bottom:4px" class="mobile-only">Что не работает в доме?</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:4px" class="mobile-only">Чем вы недовольны?</div>
         <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5" class="mobile-only">Отметьте — текст обращения сформируется сам</div>
         <div class="card-title desktop-only">Чем вы недовольны?</div>
         <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
@@ -408,16 +408,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       </div>
 
       <div id="text-card" class="card" style="display:none;margin-top:8px">
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
-          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
-          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-tone="informal" onclick="setTone(this)">Неформальный</button>
-            <button class="tone-btn" data-tone="formal" onclick="setTone(this)">Формальный</button>
-          </div>
-        </div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
           <div class="tone-switch" id="length-switch" style="flex:1;margin:0">
             <button class="tone-btn active" data-length="short" onclick="setLength(this)">Коротко</button>
@@ -668,9 +658,15 @@ function updateWizardNav() {
   if(!ba) return;
   if(currentStep === 1) {
     ba.innerHTML = `
-      <div style="display:flex;gap:8px;align-items:center;width:100%">
-        <button class="btn btn-ghost" style="flex:none;padding:10px 14px;font-size:13px;border-radius:10px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё вариант</button>
-        <button class="btn btn-send" style="flex:1;padding:12px 14px;font-size:14px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="field" style="flex:7;margin:0"><input type="text" id="fullname" placeholder="ФИО" style="padding:9px 10px;font-size:13px;border-radius:8px" oninput="dUpd()" value="${savedName}"></div>
+          <div class="field" style="flex:3;margin:0"><input type="text" id="apt" placeholder="Кв." inputmode="numeric" style="padding:9px 10px;font-size:13px;border-radius:8px" oninput="dUpd()" value="${savedApt}"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost" style="flex:none;padding:10px 14px;font-size:13px;border-radius:10px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё вариант</button>
+          <button class="btn btn-send" style="flex:1;padding:12px 14px;font-size:14px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+        </div>
       </div>`;
     if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='flex'; }
     syncNextBtn();
