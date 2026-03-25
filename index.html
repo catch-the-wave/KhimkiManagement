@@ -593,6 +593,7 @@ let seed = Math.floor(Math.random() * 1000000);
 let currentStep = 1;
 let savedName = '';
 let savedApt = '';
+let skipPersonalData = false;
 
 function showStep(n) {
   [1,2].forEach(i => {
@@ -616,9 +617,7 @@ function showStep(n) {
 }
 
 function canGoNext(){
-  const n=document.getElementById('fullname');
-  const a=document.getElementById('apt');
-  return sel.size>0 && (!n||n.value.trim()!=='') && (!a||a.value.trim()!=='');
+  return sel.size>0;
 }
 function syncNextBtn(){const b=document.getElementById('btn-step-next');if(b)b.disabled=!canGoNext();}
 function updateWizardNav() {
@@ -630,17 +629,19 @@ function updateWizardNav() {
   const prevApt  = elA ? elA.value : savedApt;
   if(currentStep === 1) {
     ba.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-        <div style="display:flex;gap:6px;align-items:center">
-          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="field" style="flex:1"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
           <div class="field" style="flex:0 0 64px"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
-          <button class="btn btn-ghost" style="flex:none;width:40px;height:40px;padding:0;font-size:16px;display:none;border-radius:10px" id="btn-regen" onclick="regen()" title="Другой вариант">🔄</button>
-          <button class="btn btn-send" style="flex:none;padding:10px 20px;font-size:14px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost" style="flex:none;padding:10px 14px;font-size:13px;border-radius:10px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё вариант</button>
+          <button class="btn btn-send" style="flex:1;padding:12px 20px;font-size:15px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
         </div>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
-    if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='block'; }
+    if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='flex'; }
   } else {
     ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
   }
@@ -650,9 +651,18 @@ function goNext() {
   if(document.activeElement) document.activeElement.blur();
   if(currentStep === 1) {
     if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
-    if(!validateFields()) return;
-    savedName = document.getElementById('fullname').value.trim();
-    savedApt = document.getElementById('apt').value.trim();
+    const elN = document.getElementById('fullname');
+    const elA = document.getElementById('apt');
+    const name = elN ? elN.value.trim() : savedName;
+    const apt = elA ? elA.value.trim() : savedApt;
+    if((!name || !apt) && !skipPersonalData) {
+      showPrivacyModal();
+      return;
+    }
+    savedName = name;
+    savedApt = apt;
+    if(savedName) localStorage.setItem('kh_name', savedName);
+    if(savedApt) localStorage.setItem('kh_apt', savedApt);
     if(curText) clipCopy(textWithHeader('uk'));
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
@@ -715,6 +725,8 @@ function dUpd(){
   const a=document.getElementById('apt');
   if(n) localStorage.setItem('kh_name', n.value);
   if(a) localStorage.setItem('kh_apt', a.value);
+  // Reset skip if user starts filling in data
+  if((n && n.value.trim()) || (a && a.value.trim())) skipPersonalData = false;
 }
 
 // ====== SOCIAL COUNTER ======
@@ -737,21 +749,13 @@ function updateCounterUI(n){
 const SUBJ = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
 
 function validateFields(){
+  if(skipPersonalData) return true;
   const el=document.getElementById('fullname');
   const name=el?el.value.trim():savedName;
   const elA=document.getElementById('apt');
   const apt=elA?elA.value.trim():savedApt;
   if(!name||!apt){
-    const target=!name&&el?el:(!apt&&elA?elA:null);
-    if(target){
-      setTimeout(()=>{
-        target.scrollIntoView({behavior:'smooth',block:'center'});
-        target.focus();
-      },150);
-      toast(!name?'Укажите ФИО':'Укажите номер квартиры');
-    } else {
-      showFieldsModal(!name,!apt);
-    }
+    showPrivacyModal();
     return false;
   }
   return true;
@@ -1006,14 +1010,20 @@ function seededRand(s) {
 function gen() {
   if (sel.size === 0) return '';
   const elN = document.getElementById('fullname');
-  const name = (elN?elN.value.trim():savedName) || '[ФИО]';
+  const name = (elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '[ФИО]');
   const elA = document.getElementById('apt');
-  const apt  = (elA?elA.value.trim():savedApt) || '[кв.]';
+  const apt  = (elA?elA.value.trim():savedApt) || (skipPersonalData ? '' : '[кв.]');
   const isUK = dest === 'uk';
   const isFormal = tone === 'formal';
   const tmpl = T[tone];
   const rng = seededRand(seed);
   const pick = arr => arr[Math.floor(rng() * arr.length)];
+  // Clean up apartment references when apt is empty
+  const fillTpl = s => {
+    let r = s.replace('{n}',name).replace('{a}',apt);
+    if(!apt) r = r.replace(/,?\s*кв\.?\s*/g, ' ').replace(/квартиры?\s*/g, 'дома ').replace(/\s{2,}/g,' ').trim();
+    return r;
+  };
 
   const probs = PROB_IDS.filter(id => sel.has(id));
   const isShort = rng() > 0.5;
@@ -1021,7 +1031,7 @@ function gen() {
   if (isShort) {
     // ---- SHORT format: compact, problems as bullet list in 1-2 paragraphs ----
     let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
-    t += pick(tmpl.short_open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+    t += fillTpl(pick(tmpl.short_open)) + '\n\n';
     t += pick(isUK ? tmpl.short_uk_intro : tmpl.short_gov_intro) + '\n';
 
     // Combine problems into a compact list
@@ -1047,7 +1057,7 @@ function gen() {
 
   // ---- LONG format (original) ----
   let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
-  t += pick(tmpl.open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+  t += fillTpl(pick(tmpl.open)) + '\n\n';
   t += pick(isUK ? tmpl.uk_intro : tmpl.gov_intro) + '\n\n';
 
   // Build problem paragraphs with connectors
@@ -1095,7 +1105,7 @@ function upd() {
   }
 
   if(tc) tc.style.display='block';
-  if(regenBtn) regenBtn.style.display='block';
+  if(regenBtn) regenBtn.style.display='flex';
   curText = gen();
   area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
   requestAnimationFrame(fitTextarea);
@@ -1124,13 +1134,11 @@ function regen(){
 async function regenAI(){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=elN?elN.value.trim():savedName;
+  const name=(elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '');
   const elA=document.getElementById('apt');
-  const apt=elA?elA.value.trim():savedApt;
-  if(!name||!apt){
-    const target=!name&&elN?elN:(!apt&&elA?elA:null);
-    if(target){setTimeout(()=>{target.scrollIntoView({behavior:'smooth',block:'center'});target.focus();},150);toast(!name?'Укажите ФИО':'Укажите номер квартиры');}
-    else showFieldsModal(!name,!apt);
+  const apt=(elA?elA.value.trim():savedApt) || '';
+  if(!name && !skipPersonalData){
+    showPrivacyModal();
     return false;
   }
 
@@ -1138,15 +1146,11 @@ async function regenAI(){
   if(!problems.length) return false;
 
   const btn=document.querySelector('[onclick="regen()"]');
-  if(btn){btn.disabled=true;btn.textContent='⏳ 0с';}
+  if(btn){btn.disabled=true;btn.textContent='⏳';}
 
   // Show skeleton loader
   const area=document.getElementById('carea');
   if(area) area.innerHTML=`<div class="skeleton-loading">${'<div class="skeleton-line"></div>'.repeat(7)}<div class="skeleton-status">ИИ пишет жалобу…</div></div>`;
-
-  // Timer on button
-  let sec=0;
-  const timer=setInterval(()=>{sec++;if(btn)btn.textContent='⏳ '+sec+'с';},1000);
 
   try{
     console.log('[AI] Requesting generation...',{name,apt,problems:problems.length,tone,dest});
@@ -1174,8 +1178,7 @@ async function regenAI(){
     console.log('[AI] Error:',e);
     return false;
   }finally{
-    clearInterval(timer);
-    if(btn){btn.disabled=false;btn.textContent='🔄';}
+    if(btn){btn.disabled=false;btn.textContent='🔄 Ещё вариант';}
   }
 }
 function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1197,17 +1200,7 @@ function resetButtons(){
 
 function copyAndShow(){
   if(!curText)return;
-  // Check required fields
-  const el=document.getElementById('fullname');
-  const name = el?el.value.trim():savedName;
-  const elA=document.getElementById('apt');
-  const apt  = elA?elA.value.trim():savedApt;
-  if(!name || !apt){
-    const target=!name&&el?el:(!apt&&elA?elA:null);
-    if(target){setTimeout(()=>{target.scrollIntoView({behavior:'smooth',block:'center'});target.focus();},150);toast(!name?'Укажите ФИО':'Укажите номер квартиры');}
-    else showFieldsModal(!name, !apt);
-    return;
-  }
+  if(!validateFields()) return;
   clipCopy(curText).then(()=>{
     // Show "Send" button after copy
     const bcopy = document.getElementById('bcopy');
@@ -1274,6 +1267,8 @@ function showSendModal(type){
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('show');
   document.getElementById('send-modal').classList.remove('show');
+  const modalActions = document.querySelector('#send-modal .modal-actions');
+  if(modalActions) modalActions.style.display='';
 }
 
 function getNextDest(){
@@ -1287,20 +1282,48 @@ function selectDest(d){
   if(btn) setD(btn);
 }
 
-function showFieldsModal(noName, noApt){
+function showPrivacyModal(){
   const title = document.getElementById('modal-title');
   const steps = document.getElementById('modal-steps');
   const nd = document.getElementById('modal-next-dest');
   const shareBtn = document.getElementById('modal-share-btn');
   shareBtn.style.display='none';
   nd.innerHTML='';
-  title.textContent='Заполните данные';
-  let items='';
-  if(noName) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите ФИО</b>Без имени жалоба не будет принята</div></div>`;
-  if(noApt) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите квартиру</b>Номер квартиры обязателен</div></div>`;
-  steps.innerHTML=items;
+  title.innerHTML='Осталось подписать ✍️';
+  steps.innerHTML=`
+    <div style="font-size:13px;line-height:1.6;color:var(--text);margin-bottom:14px">
+      Анонимные обращения часто игнорируют. С вашим именем и квартирой жалобу <b>обязаны рассмотреть</b> по закону.
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;display:flex;align-items:flex-start;gap:6px">
+      <span style="flex-shrink:0">🔒</span>
+      <span>Мы не сохраняем данные. Они только в тексте письма.</span>
+    </div>
+    <button class="btn btn-send" onclick="closeModal()" style="width:100%;margin-bottom:12px;padding:14px;font-size:15px">Указать ФИО</button>
+    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--muted);line-height:1.5" onclick="event.stopPropagation()">
+        <input type="checkbox" id="skip-personal-cb" onchange="toggleSkipPersonal()" style="margin-top:2px;flex-shrink:0;width:16px;height:16px">
+        <span>Не хочу указывать свои данные</span>
+      </label>
+      <button class="btn" id="btn-skip-personal" onclick="confirmSkipPersonal()" disabled style="width:100%;margin-top:8px;padding:10px;font-size:13px;background:var(--bg);color:var(--muted);border:1px solid var(--border)">Продолжить без подписи</button>
+    </div>
+  `;
+  // Hide the default close button
+  const modalActions = document.querySelector('#send-modal .modal-actions');
+  if(modalActions) modalActions.style.display='none';
   document.getElementById('modal-overlay').classList.add('show');
   document.getElementById('send-modal').classList.add('show');
+}
+
+function toggleSkipPersonal(){
+  const cb = document.getElementById('skip-personal-cb');
+  const btn = document.getElementById('btn-skip-personal');
+  if(btn) btn.disabled = !cb.checked;
+}
+
+function confirmSkipPersonal(){
+  skipPersonalData = true;
+  closeModal();
+  goNext();
 }
 
 function shareWithNeighbor(){
