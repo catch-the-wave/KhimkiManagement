@@ -142,6 +142,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .tone-switch{display:flex;gap:3px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:10px}
 .tone-btn{flex:1;padding:7px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
 .tone-btn.active{background:var(--tone-active-bg);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.picker-select{flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;background:var(--bg);color:var(--text);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 
 /* Toast */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--toast-bg);color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:200;opacity:0;transition:opacity .25s,transform .25s;white-space:normal;text-align:center;max-width:90vw;pointer-events:none}
@@ -385,7 +386,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div id="step-1">
       <div class="hook-bar">
         <div class="hook-bar-title">Не нужно ничего писать самому</div>
-        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
+        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически.</div>
       </div>
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -395,18 +396,16 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div class="chips" id="chips"></div>
       </div>
       <div id="text-card" class="card" style="display:none;margin-top:8px">
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
-          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-tone="informal" onclick="setTone(this)">Неформальный</button>
-            <button class="tone-btn" data-tone="formal" onclick="setTone(this)">Формальный</button>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
-          <div class="tone-switch" id="length-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-length="short" onclick="setLength(this)">Коротко</button>
-            <button class="tone-btn" data-length="medium" onclick="setLength(this)">Обычно</button>
-            <button class="tone-btn" data-length="long" onclick="setLength(this)">Подробно</button>
-          </div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <select id="tone-select" class="picker-select" onchange="setTone(this)">
+            <option value="informal">Неформальный</option>
+            <option value="formal">Формальный</option>
+          </select>
+          <select id="length-select" class="picker-select" onchange="setLength(this)">
+            <option value="short">Коротко</option>
+            <option value="medium">Обычно</option>
+            <option value="long">Подробно</option>
+          </select>
         </div>
         <div id="model-badge" style="display:none"></div>
         <div id="carea"></div>
@@ -619,8 +618,8 @@ function showStep(n) {
   updateWizardNav();
   window.scrollTo(0,0);
   if (n === 1) {
-    document.querySelectorAll('#tone-switch .tone-btn').forEach(b => b.classList.toggle('active', b.dataset.tone === tone));
-    document.querySelectorAll('#length-switch .tone-btn').forEach(b => b.classList.toggle('active', b.dataset.length === length));
+    const ts=document.getElementById('tone-select'); if(ts) ts.value=tone;
+    const ls=document.getElementById('length-select'); if(ls) ls.value=length;
     requestAnimationFrame(fitTextarea);
   }
   if (n === 2) renderS3Preview();
@@ -1008,19 +1007,15 @@ function toggleSelAll(){
 }
 
 // ====== TONE ======
-function setTone(btn){
-  document.querySelectorAll('#tone-switch .tone-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  tone=btn.dataset.tone;
+function setTone(el){
+  tone=el.value;
   seed++;
   regenOnSwitch();
 }
 
 // ====== LENGTH ======
-function setLength(btn){
-  document.querySelectorAll('#length-switch .tone-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  length=btn.dataset.length;
+function setLength(el){
+  length=el.value;
   seed++;
   regenOnSwitch();
 }
