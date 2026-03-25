@@ -304,6 +304,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .theme-switch input:checked+.theme-slider{background:var(--primary)}
 .theme-switch input:checked+.theme-slider::before{transform:translateX(20px)}
 </style>
+<!-- PostHog analytics (loaded after key fetch) -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init be br ca cap ce clear_opt_in_out_capturing debug disable_scroll disable_session_recording enable_heatmaps enable_recording_console_log fl get_config get_distinct_id get_early_access_features getEarlyAccessFeatures get_property get_session_id get_session_replay_url group groupIdentify has_opted_in_capturing has_opted_out_capturing identify init isFeatureEnabled load_toolbar onFeatureFlags opt_in_capturing opt_out_capturing page reloadFeatureFlags remove_event_property reset screen set_config setPersonProperties set_person_properties set_session_property startSessionRecording stop_session_recording stopSessionRecording unregister unregister_for_session unregister_event_property updateEarlyAccessFeatureEnrollment".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+</script>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
@@ -602,6 +606,25 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 <script src="texts.js"></script>
 <script>
 
+// ====== POSTHOG ANALYTICS ======
+(async function initAnalytics() {
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    if (cfg.posthogKey) {
+      posthog.init(cfg.posthogKey, {
+        api_host: 'https://us.i.posthog.com',
+        person_profiles: 'never',
+        autocapture: false,
+        capture_pageview: true,
+      });
+    }
+  } catch(e) {}
+})();
+
+function track(event, props) {
+  try { if(window.posthog && posthog.capture) posthog.capture(event, props); } catch(e) {}
+}
+
 const PROB_IDS = Object.keys(P);
 const sel = new Set();
 let dest = 'admin'; // текст уходит в 3 инстанции — используем gov_intro (нейтральный)
@@ -708,6 +731,7 @@ function goNext() {
     if(savedName) localStorage.setItem('kh_name', savedName);
     if(savedApt) localStorage.setItem('kh_apt', savedApt);
     if(curText) clipCopy(textWithHeader('uk'));
+    track('step2_reached', { problems: [...sel], problems_count: sel.size, tone, length });
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
   }
@@ -906,6 +930,7 @@ function sendAll(){
   const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
   window.location.href=`mailto:${emails}?subject=${SUBJ}`;
   incrementCounter();
+  track('complaint_sent', { method: 'email', dest: 'all_3', problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
 }
 
@@ -918,6 +943,7 @@ function openEmail(email, destKey){
 function openPortal(url, destKey){
   if(!curText)return;
   clipCopy(textWithHeader(destKey)).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
+  track('complaint_sent', { method: 'portal', dest: destKey, problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>window.open(url,'_blank'),150);
 }
 
@@ -1301,6 +1327,7 @@ async function regenAI(silent){
     requestAnimationFrame(fitTextarea);
     // Highlight empty fields to prompt user to fill them
     highlightEmptyFields();
+    track('ai_generated', { problems: [...sel], problems_count: sel.size, tone, length, model: data.model });
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){

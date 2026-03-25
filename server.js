@@ -195,6 +195,10 @@ function saveStats() {
   try { fs.writeFileSync(STATS_FILE, JSON.stringify(statsData)); } catch {}
 }
 
+app.get('/api/config', (req, res) => {
+  res.json({ posthogKey: process.env.POSTHOG_KEY || '' });
+});
+
 app.get('/api/stats', (req, res) => res.json(statsData));
 
 app.post('/api/stats/hit', (req, res) => {
