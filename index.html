@@ -628,7 +628,26 @@ function showStep(n) {
 function canGoNext(){
   return sel.size>0;
 }
-function syncNextBtn(){const b=document.getElementById('btn-step-next');if(b)b.disabled=!canGoNext();}
+function hasPersonalData(){
+  const n=document.getElementById('fullname');
+  return (n && n.value.trim()!=='') || savedName!=='';
+}
+function syncNextBtn(){
+  const b=document.getElementById('btn-step-next');
+  if(!b) return;
+  b.disabled=!canGoNext();
+  if(hasPersonalData()){
+    b.className='btn btn-send';
+    b.style.background='';
+    b.style.color='';
+    b.style.border='';
+  } else {
+    b.className='btn';
+    b.style.background='var(--bg)';
+    b.style.color='var(--muted)';
+    b.style.border='1.5px solid var(--border)';
+  }
+}
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
