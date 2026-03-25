@@ -199,7 +199,7 @@ app.post('/api/generate', async (req, res) => {
   }
 
   const { name, apt, problems, tone, dest, length } = req.body;
-  if (!name || !apt || !problems || !problems.length) {
+  if (!name || !problems || !problems.length) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -220,7 +220,7 @@ app.post('/api/generate', async (req, res) => {
 
   const userMessage = [
     `ФИО: ${name}`,
-    `Квартира: ${apt}`,
+    apt ? `Квартира: ${apt}` : 'Квартира: не указана',
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
     `Получатель: ${destNames[dest] || destNames.uk}`,
     `Объём: ${lengthCfg.instruction}`,
