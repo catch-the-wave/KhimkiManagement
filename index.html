@@ -481,22 +481,29 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       <div class="track-card">
         <div class="dest-row">
           <div class="dest-row-info">
-            <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
-            <div class="dest-row-sub">Если отметить «не решено» — уходит на спецконтроль. Самое сильное давление на администрацию.</div>
+            <div class="dest-row-name">Добродел</div>
+            <div class="dest-row-sub">Если отметить «не решено» — уходит на спецконтроль.<br>Самое сильное давление на администрацию.</div>
           </div>
           <button class="btn-open" onclick="openPortal('https://vmeste.mosreg.ru','admin')">Открыть →</button>
         </div>
         <div class="dest-row">
           <div class="dest-row-info">
-            <div class="dest-row-name">ЕДС МО<span class="p-badge fast">24 часа</span></div>
-            <div class="dest-row-sub">Напрямую в УО через единую диспетчерскую МО. Самый быстрый ответ.</div>
+            <div class="dest-row-name">Госжилинспекция МО<span class="p-badge legal">Самый сильный рычаг</span></div>
+            <div class="dest-row-sub">Единственный орган, который может лишить УО лицензии.<br>Только через портал.</div>
+          </div>
+          <button class="btn-open" onclick="openPortal('https://mosreg.ru/web-reception?modal=1&ov=40','ministry')">Открыть →</button>
+        </div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ЕДС МО</div>
+            <div class="dest-row-sub">Напрямую в УО через единую диспетчерскую МО.<br>Самый быстрый ответ.</div>
           </div>
           <button class="btn-open" onclick="openPortal('https://eds.mosreg.ru/claims','uk')">Открыть →</button>
         </div>
         <div class="dest-row">
           <div class="dest-row-info">
-            <div class="dest-row-name">ГИС ЖКХ<span class="p-badge legal">Для суда</span></div>
-            <div class="dest-row-sub">Федеральный уровень. Жалоба — официальное юридическое доказательство для суда. Действия → Обращение → Адресат: ГЖИ МО.</div>
+            <div class="dest-row-name">ГИС ЖКХ</div>
+            <div class="dest-row-sub">Жалоба на федеральном уровне — юридическое доказательство для суда.<br>Действия → Обращение → Адресат: ГЖИ МО.</div>
           </div>
           <button class="btn-open" onclick="openPortal('https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true','gis')">Открыть →</button>
         </div>
@@ -529,6 +536,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       <a class="portal-link" href="https://vmeste.mosreg.ru" target="_blank"><span class="pi">🏛️</span><div><div class="pn">Добродел</div><div class="pd">vmeste.mosreg.ru — 8 дней</div></div></a>
       <a class="portal-link" href="https://eds.mosreg.ru/claims" target="_blank"><span class="pi">🔧</span><div><div class="pn">ЕДС МО</div><div class="pd">eds.mosreg.ru — напрямую в УО</div></div></a>
       <a class="portal-link" href="https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true" target="_blank"><span class="pi">🏠</span><div><div class="pn">ГИС ЖКХ</div><div class="pd">dom.gosuslugi.ru — для суда</div></div></a>
+      <a class="portal-link" href="https://mosreg.ru/web-reception?modal=1&ov=40" target="_blank"><span class="pi">🏛️</span><div><div class="pn">ГЖИ МО</div><div class="pd">mosreg.ru — веб-приёмная, ~10 минут</div></div></a>
       <a class="portal-link" href="tel:84955737788"><span class="pi">📞</span><div><div class="pn">Глава г. Химки</div><div class="pd">8 (495) 573-77-88</div></div></a>
     </div>
     <div class="card">
@@ -731,7 +739,6 @@ function goNext() {
     if(savedName) localStorage.setItem('kh_name', savedName);
     if(savedApt) localStorage.setItem('kh_apt', savedApt);
     if(curText) clipCopy(textWithHeader('uk'));
-    track('data_entered', { skipped: false });
     track('step2_reached', { problems: [...sel], problems_count: sel.size, tone, length });
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
@@ -926,19 +933,18 @@ function textWithHeader(destKey) {
 
 function sendAll(){
   if(!curText||!validateFields())return;
-  const allHeader = 'В УО «Континент Комфорта», Управление ЖКХ г.о. Химки,\nМинистерство по содержанию территорий и гос. жилищному надзору МО';
+  const allHeader = 'В УО «Континент Комфорта», Управление ЖКХ г.о. Химки';
   clipCopy(allHeader + '\n\n' + curText);
-  const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
+  const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru';
   window.location.href=`mailto:${emails}?subject=${SUBJ}`;
   incrementCounter();
-  track('complaint_sent', { method: 'email', dest: 'all_3', problems: [...sel], problems_count: sel.size, tone, length });
+  track('complaint_sent', { method: 'email', dest: 'all_2', problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
 }
 
 function openEmail(email, destKey){
   if(!curText||!validateFields())return;
   clipCopy(textWithHeader(destKey));
-  track('complaint_sent', { method: 'email', dest: destKey, problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>{window.location.href=`mailto:${email}?subject=${SUBJ}`;},150);
 }
 
@@ -952,7 +958,6 @@ function openPortal(url, destKey){
 function shareLink() {
   const text = 'https://sovkhoznaya5.up.railway.app\n\nРасскажи соседям — вместе сделаем дом лучше!';
   clipCopy(text).then(() => toast('✅ Ссылка скопирована — отправь соседу'));
-  track('share_clicked', { problems_count: sel.size });
 }
 
 function copyTextForPortal() {
@@ -1068,10 +1073,7 @@ function switchTab(t) {
 function tog(el) {
   const id=el.dataset.id;
   if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
-  else{
-    sel.add(id);el.classList.add('selected');
-    if(sel.size===1) track('problem_selected', { first_problem: id });
-  }
+  else{sel.add(id);el.classList.add('selected')}
   seed++;
   syncSelToggle();
   syncNextBtn();
@@ -1259,7 +1261,6 @@ function upd() {
   regenAI(true).then(ok=>{
     if(!ok){
       // Fallback to local template
-      track('ai_failed', { problems_count: sel.size, reason: 'api_error' });
       curText = gen();
       area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
       requestAnimationFrame(fitTextarea);
@@ -1268,7 +1269,6 @@ function upd() {
     resetButtons();
     syncNameHint();
   }).catch(()=>{
-    track('ai_failed', { problems_count: sel.size, reason: 'exception' });
     curText = gen();
     area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
     requestAnimationFrame(fitTextarea);
@@ -1504,7 +1504,6 @@ function toggleSkipPersonal(){
 
 function confirmSkipPersonal(){
   skipPersonalData = true;
-  track('data_entered', { skipped: true });
   closeModal();
   goNext();
 }
