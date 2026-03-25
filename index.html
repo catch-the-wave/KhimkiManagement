@@ -256,8 +256,8 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .track-card{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .track-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
 .track-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
-.track-title{font-size:18px;font-weight:700;color:var(--text)}
-.track-sub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
+.track-title{font-size:22px;font-weight:700;color:var(--text)}
+.track-sub{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.55}
 
 /* Gosuslugi toggle */
 .gosu-card{margin-bottom:8px}
@@ -424,7 +424,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div id="step-2" style="display:none">
 
       <!-- Email section -->
-      <div style="margin-bottom:12px;padding:0 2px">
+      <div style="margin-bottom:14px;padding:0 10px">
         <div class="track-title">Отправьте жалобу по почте</div>
         <div class="track-sub">📋 Текст скопирован — нажмите кнопку, откроется почтовый клиент, вставьте и отправьте</div>
       </div>
@@ -435,7 +435,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
         <div class="send-all-sub" style="margin-top:8px">Письмо уйдёт в 3 адреса: «Континент Комфорта» · ЖКХ · ГЖИ МО</div>
       </div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6;padding:0 2px;margin-top:-12px;margin-bottom:24px">📷 Жалобы с фотографиями рассматриваются быстрее — по возможности приложите фото к письму</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;padding:0 10px;margin-top:-10px;margin-bottom:24px">📷 Жалобы с фотографиями рассматриваются быстрее — по возможности приложите фото к письму</div>
 
       <!-- Individual emails (hidden — duplicated in green button)
       <div class="track-card">
@@ -470,7 +470,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       -->
 
       <!-- Portals -->
-      <div style="margin-bottom:12px;padding:0 2px">
+      <div style="margin-bottom:14px;padding:0 10px">
         <div class="track-title">Есть аккаунт на Госуслугах?</div>
         <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА)</div>
       </div>
@@ -867,7 +867,7 @@ function renderS3Preview() {
   const needToggle = curText.length > S3_LIMIT;
   el.innerHTML = `
     <div style="border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;background:var(--bg)">
-      <div id="s3-text" style="font-size:13px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
+      <div id="s3-text" style="font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
       ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:8px;font-family:inherit;padding:0;display:block">Показать полностью ↓</button>` : ''}
     </div>`;
 }
