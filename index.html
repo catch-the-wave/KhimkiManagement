@@ -65,13 +65,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .container{max-width:600px;margin:0 auto;padding:0 14px 110px}
 
 /* Mobile hero */
-.mobile-hero{min-height:calc(100vh - 80px);display:flex;flex-direction:column;justify-content:center;padding:20px 4px}
+.mobile-hero{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:32px 24px;position:relative}
+.mobile-hero .hero-text{max-width:320px}
+.mobile-hero .hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);opacity:.5;animation:heroFade 2.5s ease-in-out infinite;display:flex;flex-direction:column;align-items:center;gap:4px}
+@keyframes heroFade{0%,100%{opacity:.3;transform:translateX(-50%) translateY(0)}50%{opacity:.7;transform:translateX(-50%) translateY(4px)}}
 .desktop-only{display:block}
 @media(max-width:640px){
   .desktop-only{display:none}
-}
-@media(max-width:640px){
+  body.hero-visible .header{display:none}
+  body.hero-visible{overflow:auto}
   #main-content{display:none}
+  body.hero-dismissed #main-content{display:block}
 }
 @media(min-width:641px){
   .mobile-hero{display:none!important}
@@ -318,7 +322,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 </style>
 </head>
 <body>
-<script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+<script>
+if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+if(window.innerWidth<=640)document.body.classList.add('hero-visible');
+</script>
 
 <div class="header" style="position:sticky;top:0;z-index:100">
   <h1>Жалоба на УО «Континент Комфорта»</h1>
@@ -399,9 +406,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div id="step-1">
       <!-- Mobile hero -->
       <div class="mobile-hero" id="mobile-hero">
-        <div style="font-size:22px;font-weight:800;line-height:1.3;margin-bottom:10px">Помогите сменить<br>управляющую компанию</div>
-        <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:20px">Дом не обслуживают, а деньги берут. Ваше обращение — шаг к нормальной жизни. Займёт 2 минуты.</div>
-        <button class="btn btn-send" onclick="document.getElementById('mobile-hero').style.display='none';document.getElementById('main-content').style.display='block';document.getElementById('main-content').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:14px;font-size:15px;border-radius:12px">Начать ↓</button>
+        <div class="hero-text">
+          <div style="font-size:28px;font-weight:800;line-height:1.25;margin-bottom:14px;letter-spacing:-.3px">Помогите сменить<br>управляющую компанию</div>
+          <div style="font-size:15px;color:var(--muted);line-height:1.65">Дом не обслуживают, а&nbsp;деньги берут.<br>Ваше обращение&nbsp;&mdash; шаг к&nbsp;нормальной жизни.</div>
+        </div>
+        <div class="hero-scroll"><span>&#8595;</span></div>
       </div>
       <!-- Main content (hidden on mobile until hero dismissed) -->
       <div id="main-content">
@@ -627,6 +636,25 @@ let currentStep = 1;
 let savedName = '';
 let savedApt = '';
 let skipPersonalData = false;
+
+// Hero scroll-to-dismiss on mobile
+(function initHero(){
+  if(window.innerWidth > 640) return;
+  const hero = document.getElementById('mobile-hero');
+  const mc = document.getElementById('main-content');
+  if(!hero || !mc) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(!e.isIntersecting) {
+        document.body.classList.remove('hero-visible');
+        document.body.classList.add('hero-dismissed');
+        mc.style.display = 'block';
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.1 });
+  obs.observe(hero);
+})();
 
 function showStep(n) {
   [1,2].forEach(i => {
