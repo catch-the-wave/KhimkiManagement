@@ -1145,7 +1145,6 @@ function upd() {
   if(tc) tc.style.display='block';
   if(regenBtn) regenBtn.style.display='flex';
   // Try AI generation first, show skeleton while loading
-  syncNameHint();
   regenAI(true).then(ok=>{
     if(!ok){
       // Fallback to local template
