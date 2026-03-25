@@ -284,7 +284,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 
 /* Compact destination rows */
 .dest-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.dest-row:first-of-type{border-top:1px solid var(--border)}
+.dest-row:first-of-type{border-top:none}
 .dest-row:last-of-type{border-bottom:none}
 .dest-row-info{flex:1;min-width:0}
 .dest-row-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -424,16 +424,13 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div id="step-2" style="display:none">
 
       <!-- Email section -->
+      <div style="margin-bottom:8px;padding:0 2px">
+        <div class="track-title">Отправьте жалобу по почте</div>
+        <div class="track-sub">📋 Текст скопирован — нажмите кнопку, откроется почтовый клиент, вставьте и отправьте</div>
+      </div>
       <div class="track-card" style="margin-bottom:12px">
-        <div class="track-header">
-          <div>
-            <div class="track-title">Отправьте жалобу по почте</div>
-            <div class="track-sub">📋 Текст скопирован — нажмите кнопку, откроется почтовый клиент, вставьте и отправьте</div>
-          </div>
-        </div>
-
         <!-- Text preview -->
-        <div id="s3-preview" style="margin-bottom:14px;border-top:1px solid var(--border);padding-top:14px"></div>
+        <div id="s3-preview" style="margin-bottom:14px"></div>
 
         <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
         <div class="send-all-sub" style="margin-top:8px">Письмо уйдёт в 3 адреса: «Континент Комфорта» · ЖКХ Химков · ГЖИ МО</div>
@@ -473,13 +470,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       -->
 
       <!-- Portals -->
+      <div style="margin-bottom:8px;padding:0 2px">
+        <div class="track-title">Есть аккаунт на Госуслугах?</div>
+        <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА)</div>
+      </div>
       <div class="track-card">
-        <div class="track-header">
-          <div>
-            <div class="track-title">Есть аккаунт на Госуслугах?</div>
-            <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА)</div>
-          </div>
-        </div>
         <div class="dest-row">
           <div class="dest-row-info">
             <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
