@@ -395,12 +395,9 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       </div>
 
       <div id="text-card" class="card" style="display:none;margin-top:8px">
-        <div id="name-fields-card" style="margin-bottom:10px">
-          <div id="name-hint" style="font-size:11px;color:var(--muted);margin-bottom:6px;line-height:1.4">С именем обращение обязаны рассмотреть · 🔒 не сохраняем</div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
-            <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
-          </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
+          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
         </div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
@@ -750,17 +747,8 @@ function highlightEmptyFields(){
   });
 }
 
-function syncNameHint(){
-  const hint = document.getElementById('name-hint');
-  if(!hint) return;
-  const elN = document.getElementById('fullname');
-  const hasName = elN && elN.value.trim();
-  hint.style.display = hasName ? 'none' : 'block';
-}
-
 function dUpd(){
   syncNextBtn();
-  syncNameHint();
   clearTimeout(_updTimer);
   _updTimer=setTimeout(upd,280);
   const n=document.getElementById('fullname');
@@ -1150,7 +1138,6 @@ function upd() {
     curText='';
     if(tc) tc.style.display='none';
     if(regenBtn) regenBtn.style.display='none';
-    syncNameHint();
     resetButtons();
     return;
   }
@@ -1168,14 +1155,12 @@ function upd() {
     }
     if(bc) bc.disabled=false;
     resetButtons();
-    syncNameHint();
   }).catch(()=>{
     curText = gen();
     area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
     requestAnimationFrame(fitTextarea);
     if(bc) bc.disabled=false;
     resetButtons();
-    syncNameHint();
   });
 }
 
