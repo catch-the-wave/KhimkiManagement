@@ -224,7 +224,7 @@ app.post('/api/generate', async (req, res) => {
     apt ? `Квартира: ${apt}` : 'Квартира: не указана',
     `Дата: ${today}`,
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
-    `Получатель: ${destNames[dest] || destNames.uk}`,
+    `Получатель: несколько инстанций (УО, администрация г.о. Химки, ГЖИ МО)`,
     `Объём: ${lengthCfg.instruction}`,
     `Проблемы: ${problems.join(', ')}`,
     building && building !== '5' ? `Важно: жилец из дома ${building} (ул. Совхозная, д. ${building}), а не из дома 5` : null

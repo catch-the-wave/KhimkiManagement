@@ -602,7 +602,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 
 const PROB_IDS = Object.keys(P);
 const sel = new Set();
-let dest = 'uk';
+let dest = 'admin'; // текст уходит в 3 инстанции — используем gov_intro (нейтральный)
 let tone = 'informal';
 let length = 'short';
 let curText = '';
