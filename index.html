@@ -64,6 +64,19 @@ html,body{overflow-x:hidden;width:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
 .container{max-width:600px;margin:0 auto;padding:0 14px 110px}
 
+/* Mobile hero */
+.mobile-hero{min-height:calc(100vh - 80px);display:flex;flex-direction:column;justify-content:center;padding:20px 4px}
+.desktop-only{display:block}
+@media(max-width:640px){
+  .desktop-only{display:none}
+}
+@media(max-width:640px){
+  #main-content{display:none}
+}
+@media(min-width:641px){
+  .mobile-hero{display:none!important}
+}
+
 /* Header */
 .header{background:var(--header-bg);color:#fff;padding:13px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:padding .2s}
 .header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
@@ -384,7 +397,15 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 
     <!-- STEP 1: Problems -->
     <div id="step-1">
-      <div class="hook-bar">
+      <!-- Mobile hero -->
+      <div class="mobile-hero" id="mobile-hero">
+        <div style="font-size:22px;font-weight:800;line-height:1.3;margin-bottom:10px">Помогите сменить<br>управляющую компанию</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:20px">Дом не обслуживают, а деньги берут. Ваше обращение — шаг к нормальной жизни. Займёт 2 минуты.</div>
+        <button class="btn btn-send" onclick="document.getElementById('mobile-hero').style.display='none';document.getElementById('main-content').style.display='block';document.getElementById('main-content').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:14px;font-size:15px;border-radius:12px">Начать ↓</button>
+      </div>
+      <!-- Main content (hidden on mobile until hero dismissed) -->
+      <div id="main-content">
+      <div class="hook-bar desktop-only">
         <div class="hook-bar-title">Не нужно ничего писать самому</div>
         <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
       </div>
@@ -415,6 +436,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div id="model-badge" style="display:none"></div>
         <div id="carea"></div>
       </div>
+    </div><!-- /main-content -->
     </div>
 
     <!-- STEP 2: Send -->
