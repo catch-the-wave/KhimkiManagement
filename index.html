@@ -979,7 +979,10 @@ function setLength(btn){
 // Auto-regenerate via AI when tone/length changes (if text is visible)
 function regenOnSwitch(){
   if(sel.size===0){upd();return;}
-  regen();
+  // Try AI silently, fall back to local gen (no modal)
+  regenAI(true).then(ok=>{
+    if(!ok){seed++;upd();}
+  }).catch(()=>{seed++;upd();});
 }
 
 // ====== DEST ======
@@ -1036,7 +1039,7 @@ function gen() {
 
   if (isShort) {
     // ---- SHORT format: compact, problems as bullet list in 1-2 paragraphs ----
-    let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
+    let t = '';
     t += fillTpl(pick(tmpl.short_open)) + '\n\n';
     t += pick(isUK ? tmpl.short_uk_intro : tmpl.short_gov_intro) + '\n';
 
@@ -1112,11 +1115,23 @@ function upd() {
 
   if(tc) tc.style.display='block';
   if(regenBtn) regenBtn.style.display='flex';
-  curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
-  requestAnimationFrame(fitTextarea);
-  if(bc) bc.disabled=false;
-  resetButtons();
+  // Try AI generation first, show skeleton while loading
+  regenAI(true).then(ok=>{
+    if(!ok){
+      // Fallback to local template
+      curText = gen();
+      area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
+      requestAnimationFrame(fitTextarea);
+    }
+    if(bc) bc.disabled=false;
+    resetButtons();
+  }).catch(()=>{
+    curText = gen();
+    area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
+    requestAnimationFrame(fitTextarea);
+    if(bc) bc.disabled=false;
+    resetButtons();
+  });
 }
 
 function fitTextarea() {
@@ -1137,14 +1152,14 @@ function regen(){
   });
 }
 
-async function regenAI(){
+async function regenAI(silent){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
   const name=(elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '');
   const elA=document.getElementById('apt');
   const apt=(elA?elA.value.trim():savedApt) || '';
   if(!name && !skipPersonalData){
-    showPrivacyModal();
+    if(!silent) showPrivacyModal();
     return false;
   }
 

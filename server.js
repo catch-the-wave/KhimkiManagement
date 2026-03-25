@@ -218,9 +218,11 @@ app.post('/api/generate', async (req, res) => {
     gis: 'ГИС ЖКХ'
   };
 
+  const today = new Date().toLocaleDateString('ru-RU');
   const userMessage = [
     `ФИО: ${name}`,
     apt ? `Квартира: ${apt}` : 'Квартира: не указана',
+    `Дата: ${today}`,
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
     `Получатель: ${destNames[dest] || destNames.uk}`,
     `Объём: ${lengthCfg.instruction}`,
