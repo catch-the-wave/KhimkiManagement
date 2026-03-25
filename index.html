@@ -394,18 +394,6 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div class="chips" id="chips"></div>
       </div>
 
-      <!-- Name fields + hint (between chips and text) -->
-      <div id="name-fields-card" class="card" style="display:none;margin-top:8px">
-        <div id="name-hint" style="text-align:center;padding:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5">
-          С именем обращение обязаны рассмотреть. Без — могут проигнорировать.
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
-          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">🔒 Данные не сохраняются — только в тексте письма</div>
-      </div>
-
       <div id="text-card" class="card" style="display:none;margin-top:8px">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
@@ -418,6 +406,13 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
             <button class="tone-btn active" data-length="short" onclick="setLength(this)">Коротко</button>
             <button class="tone-btn" data-length="medium" onclick="setLength(this)">Обычно</button>
             <button class="tone-btn" data-length="long" onclick="setLength(this)">Подробно</button>
+          </div>
+        </div>
+        <div id="name-fields-card" style="margin-bottom:10px">
+          <div id="name-hint" style="font-size:11px;color:var(--muted);margin-bottom:6px;line-height:1.4">С именем обращение обязаны рассмотреть · 🔒 не сохраняем</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
+            <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:8px 10px;font-size:13px" oninput="dUpd()"></div>
           </div>
         </div>
         <div id="model-badge" style="display:none"></div>
@@ -1149,13 +1144,11 @@ function upd() {
   if(!area) return;
 
   const tc = document.getElementById('text-card');
-  const nfc = document.getElementById('name-fields-card');
   const regenBtn = document.getElementById('btn-regen');
   if(sel.size === 0) {
     area.innerHTML = '';
     curText='';
     if(tc) tc.style.display='none';
-    if(nfc) nfc.style.display='none';
     if(regenBtn) regenBtn.style.display='none';
     syncNameHint();
     resetButtons();
@@ -1163,7 +1156,6 @@ function upd() {
   }
 
   if(tc) tc.style.display='block';
-  if(nfc) nfc.style.display='block';
   if(regenBtn) regenBtn.style.display='flex';
   // Try AI generation first, show skeleton while loading
   syncNameHint();
