@@ -35,7 +35,7 @@
   --primary: #4a9eff;
   --primary-light: #1a2440;
   --primary-glow: rgba(74,158,255,.15);
-  --action: #4ade80;
+  --action: #34d399;
   --action-light: #162316;
   --bg: #0f0f0f;
   --card: #1a1a1a;
@@ -48,11 +48,17 @@
   --drawer-bg: #1a1a1a;
   --tone-active-bg: #252525;
   --shadow: none;
-  --badge-best-bg: #162316; --badge-best-c: #4ade80;
+  --badge-best-bg: #162316; --badge-best-c: #34d399;
   --badge-fast-bg: #1a2440; --badge-fast-c: #60a5fa;
   --badge-legal-bg: #261a2e; --badge-legal-c: #c084fc;
   --badge-warn-bg: #2a1f0a; --badge-warn-c: #fbbf24;
 }
+[data-theme="dark"] .field input,
+[data-theme="dark"] textarea.complaint-edit{background:#1a1a1a;color:#e0e0e0;border-color:#2a2a2a}
+[data-theme="dark"] .field input:-webkit-autofill,
+[data-theme="dark"] .field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 50px #1a1a1a inset;-webkit-text-fill-color:#e0e0e0}
+[data-theme="dark"] .btn-open{background:#2d8a63;color:#fff}
+[data-theme="dark"] .btn-send-all{background:#2d8a63;box-shadow:0 2px 8px rgba(45,138,99,.3)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow-x:hidden;width:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -63,6 +69,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .header h1{font-size:16px;font-weight:700;letter-spacing:-.1px}
 .header p{font-size:11px;opacity:.65;margin-top:1px}
 .header.compact{padding:10px 16px}
+@media(max-width:640px){.header{display:none}.section{padding-top:20px}}
 
 /* Sections */
 .section{display:none;padding-top:10px}
@@ -79,8 +86,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .chip.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
 .chip .ck{display:none}
 .chip.selected .ck{display:inline}
-.sel-ctrls{display:flex;gap:12px;margin-bottom:10px}
-.sel-ctrls button{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit}
 
 /* Form */
 .form-row{display:flex;gap:8px;margin-bottom:8px}
@@ -92,7 +97,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .addr{font-size:12px;color:var(--muted);padding:4px 2px;display:flex;align-items:center;gap:4px}
 
 /* Textarea */
-textarea.complaint-edit{width:100%;min-height:320px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;padding-bottom:16px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
+textarea.complaint-edit{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;padding-bottom:16px;font-size:13px;line-height:1.75;font-family:inherit;resize:none;box-sizing:border-box;color:var(--text);outline:none;transition:.15s}
 textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
 /* Skeleton loader for AI generation */
 .skeleton-loading{padding:16px 14px;min-height:220px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);box-sizing:border-box}
@@ -113,7 +118,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .dest-hint b{color:var(--primary)}
 
 /* Bottom bar */
-.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:var(--bottom-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:6px 14px;padding-bottom:max(6px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;max-width:600px;margin:0 auto}
 
 /* Buttons */
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:13px 10px;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.15s;letter-spacing:-.1px}
@@ -137,6 +142,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .tone-switch{display:flex;gap:3px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:10px}
 .tone-btn{flex:1;padding:7px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
 .tone-btn.active{background:var(--tone-active-bg);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.picker-select{flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;background:var(--bg);color:var(--text);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 
 /* Toast */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--toast-bg);color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:200;opacity:0;transition:opacity .25s,transform .25s;white-space:normal;text-align:center;max-width:90vw;pointer-events:none}
@@ -204,7 +210,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .send-all-card{margin-bottom:8px}
 .btn-send-all{width:100%;padding:15px;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;border:none;background:var(--action);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s;letter-spacing:-.1px;box-shadow:0 2px 8px rgba(46,125,50,.3)}
 .btn-send-all:active{transform:scale(.97);box-shadow:none}
-.send-all-sub{text-align:center;font-size:11px;color:var(--muted);margin-top:5px}
+.send-all-sub{text-align:center;font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
 
 /* Advanced toggle */
 .adv-toggle-btn{display:block;width:100%;text-align:center;font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit;padding:8px;margin-bottom:2px}
@@ -231,7 +237,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 /* Modals */
 .send-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
 .send-modal-overlay.show{opacity:1;pointer-events:auto}
-.send-modal{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));z-index:301;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
+.send-modal{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:var(--card);border-radius:20px 20px 0 0;padding:24px 24px;padding-bottom:max(24px,env(safe-area-inset-bottom));z-index:301;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
 .send-modal.show{transform:translateY(0)}
 .send-modal h3{font-size:16px;font-weight:700;margin-bottom:14px;text-align:center}
 .send-modal .step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
@@ -247,11 +253,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .next-dest button{font-size:13px;font-weight:700;color:#fff;background:var(--primary);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;width:100%;font-family:inherit}
 
 /* Track cards (step 3) */
-.track-card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow);border:1px solid var(--border)}
-.track-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.track-card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.track-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
 .track-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
-.track-title{font-size:14px;font-weight:700;color:var(--text)}
-.track-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.track-title{font-size:22px;font-weight:700;color:var(--text)}
+.track-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
 
 /* Gosuslugi toggle */
 .gosu-card{margin-bottom:8px}
@@ -278,10 +284,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 
 /* Compact destination rows */
 .dest-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.dest-row:first-of-type{border-top:none}
 .dest-row:last-of-type{border-bottom:none}
 .dest-row-info{flex:1;min-width:0}
 .dest-row-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.dest-row-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.dest-row-sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
 .btn-open{flex-shrink:0;padding:9px 16px;border-radius:10px;background:var(--action);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;margin-top:2px}
 .btn-open:active{transform:scale(.97)}
 .track-hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.4}
@@ -297,6 +304,10 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 .theme-switch input:checked+.theme-slider{background:var(--primary)}
 .theme-switch input:checked+.theme-slider::before{transform:translateX(20px)}
 </style>
+<!-- PostHog analytics (loaded after key fetch) -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init be br ca cap ce clear_opt_in_out_capturing debug disable_scroll disable_session_recording enable_heatmaps enable_recording_console_log fl get_config get_distinct_id get_early_access_features getEarlyAccessFeatures get_property get_session_id get_session_replay_url group groupIdentify has_opted_in_capturing has_opted_out_capturing identify init isFeatureEnabled load_toolbar onFeatureFlags opt_in_capturing opt_out_capturing page reloadFeatureFlags remove_event_property reset screen set_config setPersonProperties set_person_properties set_session_property startSessionRecording stop_session_recording stopSessionRecording unregister unregister_for_session unregister_event_property updateEarlyAccessFeatureEnrollment".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+</script>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
@@ -380,44 +391,55 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div id="step-1">
       <div class="hook-bar">
         <div class="hook-bar-title">Не нужно ничего писать самому</div>
-        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически. Отправка займёт 2 минуты.</div>
+        <div class="hook-bar-sub">Отметьте галочками что не работает — жалоба сформируется автоматически.</div>
       </div>
       <div class="card">
-        <div class="card-title">Чем вы недовольны?</div>
-        <div class="sel-ctrls"><button onclick="selAll()">Выбрать все</button><button onclick="clrAll()">Сбросить</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="card-title" style="margin-bottom:0">Чем вы недовольны?</div>
+          <button id="sel-toggle-btn" onclick="toggleSelAll()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;font-family:inherit">Выбрать все</button>
+        </div>
         <div class="chips" id="chips"></div>
       </div>
       <div id="text-card" class="card" style="display:none;margin-top:8px">
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
-          <div class="tone-switch" id="tone-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-tone="informal" onclick="setTone(this)">Неформальный</button>
-            <button class="tone-btn" data-tone="formal" onclick="setTone(this)">Формальный</button>
-          </div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <select id="tone-select" class="picker-select" onchange="setTone(this)">
+            <option value="informal">💬 По-простому</option>
+            <option value="formal">Официальный</option>
+          </select>
+          <select id="length-select" class="picker-select" onchange="setLength(this)">
+            <option value="short">Кратко</option>
+            <option value="medium">Умеренно</option>
+            <option value="long">Подробно</option>
+          </select>
         </div>
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
-          <div class="tone-switch" id="length-switch" style="flex:1;margin:0">
-            <button class="tone-btn active" data-length="short" onclick="setLength(this)">Коротко</button>
-            <button class="tone-btn" data-length="medium" onclick="setLength(this)">Обычно</button>
-            <button class="tone-btn" data-length="long" onclick="setLength(this)">Подробно</button>
-          </div>
-        </div>
-        <div id="model-badge" style="display:none;margin-bottom:8px;font-size:11px;color:var(--muted);display:none"><span style="font-weight:600">Модель:</span> <span id="model-badge-name"></span></div>
+        <div id="model-badge" style="display:none"></div>
         <div id="carea"></div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:8px;cursor:pointer">
+          <input type="checkbox" id="chk-dom3" onchange="onDom3Change(this.checked)" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer">
+          Я из дома 3
+        </label>
+        <div id="name-hint" style="display:none;text-align:center;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--primary);background:var(--primary-light);border-radius:10px;line-height:1.5">
+          👇 Укажите ФИО внизу — оно автоматически подставится в текст
+        </div>
       </div>
     </div>
 
     <!-- STEP 2: Send -->
     <div id="step-2" style="display:none">
 
-      <!-- Text preview -->
-      <div id="s3-preview" class="card" style="margin-bottom:12px"></div>
-
-      <!-- Hero send -->
-      <div style="padding:0 0 14px">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Осталось отправить</div>
-        <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
-        <div class="send-all-sub">УО + ЖКХ Химков + ГЖИ МО · текст уже скопирован</div>
+      <!-- Email section -->
+      <div style="margin-bottom:14px;padding:0 10px">
+        <div class="track-title">Отправьте жалобу по почте</div>
+        <div class="track-sub">Письмо уйдёт в 3 адреса: «Континент Комфорта» · ЖКХ · ГЖИ МО</div>
       </div>
+      <div class="track-card" style="margin-bottom:20px">
+        <!-- Text preview -->
+        <div id="s3-preview" style="margin-bottom:16px"></div>
+
+        <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
+        <div class="send-all-sub" style="margin-top:8px">📋 Текст уже скопирован — нажмите кнопку, откроется почтовый клиент, вставьте и отправьте</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);opacity:.7;line-height:1.5;padding:0 10px;margin-top:-8px;margin-bottom:24px;text-align:center">📷 Жалобы с фотографиями рассматриваются быстрее — по возможности приложите фото к письму</div>
 
       <!-- Individual emails (hidden — duplicated in green button)
       <div class="track-card">
@@ -452,13 +474,11 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       -->
 
       <!-- Portals -->
+      <div style="margin-bottom:14px;padding:0 10px">
+        <div class="track-title">Есть аккаунт на Госуслугах?</div>
+        <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА)</div>
+      </div>
       <div class="track-card">
-        <div class="track-header">
-          <div>
-            <div class="track-title">Порталы — юридически сильнее email</div>
-            <div class="track-sub">Текст уже скопирован — откройте портал и вставьте</div>
-          </div>
-        </div>
         <div class="dest-row">
           <div class="dest-row-info">
             <div class="dest-row-name">Добродел<span class="p-badge best">Лучший · 8 дней</span></div>
@@ -478,8 +498,14 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
             <div class="dest-row-name">ГИС ЖКХ<span class="p-badge legal">Для суда</span></div>
             <div class="dest-row-sub">Федеральный уровень. Жалоба — официальное юридическое доказательство для суда. Действия → Обращение → Адресат: ГЖИ МО.</div>
           </div>
-          <button class="btn-open" onclick="openPortal('https://dom.gosuslugi.ru','gis')">Открыть →</button>
+          <button class="btn-open" onclick="openPortal('https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true','gis')">Открыть →</button>
         </div>
+      </div>
+
+      <!-- Share -->
+      <div style="margin-top:24px;padding:0 2px">
+        <button class="btn btn-send" style="width:100%;padding:15px;font-size:15px;font-weight:700;border-radius:14px" onclick="shareLink()">🔗 Поделиться с соседом</button>
+        <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px;opacity:.7">Вместе сделаем дом лучше</div>
       </div>
 
     </div>
@@ -500,9 +526,9 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <div class="card">
       <div class="card-title">Куда подавать жалобы</div>
       <a class="portal-link" href="mailto:kontinent.reception@mail.ru"><span class="pi">✉️</span><div><div class="pn">УО «Континент Комфорта»</div><div class="pd">kontinent.reception@mail.ru — самый простой</div></div></a>
-      <a class="portal-link" href="https://eds.mosreg.ru/claims" target="_blank"><span class="pi">🏛️</span><div><div class="pn">«Решаем проблемы вместе»</div><div class="pd">Портал Правительства МО</div></div></a>
-      <a class="portal-link" href="https://mstg.mosreg.ru" target="_blank"><span class="pi">🧹</span><div><div class="pn">Министерство чистоты МО</div><div class="pd">Жилищный надзор</div></div></a>
-      <a class="portal-link" href="https://dom.gosuslugi.ru" target="_blank"><span class="pi">🏠</span><div><div class="pn">ГИС ЖКХ</div><div class="pd">dom.gosuslugi.ru</div></div></a>
+      <a class="portal-link" href="https://vmeste.mosreg.ru" target="_blank"><span class="pi">🏛️</span><div><div class="pn">Добродел</div><div class="pd">vmeste.mosreg.ru — 8 дней</div></div></a>
+      <a class="portal-link" href="https://eds.mosreg.ru/claims" target="_blank"><span class="pi">🔧</span><div><div class="pn">ЕДС МО</div><div class="pd">eds.mosreg.ru — напрямую в УО</div></div></a>
+      <a class="portal-link" href="https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true" target="_blank"><span class="pi">🏠</span><div><div class="pn">ГИС ЖКХ</div><div class="pd">dom.gosuslugi.ru — для суда</div></div></a>
       <a class="portal-link" href="tel:84955737788"><span class="pi">📞</span><div><div class="pn">Глава г. Химки</div><div class="pd">8 (495) 573-77-88</div></div></a>
     </div>
     <div class="card">
@@ -580,12 +606,33 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
 <script src="texts.js"></script>
 <script>
 
+// ====== POSTHOG ANALYTICS ======
+(async function initAnalytics() {
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    if (cfg.posthogKey) {
+      posthog.init(cfg.posthogKey, {
+        api_host: 'https://us.i.posthog.com',
+        person_profiles: 'never',
+        autocapture: false,
+        capture_pageview: true,
+      });
+    }
+  } catch(e) {}
+})();
+
+function track(event, props) {
+  try { if(window.posthog && posthog.capture) posthog.capture(event, props); } catch(e) {}
+}
+
 const PROB_IDS = Object.keys(P);
 const sel = new Set();
-let dest = 'uk';
+let dest = 'admin'; // текст уходит в 3 инстанции — используем gov_intro (нейтральный)
 let tone = 'informal';
 let length = 'short';
 let curText = '';
+let nameInText = 'Жилец дома';
+let fromDom3 = false; // имя которое сейчас стоит в тексте
 let seed = Math.floor(Math.random() * 1000000);
 
 
@@ -593,6 +640,7 @@ let seed = Math.floor(Math.random() * 1000000);
 let currentStep = 1;
 let savedName = '';
 let savedApt = '';
+let skipPersonalData = false;
 
 function showStep(n) {
   [1,2].forEach(i => {
@@ -608,19 +656,36 @@ function showStep(n) {
   updateWizardNav();
   window.scrollTo(0,0);
   if (n === 1) {
-    document.querySelectorAll('#tone-switch .tone-btn').forEach(b => b.classList.toggle('active', b.dataset.tone === tone));
-    document.querySelectorAll('#length-switch .tone-btn').forEach(b => b.classList.toggle('active', b.dataset.length === length));
+    const ts=document.getElementById('tone-select'); if(ts) ts.value=tone;
+    const ls=document.getElementById('length-select'); if(ls) ls.value=length;
     requestAnimationFrame(fitTextarea);
   }
   if (n === 2) renderS3Preview();
 }
 
 function canGoNext(){
-  const n=document.getElementById('fullname');
-  const a=document.getElementById('apt');
-  return sel.size>0 && (!n||n.value.trim()!=='') && (!a||a.value.trim()!=='');
+  return sel.size>0;
 }
-function syncNextBtn(){const b=document.getElementById('btn-step-next');if(b)b.disabled=!canGoNext();}
+function hasPersonalData(){
+  const n=document.getElementById('fullname');
+  return (n && n.value.trim()!=='') || savedName!=='';
+}
+function syncNextBtn(){
+  const b=document.getElementById('btn-step-next');
+  if(!b) return;
+  b.disabled=!canGoNext();
+  if(hasPersonalData()){
+    b.className='btn btn-send';
+    b.style.background='';
+    b.style.color='';
+    b.style.border='';
+  } else {
+    b.className='btn';
+    b.style.background='var(--bg)';
+    b.style.color='var(--muted)';
+    b.style.border='1.5px solid var(--border)';
+  }
+}
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
@@ -630,17 +695,20 @@ function updateWizardNav() {
   const prevApt  = elA ? elA.value : savedApt;
   if(currentStep === 1) {
     ba.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-        <div style="display:flex;gap:6px;align-items:center">
-          <div class="field" style="flex:2"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
-          <div class="field" style="flex:0 0 64px"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:9px 10px;font-size:13px" oninput="dUpd()"></div>
-          <button class="btn btn-ghost" style="flex:none;width:40px;height:40px;padding:0;font-size:16px;display:none;border-radius:10px" id="btn-regen" onclick="regen()" title="Другой вариант">🔄</button>
-          <button class="btn btn-send" style="flex:none;padding:10px 20px;font-size:14px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="field" style="flex:7"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванов Иван Иванович" style="padding:13px 10px;font-size:13px" oninput="dUpd()" onfocus="onNameFocus()" onblur="onNameBlur()"></div>
+          <div class="field" style="flex:3"><label>Кв.</label><input type="text" id="apt" placeholder="№" inputmode="numeric" style="padding:13px 10px;font-size:13px" oninput="dUpd()" onfocus="onNameFocus()" onblur="onNameBlur()"></div>
+        </div>
+        <div id="ba-btns" style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost" style="flex:none;padding:10px 14px;font-size:13px;border-radius:10px;display:none" id="btn-regen" onclick="regen()" title="Другой вариант">🔄 Ещё вариант</button>
+          <button class="btn btn-send" style="flex:1;padding:10px 14px;font-size:13px;border-radius:10px;white-space:nowrap" id="btn-step-next" onclick="goNext()" ${canGoNext()?'':'disabled'}>Далее →</button>
         </div>
       </div>`;
     if(prevName) document.getElementById('fullname').value = prevName;
     if(prevApt)  document.getElementById('apt').value  = prevApt;
-    if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='block'; }
+    if(sel.size > 0) { const rb=document.getElementById('btn-regen'); if(rb) rb.style.display='flex'; }
+    syncNextBtn();
   } else {
     ba.innerHTML = `<button class="btn" style="background:var(--bg);color:var(--text);flex:1;border:1px solid var(--border)" onclick="goBack()">← Назад</button>`;
   }
@@ -650,10 +718,20 @@ function goNext() {
   if(document.activeElement) document.activeElement.blur();
   if(currentStep === 1) {
     if(sel.size === 0){ toast('Выберите хотя бы одну проблему'); return; }
-    if(!validateFields()) return;
-    savedName = document.getElementById('fullname').value.trim();
-    savedApt = document.getElementById('apt').value.trim();
+    const elN = document.getElementById('fullname');
+    const elA = document.getElementById('apt');
+    const name = elN ? elN.value.trim() : savedName;
+    const apt = elA ? elA.value.trim() : savedApt;
+    if((!name || !apt) && !skipPersonalData) {
+      showPrivacyModal();
+      return;
+    }
+    savedName = name;
+    savedApt = apt;
+    if(savedName) localStorage.setItem('kh_name', savedName);
+    if(savedApt) localStorage.setItem('kh_apt', savedApt);
     if(curText) clipCopy(textWithHeader('uk'));
+    track('step2_reached', { problems: [...sel], problems_count: sel.size, tone, length });
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
   }
@@ -681,19 +759,19 @@ const API_KEY = 'complaints';
 
 async function syncCounter() {
   try {
-    const r = await fetch(`https://api.countapi.xyz/get/${API_NS}/${API_KEY}`);
+    const r = await fetch('/api/stats');
     const d = await r.json();
-    const n = Math.max(d.value||0, getCounter());
-    if(d.value) localStorage.setItem('kh_sent', n);
+    const n = Math.max(d.sent||0, getCounter());
+    localStorage.setItem('kh_sent', n);
     updateCounterUI(n);
   } catch(e) { updateCounterUI(getCounter()); }
 }
 
 async function incrementCounter() {
   try {
-    const r = await fetch(`https://api.countapi.xyz/hit/${API_NS}/${API_KEY}`);
+    const r = await fetch('/api/stats/hit', {method:'POST'});
     const d = await r.json();
-    const n = Math.max(d.value||0, getCounter()+1);
+    const n = Math.max(d.sent||0, getCounter()+1);
     localStorage.setItem('kh_sent', n);
     updateCounterUI(n);
     return n;
@@ -707,14 +785,73 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
+function highlightEmptyFields(){
+  const elN = document.getElementById('fullname');
+  const elA = document.getElementById('apt');
+  [elN, elA].forEach(el => {
+    if(!el || el.value.trim()) return;
+    el.style.borderColor = 'var(--primary)';
+    el.style.boxShadow = '0 0 0 3px var(--primary-glow)';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 3000);
+  });
+}
+
+function syncNameHint(){
+  const hint = document.getElementById('name-hint');
+  if(!hint) return;
+  const elN = document.getElementById('fullname');
+  const hasName = (elN && elN.value.trim()) || savedName;
+  hint.style.display = (sel.size > 0 && !hasName) ? 'block' : 'none';
+}
+
 function dUpd(){
   syncNextBtn();
-  clearTimeout(_updTimer);
-  _updTimer=setTimeout(upd,280);
+  syncNameHint();
   const n=document.getElementById('fullname');
   const a=document.getElementById('apt');
   if(n) localStorage.setItem('kh_name', n.value);
   if(a) localStorage.setItem('kh_apt', a.value);
+  // Reset skip if user starts filling in data
+  if((n && n.value.trim()) || (a && a.value.trim())) skipPersonalData = false;
+}
+
+let _nameFocusTimer;
+function onNameFocus(){
+  clearTimeout(_nameFocusTimer);
+  const btns=document.getElementById('ba-btns');
+  if(!btns||!curText) return;
+  btns.innerHTML=`<button class="btn btn-send" style="flex:1;padding:10px 14px;font-size:13px;border-radius:10px" onclick="regenWithName()">🔄 Обновить текст</button>`;
+}
+function onNameBlur(){
+  _nameFocusTimer=setTimeout(()=>{
+    const f=document.activeElement;
+    const n=document.getElementById('fullname');
+    const a=document.getElementById('apt');
+    if(f===n||f===a) return;
+    window.scrollTo(0,0);
+    updateWizardNav();
+  },150);
+}
+function regenWithName(){
+  if(document.activeElement) document.activeElement.blur();
+  regenAI(true).then(ok=>{if(!ok){seed++;upd();}});
+}
+function onDom3Change(checked){
+  fromDom3=checked;
+  regenAI(true).then(ok=>{if(!ok){seed++;upd();}});
+}
+
+function substituteNameInText(){
+  if(!curText || !nameInText) return;
+  const n=document.getElementById('fullname');
+  const newName=(n?n.value.trim():savedName)||'Жилец дома';
+  if(newName===nameInText) return;
+  const updated=curText.replaceAll(nameInText, newName);
+  if(updated===curText) return;
+  curText=updated;
+  nameInText=newName;
+  const ta=document.getElementById('complaint-ta');
+  if(ta) ta.value=curText;
 }
 
 // ====== SOCIAL COUNTER ======
@@ -737,27 +874,19 @@ function updateCounterUI(n){
 const SUBJ = encodeURIComponent('Жалоба на содержание МКД — ул. Совхозная д.5');
 
 function validateFields(){
+  if(skipPersonalData) return true;
   const el=document.getElementById('fullname');
   const name=el?el.value.trim():savedName;
   const elA=document.getElementById('apt');
   const apt=elA?elA.value.trim():savedApt;
   if(!name||!apt){
-    const target=!name&&el?el:(!apt&&elA?elA:null);
-    if(target){
-      setTimeout(()=>{
-        target.scrollIntoView({behavior:'smooth',block:'center'});
-        target.focus();
-      },150);
-      toast(!name?'Укажите ФИО':'Укажите номер квартиры');
-    } else {
-      showFieldsModal(!name,!apt);
-    }
+    showPrivacyModal();
     return false;
   }
   return true;
 }
 
-const S3_LIMIT = 220;
+const S3_LIMIT = 150;
 let s3Expanded = false;
 
 function renderS3Preview() {
@@ -767,10 +896,9 @@ function renderS3Preview() {
   const short = curText.length > S3_LIMIT ? curText.slice(0, S3_LIMIT).replace(/\s\S*$/, '') + '…' : curText;
   const needToggle = curText.length > S3_LIMIT;
   el.innerHTML = `
-    <div id="s3-text" style="font-size:12px;line-height:1.6;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
-    ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:6px;font-family:inherit;padding:0">Показать полностью ↓</button>` : ''}
-    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
-      <button class="btn btn-ghost" style="width:100%" onclick="copyS3(this)">📋 Скопировать текст</button>
+    <div style="border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;background:var(--bg)">
+      <div id="s3-text" style="font-size:12px;line-height:1.55;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
+      ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:8px;font-family:inherit;padding:0;display:block">Показать полностью ↓</button>` : ''}
     </div>`;
 }
 
@@ -802,6 +930,7 @@ function sendAll(){
   const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
   window.location.href=`mailto:${emails}?subject=${SUBJ}`;
   incrementCounter();
+  track('complaint_sent', { method: 'email', dest: 'all_3', problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
 }
 
@@ -814,7 +943,13 @@ function openEmail(email, destKey){
 function openPortal(url, destKey){
   if(!curText)return;
   clipCopy(textWithHeader(destKey)).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
+  track('complaint_sent', { method: 'portal', dest: destKey, problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>window.open(url,'_blank'),150);
+}
+
+function shareLink() {
+  const text = 'https://sovkhoznaya5.up.railway.app\n\nРасскажи соседям — вместе сделаем дом лучше!';
+  clipCopy(text).then(() => toast('✅ Ссылка скопирована — отправь соседу'));
 }
 
 function copyTextForPortal() {
@@ -932,36 +1067,40 @@ function tog(el) {
   if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
   else{sel.add(id);el.classList.add('selected')}
   seed++;
+  syncSelToggle();
   syncNextBtn();
   upd();
 }
-function selAll(){
-  document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});
-  seed++;
-  syncNextBtn();
-  upd();
+function syncSelToggle(){
+  const btn=document.getElementById('sel-toggle-btn');
+  if(!btn) return;
+  const allSelected = PROB_IDS.every(id=>sel.has(id));
+  btn.textContent = allSelected ? 'Сбросить' : 'Выбрать все';
 }
-function clrAll(){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
-  sel.clear();
+function toggleSelAll(){
+  const allSelected = PROB_IDS.every(id=>sel.has(id));
+  if(allSelected){
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+    sel.clear();
+  } else {
+    document.querySelectorAll('.chip').forEach(c=>{c.classList.add('selected');sel.add(c.dataset.id)});
+    seed++;
+  }
+  syncSelToggle();
   syncNextBtn();
   upd();
 }
 
 // ====== TONE ======
-function setTone(btn){
-  document.querySelectorAll('#tone-switch .tone-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  tone=btn.dataset.tone;
+function setTone(el){
+  tone=el.value;
   seed++;
   regenOnSwitch();
 }
 
 // ====== LENGTH ======
-function setLength(btn){
-  document.querySelectorAll('#length-switch .tone-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  length=btn.dataset.length;
+function setLength(el){
+  length=el.value;
   seed++;
   regenOnSwitch();
 }
@@ -969,7 +1108,10 @@ function setLength(btn){
 // Auto-regenerate via AI when tone/length changes (if text is visible)
 function regenOnSwitch(){
   if(sel.size===0){upd();return;}
-  regen();
+  // Try AI silently, fall back to local gen (no modal)
+  regenAI(true).then(ok=>{
+    if(!ok){seed++;upd();}
+  }).catch(()=>{seed++;upd();});
 }
 
 // ====== DEST ======
@@ -1006,22 +1148,28 @@ function seededRand(s) {
 function gen() {
   if (sel.size === 0) return '';
   const elN = document.getElementById('fullname');
-  const name = (elN?elN.value.trim():savedName) || '[ФИО]';
+  const name = (elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '[ФИО]');
   const elA = document.getElementById('apt');
-  const apt  = (elA?elA.value.trim():savedApt) || '[кв.]';
+  const apt  = (elA?elA.value.trim():savedApt) || (skipPersonalData ? '' : '[кв.]');
   const isUK = dest === 'uk';
   const isFormal = tone === 'formal';
   const tmpl = T[tone];
   const rng = seededRand(seed);
   const pick = arr => arr[Math.floor(rng() * arr.length)];
+  // Clean up apartment references when apt is empty
+  const fillTpl = s => {
+    let r = s.replace('{n}',name).replace('{a}',apt);
+    if(!apt) r = r.replace(/,?\s*кв\.?\s*/g, ' ').replace(/квартиры?\s*/g, 'дома ').replace(/\s{2,}/g,' ').trim();
+    return r;
+  };
 
   const probs = PROB_IDS.filter(id => sel.has(id));
-  const isShort = rng() > 0.5;
+  const isShort = length === 'short';
 
   if (isShort) {
     // ---- SHORT format: compact, problems as bullet list in 1-2 paragraphs ----
-    let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
-    t += pick(tmpl.short_open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+    let t = '';
+    t += fillTpl(pick(tmpl.short_open)) + '\n\n';
     t += pick(isUK ? tmpl.short_uk_intro : tmpl.short_gov_intro) + '\n';
 
     // Combine problems into a compact list
@@ -1047,7 +1195,7 @@ function gen() {
 
   // ---- LONG format (original) ----
   let t = (isFormal ? 'ЖАЛОБА\n' : 'Жалоба\n') + '\n';
-  t += pick(tmpl.open).replace('{n}',name).replace('{a}',apt) + '\n\n';
+  t += fillTpl(pick(tmpl.open)) + '\n\n';
   t += pick(isUK ? tmpl.uk_intro : tmpl.gov_intro) + '\n\n';
 
   // Build problem paragraphs with connectors
@@ -1074,6 +1222,7 @@ function gen() {
 
   const date = new Date().toLocaleDateString('ru-RU');
   t += `${date}\n${name}`;
+  if(fromDom3) t = t.replaceAll('д. 5', 'д. 3');
   return t;
 }
 
@@ -1086,31 +1235,49 @@ function upd() {
   const tc = document.getElementById('text-card');
   const regenBtn = document.getElementById('btn-regen');
   if(sel.size === 0) {
+    const sy=window.scrollY;
     area.innerHTML = '';
     curText='';
     if(tc) tc.style.display='none';
     if(regenBtn) regenBtn.style.display='none';
+    syncNameHint();
     resetButtons();
+    window.scrollTo(0,sy);
     return;
   }
 
   if(tc) tc.style.display='block';
-  if(regenBtn) regenBtn.style.display='block';
-  curText = gen();
-  area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
-  requestAnimationFrame(fitTextarea);
-  if(bc) bc.disabled=false;
-  resetButtons();
+  if(regenBtn) regenBtn.style.display='flex';
+  // Try AI generation first, show skeleton while loading
+  syncNameHint();
+  regenAI(true).then(ok=>{
+    if(!ok){
+      // Fallback to local template
+      curText = gen();
+      area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
+      requestAnimationFrame(fitTextarea);
+    }
+    if(bc) bc.disabled=false;
+    resetButtons();
+    syncNameHint();
+  }).catch(()=>{
+    curText = gen();
+    area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
+    requestAnimationFrame(fitTextarea);
+    if(bc) bc.disabled=false;
+    resetButtons();
+    syncNameHint();
+  });
 }
 
 function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
+  const sy = window.scrollY;
   ta.style.height = 'auto';
-  const h = Math.max(ta.scrollHeight + 4, window.innerHeight * 0.45);
-  ta.style.height = h + 'px';
+  ta.style.height = (ta.scrollHeight + 4) + 'px';
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
-window.addEventListener('resize', fitTextarea);
 
 function regen(){
   // Try AI first, fallback to local templates
@@ -1121,39 +1288,29 @@ function regen(){
   });
 }
 
-async function regenAI(){
+async function regenAI(silent){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=elN?elN.value.trim():savedName;
+  const name=(elN?elN.value.trim():savedName) || 'Жилец дома';
   const elA=document.getElementById('apt');
-  const apt=elA?elA.value.trim():savedApt;
-  if(!name||!apt){
-    const target=!name&&elN?elN:(!apt&&elA?elA:null);
-    if(target){setTimeout(()=>{target.scrollIntoView({behavior:'smooth',block:'center'});target.focus();},150);toast(!name?'Укажите ФИО':'Укажите номер квартиры');}
-    else showFieldsModal(!name,!apt);
-    return false;
-  }
+  const apt=(elA?elA.value.trim():savedApt) || '';
 
   const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
   if(!problems.length) return false;
 
   const btn=document.querySelector('[onclick="regen()"]');
-  if(btn){btn.disabled=true;btn.textContent='⏳ 0с';}
+  if(btn){btn.disabled=true;btn.textContent='⏳';}
 
   // Show skeleton loader
   const area=document.getElementById('carea');
   if(area) area.innerHTML=`<div class="skeleton-loading">${'<div class="skeleton-line"></div>'.repeat(7)}<div class="skeleton-status">ИИ пишет жалобу…</div></div>`;
-
-  // Timer on button
-  let sec=0;
-  const timer=setInterval(()=>{sec++;if(btn)btn.textContent='⏳ '+sec+'с';},1000);
 
   try{
     console.log('[AI] Requesting generation...',{name,apt,problems:problems.length,tone,dest});
     const res=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name,apt,problems,tone,dest,length})
+      body:JSON.stringify({name,apt,problems,tone,dest,length,building:fromDom3?'3':'5'})
     });
     console.log('[AI] Response status:',res.status);
     if(!res.ok) return false;
@@ -1161,21 +1318,23 @@ async function regenAI(){
     if(!data.text) return false;
 
     curText=data.text;
+    nameInText=name; // запоминаем какое имя сейчас в тексте
     if(area){
       area.style.opacity='0';
       area.innerHTML=`<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
       requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
     }
     requestAnimationFrame(fitTextarea);
-    toast('✨ Текст сгенерирован ИИ');
+    // Highlight empty fields to prompt user to fill them
+    highlightEmptyFields();
+    track('ai_generated', { problems: [...sel], problems_count: sel.size, tone, length, model: data.model });
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){
     console.log('[AI] Error:',e);
     return false;
   }finally{
-    clearInterval(timer);
-    if(btn){btn.disabled=false;btn.textContent='🔄';}
+    if(btn){btn.disabled=false;btn.textContent='🔄 Ещё вариант';}
   }
 }
 function escTA(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1197,17 +1356,7 @@ function resetButtons(){
 
 function copyAndShow(){
   if(!curText)return;
-  // Check required fields
-  const el=document.getElementById('fullname');
-  const name = el?el.value.trim():savedName;
-  const elA=document.getElementById('apt');
-  const apt  = elA?elA.value.trim():savedApt;
-  if(!name || !apt){
-    const target=!name&&el?el:(!apt&&elA?elA:null);
-    if(target){setTimeout(()=>{target.scrollIntoView({behavior:'smooth',block:'center'});target.focus();},150);toast(!name?'Укажите ФИО':'Укажите номер квартиры');}
-    else showFieldsModal(!name, !apt);
-    return;
-  }
+  if(!validateFields()) return;
   clipCopy(curText).then(()=>{
     // Show "Send" button after copy
     const bcopy = document.getElementById('bcopy');
@@ -1274,6 +1423,8 @@ function showSendModal(type){
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('show');
   document.getElementById('send-modal').classList.remove('show');
+  const modalActions = document.querySelector('#send-modal .modal-actions');
+  if(modalActions) modalActions.style.display='';
 }
 
 function getNextDest(){
@@ -1287,20 +1438,66 @@ function selectDest(d){
   if(btn) setD(btn);
 }
 
-function showFieldsModal(noName, noApt){
+function showPrivacyModal(){
   const title = document.getElementById('modal-title');
   const steps = document.getElementById('modal-steps');
   const nd = document.getElementById('modal-next-dest');
   const shareBtn = document.getElementById('modal-share-btn');
   shareBtn.style.display='none';
   nd.innerHTML='';
-  title.textContent='Заполните данные';
-  let items='';
-  if(noName) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите ФИО</b>Без имени жалоба не будет принята</div></div>`;
-  if(noApt) items+=`<div class="step"><div class="step-num" style="background:var(--danger)">!</div><div class="step-text"><b>Укажите квартиру</b>Номер квартиры обязателен</div></div>`;
-  steps.innerHTML=items;
+  title.innerHTML='Осталось подписать ✍️';
+  steps.innerHTML=`
+    <div style="font-size:13px;line-height:1.6;color:var(--text);margin-bottom:16px">
+      Анонимные обращения часто игнорируют. С вашим именем и квартирой жалобу <b>обязаны рассмотреть</b> по закону.
+    </div>
+    <button class="btn btn-send" onclick="closeModalAndFocusFields()" style="width:100%;margin-bottom:8px;padding:14px;font-size:15px">← Указать данные</button>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;text-align:center">🔒 Мы не храним и не читаем ваши данные — они только подставятся в письмо</div>
+    <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
+      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--muted);line-height:1.5" onclick="event.stopPropagation()">
+        <input type="checkbox" id="skip-personal-cb" onchange="toggleSkipPersonal()" style="margin-top:2px;flex-shrink:0;width:16px;height:16px">
+        <span>Не хочу указывать свои данные</span>
+      </label>
+      <button class="btn" id="btn-skip-personal" onclick="confirmSkipPersonal()" disabled style="width:100%;margin-top:8px;padding:10px;font-size:13px;background:var(--bg);color:var(--muted);border:1px solid var(--border)">Продолжить без подписи</button>
+    </div>
+  `;
+  // Hide the default close button
+  const modalActions = document.querySelector('#send-modal .modal-actions');
+  if(modalActions) modalActions.style.display='none';
   document.getElementById('modal-overlay').classList.add('show');
   document.getElementById('send-modal').classList.add('show');
+}
+
+function closeModalAndFocusFields(){
+  closeModal();
+  const elN = document.getElementById('fullname');
+  const elA = document.getElementById('apt');
+  const nameEmpty = !elN || !elN.value.trim();
+  const aptEmpty = !elA || !elA.value.trim();
+  // Highlight empty fields
+  [elN, elA].forEach(el => {
+    if(!el) return;
+    const isEmpty = !el.value.trim();
+    if(isEmpty) {
+      el.style.borderColor = 'var(--primary)';
+      el.style.boxShadow = '0 0 0 3px var(--primary-glow)';
+      setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
+    }
+  });
+  // Focus first empty field
+  const target = nameEmpty ? elN : (aptEmpty ? elA : elN);
+  if(target) setTimeout(() => target.focus(), 300);
+}
+
+function toggleSkipPersonal(){
+  const cb = document.getElementById('skip-personal-cb');
+  const btn = document.getElementById('btn-skip-personal');
+  if(btn) btn.disabled = !cb.checked;
+}
+
+function confirmSkipPersonal(){
+  skipPersonalData = true;
+  closeModal();
+  goNext();
 }
 
 function shareWithNeighbor(){

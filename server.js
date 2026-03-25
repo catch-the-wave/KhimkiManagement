@@ -186,6 +186,28 @@ app.post('/api/models/remove', (req, res) => {
   res.json({ models: availableModels, current: currentModel });
 });
 
+// ====== STATS COUNTER ======
+const STATS_FILE = path.join(__dirname, 'stats.json');
+let statsData = { sent: 0 };
+try { statsData = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8')); } catch {}
+
+function saveStats() {
+  try { fs.writeFileSync(STATS_FILE, JSON.stringify(statsData)); } catch {}
+}
+
+app.get('/api/config', (req, res) => {
+  res.json({ posthogKey: process.env.POSTHOG_KEY || '' });
+});
+
+app.get('/api/stats', (req, res) => res.json(statsData));
+
+app.post('/api/stats/hit', (req, res) => {
+  statsData.sent = (statsData.sent || 0) + 1;
+  saveStats();
+  console.log(`📊 Жалоба отправлена. Всего: ${statsData.sent}`);
+  res.json(statsData);
+});
+
 // Sanitize AI response: remove non-Cyrillic/Latin stray characters (Chinese, etc.)
 function sanitizeText(text) {
   // Remove CJK characters that sometimes leak from multilingual models
@@ -198,13 +220,13 @@ app.post('/api/generate', async (req, res) => {
     return res.status(503).json({ error: 'AI generation not configured' });
   }
 
-  const { name, apt, problems, tone, dest, length } = req.body;
-  if (!name || !apt || !problems || !problems.length) {
+  const { name, apt, problems, tone, dest, length, building } = req.body;
+  if (!name || !problems || !problems.length) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   const LENGTH_CONFIG = {
-    short:  { instruction: 'Напиши очень коротко — 2-3 предложения максимум.', max_tokens: 200 },
+    short:  { instruction: 'Напиши коротко — от 2-3 предложений до небольшого абзаца.', max_tokens: 350 },
     medium: { instruction: 'Напиши в меру — 1-2 абзаца.', max_tokens: 600 },
     long:   { instruction: 'Напиши развёрнуто — 3-4 абзаца с деталями.', max_tokens: 1200 },
   };
@@ -218,14 +240,17 @@ app.post('/api/generate', async (req, res) => {
     gis: 'ГИС ЖКХ'
   };
 
+  const today = new Date().toLocaleDateString('ru-RU');
   const userMessage = [
     `ФИО: ${name}`,
-    `Квартира: ${apt}`,
+    apt ? `Квартира: ${apt}` : 'Квартира: не указана',
+    `Дата: ${today}`,
     `Тон: ${tone === 'formal' ? 'формальный' : 'неформальный'}`,
-    `Получатель: ${destNames[dest] || destNames.uk}`,
+    `Получатель: несколько инстанций (УО, администрация г.о. Химки, ГЖИ МО)`,
     `Объём: ${lengthCfg.instruction}`,
-    `Проблемы: ${problems.join(', ')}`
-  ].join('\n');
+    `Проблемы: ${problems.join(', ')}`,
+    building && building !== '5' ? `Важно: жилец из дома ${building} (ул. Совхозная, д. ${building}), а не из дома 5` : null
+  ].filter(Boolean).join('\n');
 
   console.log('\n' + '='.repeat(60));
   console.log(`📤 AI REQUEST | Model: ${currentModel}`);
@@ -278,6 +303,10 @@ app.post('/api/generate', async (req, res) => {
     }
 
     text = sanitizeText(text);
+
+    // Replace date placeholders the model might generate
+    const today = new Date().toLocaleDateString('ru-RU');
+    text = text.replace(/\[Текущая дата\]|\[дата\]|\[DATE\]|\[Дата\]/gi, today);
 
     res.json({ text, model: currentModel });
   } catch (err) {
