@@ -422,14 +422,19 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
     <!-- STEP 2: Send -->
     <div id="step-2" style="display:none">
 
+      <!-- Instruction -->
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px">📋 Текст скопирован</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">Нажмите кнопку — откроется почтовый клиент.<br>Вставьте текст и отправьте.</div>
+      </div>
+
       <!-- Text preview -->
       <div id="s3-preview" class="card" style="margin-bottom:12px"></div>
 
       <!-- Hero send -->
       <div style="padding:0 0 14px">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Отправьте жалобу по почте</div>
         <button class="btn-send-all" onclick="sendAll()">📧 Отправить жалобу</button>
-        <div class="send-all-sub">Откроется почта — вставьте текст (уже скопирован) и нажмите «Отправить». Жалоба уйдёт в 3 инстанции: УО · ЖКХ Химков · ГЖИ МО</div>
+        <div class="send-all-sub">Письмо уйдёт в 3 адреса: «Континент Комфорта» · ЖКХ Химков · ГЖИ МО</div>
         <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.5">📷 Жалобы с фотографиями рассматриваются быстрее — по возможности приложите фото к письму</div>
       </div>
 
@@ -470,7 +475,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         <div class="track-header">
           <div>
             <div class="track-title">Есть аккаунт на Госуслугах?</div>
-            <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА). Текст уже скопирован — откройте портал, войдите и вставьте</div>
+            <div class="track-sub">Все порталы требуют вход через Госуслуги (ЕСИА)</div>
           </div>
         </div>
         <div class="dest-row">
@@ -864,10 +869,7 @@ function renderS3Preview() {
   const needToggle = curText.length > S3_LIMIT;
   el.innerHTML = `
     <div id="s3-text" style="font-size:12px;line-height:1.6;color:var(--text);white-space:pre-wrap;word-break:break-word">${escTA(short)}</div>
-    ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:6px;font-family:inherit;padding:0">Показать полностью ↓</button>` : ''}
-    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
-      <button class="btn btn-ghost" style="width:100%" onclick="copyS3(this)">📋 Скопировать текст</button>
-    </div>`;
+    ${needToggle ? `<button id="s3-toggle" onclick="toggleS3Preview()" style="font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;font-weight:600;margin-top:6px;font-family:inherit;padding:0">Показать полностью ↓</button>` : ''}`;
 }
 
 function toggleS3Preview() {
