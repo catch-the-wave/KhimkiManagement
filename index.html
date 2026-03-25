@@ -768,8 +768,6 @@ function syncNameHint(){
 function dUpd(){
   syncNextBtn();
   syncNameHint();
-  clearTimeout(_updTimer);
-  _updTimer=setTimeout(upd,280);
   const n=document.getElementById('fullname');
   const a=document.getElementById('apt');
   if(n) localStorage.setItem('kh_name', n.value);
@@ -1189,6 +1187,14 @@ function fitTextarea() {
   ta.style.height = h + 'px';
 }
 window.addEventListener('resize', fitTextarea);
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{
+    const bar=document.getElementById('ba');
+    if(!bar) return;
+    const offset=window.innerHeight-window.visualViewport.height-window.visualViewport.offsetTop;
+    bar.style.bottom=Math.max(0,offset)+'px';
+  });
+}
 
 function regen(){
   // Try AI first, fallback to local templates
