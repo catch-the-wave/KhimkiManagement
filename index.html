@@ -500,6 +500,13 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
           </div>
           <button class="btn-open" onclick="openPortal('https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true','gis')">Открыть →</button>
         </div>
+        <div class="dest-row">
+          <div class="dest-row-info">
+            <div class="dest-row-name">ГЖИ МО<span class="p-badge legal">Лицензия УО</span></div>
+            <div class="dest-row-sub">Может лишить УО лицензии. Только через портал — email не принимают. Вход через Госуслуги.</div>
+          </div>
+          <button class="btn-open" onclick="openPortal('https://mstg.mosreg.ru/feedback','ministry')">Открыть →</button>
+        </div>
       </div>
 
       <!-- Share -->
@@ -529,6 +536,7 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
       <a class="portal-link" href="https://vmeste.mosreg.ru" target="_blank"><span class="pi">🏛️</span><div><div class="pn">Добродел</div><div class="pd">vmeste.mosreg.ru — 8 дней</div></div></a>
       <a class="portal-link" href="https://eds.mosreg.ru/claims" target="_blank"><span class="pi">🔧</span><div><div class="pn">ЕДС МО</div><div class="pd">eds.mosreg.ru — напрямую в УО</div></div></a>
       <a class="portal-link" href="https://my.dom.gosuslugi.ru/citizen-cabinet/#!/appeal/card/create/?isApplicant=true" target="_blank"><span class="pi">🏠</span><div><div class="pn">ГИС ЖКХ</div><div class="pd">dom.gosuslugi.ru — для суда</div></div></a>
+      <a class="portal-link" href="https://mstg.mosreg.ru/feedback" target="_blank"><span class="pi">🏛️</span><div><div class="pn">ГЖИ МО</div><div class="pd">mstg.mosreg.ru — только через портал</div></div></a>
       <a class="portal-link" href="tel:84955737788"><span class="pi">📞</span><div><div class="pn">Глава г. Химки</div><div class="pd">8 (495) 573-77-88</div></div></a>
     </div>
     <div class="card">
@@ -926,12 +934,12 @@ function textWithHeader(destKey) {
 
 function sendAll(){
   if(!curText||!validateFields())return;
-  const allHeader = 'В УО «Континент Комфорта», Управление ЖКХ г.о. Химки,\nМинистерство по содержанию территорий и гос. жилищному надзору МО';
+  const allHeader = 'В УО «Континент Комфорта», Управление ЖКХ г.о. Химки';
   clipCopy(allHeader + '\n\n' + curText);
-  const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru,Mstg@mosreg.ru';
+  const emails='kontinent.reception@mail.ru,zhkh@admhimki.ru';
   window.location.href=`mailto:${emails}?subject=${SUBJ}`;
   incrementCounter();
-  track('complaint_sent', { method: 'email', dest: 'all_3', problems: [...sel], problems_count: sel.size, tone, length });
+  track('complaint_sent', { method: 'email', dest: 'all_2', problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>toast('✅ Вставьте скопированный текст в письмо и отправьте'),800);
 }
 
