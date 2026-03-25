@@ -745,6 +745,17 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
+function highlightEmptyFields(){
+  const elN = document.getElementById('fullname');
+  const elA = document.getElementById('apt');
+  [elN, elA].forEach(el => {
+    if(!el || el.value.trim()) return;
+    el.style.borderColor = 'var(--primary)';
+    el.style.boxShadow = '0 0 0 3px var(--primary-glow)';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 3000);
+  });
+}
+
 function syncNameHint(){
   const hint = document.getElementById('name-hint');
   if(!hint) return;
@@ -1223,7 +1234,8 @@ async function regenAI(silent){
       requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
     }
     requestAnimationFrame(fitTextarea);
-    toast('✨ Текст сгенерирован ИИ');
+    // Highlight empty fields to prompt user to fill them
+    highlightEmptyFields();
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){
