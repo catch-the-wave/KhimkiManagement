@@ -731,6 +731,7 @@ function goNext() {
     if(savedName) localStorage.setItem('kh_name', savedName);
     if(savedApt) localStorage.setItem('kh_apt', savedApt);
     if(curText) clipCopy(textWithHeader('uk'));
+    track('data_entered', { skipped: false });
     track('step2_reached', { problems: [...sel], problems_count: sel.size, tone, length });
     showStep(2);
     setTimeout(()=>toast('✅ Текст скопирован — вставьте в письмо'),300);
@@ -1067,7 +1068,10 @@ function switchTab(t) {
 function tog(el) {
   const id=el.dataset.id;
   if(sel.has(id)){sel.delete(id);el.classList.remove('selected')}
-  else{sel.add(id);el.classList.add('selected')}
+  else{
+    sel.add(id);el.classList.add('selected');
+    if(sel.size===1) track('problem_selected', { first_problem: id });
+  }
   seed++;
   syncSelToggle();
   syncNextBtn();
@@ -1498,6 +1502,7 @@ function toggleSkipPersonal(){
 
 function confirmSkipPersonal(){
   skipPersonalData = true;
+  track('data_entered', { skipped: true });
   closeModal();
   goNext();
 }
