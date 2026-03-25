@@ -937,6 +937,7 @@ function sendAll(){
 function openEmail(email, destKey){
   if(!curText||!validateFields())return;
   clipCopy(textWithHeader(destKey));
+  track('complaint_sent', { method: 'email', dest: destKey, problems: [...sel], problems_count: sel.size, tone, length });
   setTimeout(()=>{window.location.href=`mailto:${email}?subject=${SUBJ}`;},150);
 }
 
@@ -950,6 +951,7 @@ function openPortal(url, destKey){
 function shareLink() {
   const text = 'https://sovkhoznaya5.up.railway.app\n\nРасскажи соседям — вместе сделаем дом лучше!';
   clipCopy(text).then(() => toast('✅ Ссылка скопирована — отправь соседу'));
+  track('share_clicked', { problems_count: sel.size });
 }
 
 function copyTextForPortal() {
