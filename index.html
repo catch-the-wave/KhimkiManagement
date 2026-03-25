@@ -498,6 +498,12 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         </div>
       </div>
 
+      <!-- Share -->
+      <div style="margin-top:24px;padding:0 2px">
+        <button class="btn btn-send" style="width:100%;padding:15px;font-size:15px;font-weight:700;border-radius:14px" onclick="shareLink()">🔗 Поделиться с соседом</button>
+        <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px;opacity:.7">Вместе сделаем дом лучше</div>
+      </div>
+
     </div>
 
   </div>
@@ -729,19 +735,19 @@ const API_KEY = 'complaints';
 
 async function syncCounter() {
   try {
-    const r = await fetch(`https://api.countapi.xyz/get/${API_NS}/${API_KEY}`);
+    const r = await fetch('/api/stats');
     const d = await r.json();
-    const n = Math.max(d.value||0, getCounter());
-    if(d.value) localStorage.setItem('kh_sent', n);
+    const n = Math.max(d.sent||0, getCounter());
+    localStorage.setItem('kh_sent', n);
     updateCounterUI(n);
   } catch(e) { updateCounterUI(getCounter()); }
 }
 
 async function incrementCounter() {
   try {
-    const r = await fetch(`https://api.countapi.xyz/hit/${API_NS}/${API_KEY}`);
+    const r = await fetch('/api/stats/hit', {method:'POST'});
     const d = await r.json();
-    const n = Math.max(d.value||0, getCounter()+1);
+    const n = Math.max(d.sent||0, getCounter()+1);
     localStorage.setItem('kh_sent', n);
     updateCounterUI(n);
     return n;
@@ -913,6 +919,11 @@ function openPortal(url, destKey){
   if(!curText)return;
   clipCopy(textWithHeader(destKey)).then(()=>toast('✅ Текст скопирован — вставьте на портале'));
   setTimeout(()=>window.open(url,'_blank'),150);
+}
+
+function shareLink() {
+  const text = 'https://sovkhoznaya5.up.railway.app\n\nРасскажи соседям — вместе сделаем дом лучше!';
+  clipCopy(text).then(() => toast('✅ Ссылка скопирована — отправь соседу'));
 }
 
 function copyTextForPortal() {

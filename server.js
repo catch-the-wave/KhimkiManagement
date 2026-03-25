@@ -186,6 +186,24 @@ app.post('/api/models/remove', (req, res) => {
   res.json({ models: availableModels, current: currentModel });
 });
 
+// ====== STATS COUNTER ======
+const STATS_FILE = path.join(__dirname, 'stats.json');
+let statsData = { sent: 0 };
+try { statsData = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8')); } catch {}
+
+function saveStats() {
+  try { fs.writeFileSync(STATS_FILE, JSON.stringify(statsData)); } catch {}
+}
+
+app.get('/api/stats', (req, res) => res.json(statsData));
+
+app.post('/api/stats/hit', (req, res) => {
+  statsData.sent = (statsData.sent || 0) + 1;
+  saveStats();
+  console.log(`📊 Жалоба отправлена. Всего: ${statsData.sent}`);
+  res.json(statsData);
+});
+
 // Sanitize AI response: remove non-Cyrillic/Latin stray characters (Chinese, etc.)
 function sanitizeText(text) {
   // Remove CJK characters that sometimes leak from multilingual models
