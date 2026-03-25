@@ -1149,12 +1149,14 @@ function upd() {
   const tc = document.getElementById('text-card');
   const regenBtn = document.getElementById('btn-regen');
   if(sel.size === 0) {
+    const sy=window.scrollY;
     area.innerHTML = '';
     curText='';
     if(tc) tc.style.display='none';
     if(regenBtn) regenBtn.style.display='none';
     syncNameHint();
     resetButtons();
+    window.scrollTo(0,sy);
     return;
   }
 
@@ -1185,8 +1187,10 @@ function upd() {
 function fitTextarea() {
   const ta = document.getElementById('complaint-ta');
   if (!ta) return;
+  const sy = window.scrollY;
   ta.style.height = 'auto';
   ta.style.height = (ta.scrollHeight + 4) + 'px';
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
 
 function regen(){
