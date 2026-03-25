@@ -409,6 +409,9 @@ textarea.complaint-edit:focus{border-color:var(--primary);box-shadow:0 0 0 3px v
         </div>
         <div id="model-badge" style="display:none"></div>
         <div id="carea"></div>
+        <div id="name-hint" style="display:none;text-align:center;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--primary);background:var(--primary-light);border-radius:10px;line-height:1.5">
+          👇 Укажите ФИО внизу — оно автоматически подставится в текст
+        </div>
       </div>
     </div>
 
@@ -625,7 +628,26 @@ function showStep(n) {
 function canGoNext(){
   return sel.size>0;
 }
-function syncNextBtn(){const b=document.getElementById('btn-step-next');if(b)b.disabled=!canGoNext();}
+function hasPersonalData(){
+  const n=document.getElementById('fullname');
+  return (n && n.value.trim()!=='') || savedName!=='';
+}
+function syncNextBtn(){
+  const b=document.getElementById('btn-step-next');
+  if(!b) return;
+  b.disabled=!canGoNext();
+  if(hasPersonalData()){
+    b.className='btn btn-send';
+    b.style.background='';
+    b.style.color='';
+    b.style.border='';
+  } else {
+    b.className='btn';
+    b.style.background='var(--bg)';
+    b.style.color='var(--muted)';
+    b.style.border='1.5px solid var(--border)';
+  }
+}
 function updateWizardNav() {
   const ba = document.getElementById('ba');
   if(!ba) return;
@@ -723,8 +745,28 @@ async function incrementCounter() {
 
 // ====== DEBOUNCE ======
 let _updTimer;
+function highlightEmptyFields(){
+  const elN = document.getElementById('fullname');
+  const elA = document.getElementById('apt');
+  [elN, elA].forEach(el => {
+    if(!el || el.value.trim()) return;
+    el.style.borderColor = 'var(--primary)';
+    el.style.boxShadow = '0 0 0 3px var(--primary-glow)';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 3000);
+  });
+}
+
+function syncNameHint(){
+  const hint = document.getElementById('name-hint');
+  if(!hint) return;
+  const elN = document.getElementById('fullname');
+  const hasName = (elN && elN.value.trim()) || savedName;
+  hint.style.display = (sel.size > 0 && !hasName) ? 'block' : 'none';
+}
+
 function dUpd(){
   syncNextBtn();
+  syncNameHint();
   clearTimeout(_updTimer);
   _updTimer=setTimeout(upd,280);
   const n=document.getElementById('fullname');
@@ -1109,6 +1151,7 @@ function upd() {
     curText='';
     if(tc) tc.style.display='none';
     if(regenBtn) regenBtn.style.display='none';
+    syncNameHint();
     resetButtons();
     return;
   }
@@ -1116,6 +1159,7 @@ function upd() {
   if(tc) tc.style.display='block';
   if(regenBtn) regenBtn.style.display='flex';
   // Try AI generation first, show skeleton while loading
+  syncNameHint();
   regenAI(true).then(ok=>{
     if(!ok){
       // Fallback to local template
@@ -1125,12 +1169,14 @@ function upd() {
     }
     if(bc) bc.disabled=false;
     resetButtons();
+    syncNameHint();
   }).catch(()=>{
     curText = gen();
     area.innerHTML = `<textarea class="complaint-edit" id="complaint-ta" oninput="curText=this.value;fitTextarea()">${escTA(curText)}</textarea>`;
     requestAnimationFrame(fitTextarea);
     if(bc) bc.disabled=false;
     resetButtons();
+    syncNameHint();
   });
 }
 
@@ -1155,13 +1201,9 @@ function regen(){
 async function regenAI(silent){
   if(sel.size===0) return false;
   const elN=document.getElementById('fullname');
-  const name=(elN?elN.value.trim():savedName) || (skipPersonalData ? 'Жилец дома' : '');
+  const name=(elN?elN.value.trim():savedName) || 'Жилец дома';
   const elA=document.getElementById('apt');
   const apt=(elA?elA.value.trim():savedApt) || '';
-  if(!name && !skipPersonalData){
-    if(!silent) showPrivacyModal();
-    return false;
-  }
 
   const problems=PROB_IDS.filter(id=>sel.has(id)).map(id=>P[id].label);
   if(!problems.length) return false;
@@ -1192,7 +1234,8 @@ async function regenAI(silent){
       requestAnimationFrame(()=>{area.style.transition='opacity .3s';area.style.opacity='1';});
     }
     requestAnimationFrame(fitTextarea);
-    toast('✨ Текст сгенерирован ИИ');
+    // Highlight empty fields to prompt user to fill them
+    highlightEmptyFields();
     console.log('[AI] Success, text length:',curText.length);
     return true;
   }catch(e){
