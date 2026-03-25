@@ -1188,15 +1188,6 @@ function fitTextarea() {
   ta.style.height = 'auto';
   ta.style.height = (ta.scrollHeight + 4) + 'px';
 }
-window.addEventListener('resize', fitTextarea);
-if(window.visualViewport){
-  window.visualViewport.addEventListener('resize',()=>{
-    const bar=document.getElementById('ba');
-    if(!bar) return;
-    const offset=window.innerHeight-window.visualViewport.height-window.visualViewport.offsetTop;
-    bar.style.bottom=Math.max(0,offset)+'px';
-  });
-}
 
 function regen(){
   // Try AI first, fallback to local templates
