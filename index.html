@@ -35,7 +35,7 @@
   --primary: #4a9eff;
   --primary-light: #1a2440;
   --primary-glow: rgba(74,158,255,.15);
-  --action: #4ade80;
+  --action: #34d399;
   --action-light: #162316;
   --bg: #0f0f0f;
   --card: #1a1a1a;
@@ -48,11 +48,17 @@
   --drawer-bg: #1a1a1a;
   --tone-active-bg: #252525;
   --shadow: none;
-  --badge-best-bg: #162316; --badge-best-c: #4ade80;
+  --badge-best-bg: #162316; --badge-best-c: #34d399;
   --badge-fast-bg: #1a2440; --badge-fast-c: #60a5fa;
   --badge-legal-bg: #261a2e; --badge-legal-c: #c084fc;
   --badge-warn-bg: #2a1f0a; --badge-warn-c: #fbbf24;
 }
+[data-theme="dark"] .field input,
+[data-theme="dark"] textarea.complaint-edit{background:#1a1a1a;color:#e0e0e0;border-color:#2a2a2a}
+[data-theme="dark"] .field input:-webkit-autofill,
+[data-theme="dark"] .field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 50px #1a1a1a inset;-webkit-text-fill-color:#e0e0e0}
+[data-theme="dark"] .btn-open{background:#2d8a63;color:#fff}
+[data-theme="dark"] .btn-send-all{background:#2d8a63;box-shadow:0 2px 8px rgba(45,138,99,.3)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{overflow-x:hidden;width:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
