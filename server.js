@@ -204,7 +204,7 @@ app.post('/api/generate', async (req, res) => {
   }
 
   const LENGTH_CONFIG = {
-    short:  { instruction: 'Напиши очень коротко — 2-3 предложения максимум.', max_tokens: 200 },
+    short:  { instruction: 'Напиши коротко — от 2-3 предложений до небольшого абзаца.', max_tokens: 350 },
     medium: { instruction: 'Напиши в меру — 1-2 абзаца.', max_tokens: 600 },
     long:   { instruction: 'Напиши развёрнуто — 3-4 абзаца с деталями.', max_tokens: 1200 },
   };
